@@ -1,144 +1,176 @@
-# Task Breakdown — Shelfly (4 Anggota)
+# Task Breakdown — Shelfly (Tim 4 Orang)
 
-Referensi: `docs/prd.md` (section 47 Pembagian Modul, 35 Database Model), `docs/design.md` (Design System).
+Dokumen ini turunan dari:
+- `docs/prd.md` — Product Requirements Document (57 section, source kebenaran fitur/data/flow)
+- `docs/design.md` — Design System (source kebenaran warna/tipografi/spacing, sudah di-encode di `core/theme`)
 
-Urutan sprint: **Sprint 0 (Foundation, sequential)** → **Sprint 1–3 (paralel per modul)** → **Sprint 4 (integrasi)**.
-
----
-
-## Sprint 0 — Foundation (sebelum kerja paralel, ±1 hari)
-
-Harus selesai duluan, semua depend ke sini:
-
-| Task | PIC | Output |
-|---|---|---|
-| Setup repo, branch protection, `develop` branch | A | Repo siap |
-| Isi `core/theme` (Color, Typography, Spacing, Radius) dari `docs/design.md` | A | Sudah dibuat: `Color.kt`, `Dimens.kt`, `Theme.kt` |
-| Room Entity + DAO (Shelf, Category, Material) | B | Sudah dibuat: `Entities.kt`, `ShelfDao.kt`, `MaterialDao.kt`, `ShelflyDatabase.kt` |
-| NavHost + routes | A | Sudah dibuat: `ShelflyNavHost.kt` |
-
-Status: kerangka sudah ada di repo. Sprint 0 tinggal review bareng, lanjut Sprint 1.
+Kalau ada konflik antara dokumen ini dan PRD, **PRD menang** — dokumen ini cuma breakdown kerja, bukan spec baru.
 
 ---
 
-## Person A — UI & Navigation
+## Susunan Tim
 
-**Modul:** Home, Shelves list, Navigation, shared components. Owner `core/theme`.
+| Anggota | Modul | Folder utama | Knowledge wajib |
+|---|---|---|---|
+| **Nadine** | A — UI & Navigation | `core/navigation`, `feature/home`, `feature/shelf` (UI), `feature/material` (UI) | UI state, navigation, component |
+| **Rifky** | B — Database & Shelf | `data/local`, `data/repository/ShelfRepository` | Relasi data, CRUD, persistence |
+| **Intan** | C — File Management | `feature/material` (import logic), file picker, URI, MIME | Storage, URI, MIME type, error handling |
+| **Yunan** | D — Search, Filter & State | `feature/search`, filter/sort logic, ViewModel state | Query/filter, state management |
 
-### Sprint 1
-- [ ] `HomeScreen`: greeting text, search bar (navigate ke Search), "My Shelves" horizontal/grid card (2 kolom), section "Recently Opened" (List, ambil dari `MaterialRepository`), FAB Add Material.
-- [ ] Bottom navigation bar: Home / Shelves / Recent / Favorites (`NavigationBar` Material3), reflect active route.
-- [ ] Shared components di `core/ui/components/`: `PrimaryButton`, `SecondaryButton`, `ShelflyCard` (radius 12dp, outline 1px sesuai design.md), `SearchField`.
-
-### Sprint 2
-- [ ] `ShelvesScreen` (daftar semua Shelf) — card: icon, nama, jumlah material, last updated. FAB Create Shelf → bottom sheet (`CreateShelfSheet`).
-- [ ] `EditShelfScreen` / sheet — form name+description+icon, tombol Delete terpisah (warna Error, bukan Primary).
-- [ ] Empty state components: `EmptyState(icon, title, subtitle, ctaLabel, onCta)` reusable — dipakai di semua screen (No Shelves, Empty Shelf, No Search Result).
-
-### Sprint 3
-- [ ] Polish transisi antar screen (Navigation Compose animasi masuk/keluar sesuai design personality: calm, bukan flashy).
-- [ ] Pastikan semua screen lain (punya B/C/D) sudah konsumsi `ShelflyTheme`, `Spacing`, `Radius` — bukan hardcode angka.
-- [ ] Review visual hierarchy: 1 CTA dominan per screen (design.md section 30).
-
-**Definition of Done:** Home + Shelves + navigasi jalan penuh pakai data asli dari Room (bukan dummy), empty state muncul kalau data kosong.
+**Catatan dari PRD section 47:** pembagian modul bukan berarti tiap orang cuma paham bagiannya. Rubrik project (section 48) menilai individual — semua anggota harus bisa jelasin: arsitektur, data flow, struktur database, alur import, state management, search/filter, error handling.
 
 ---
 
-## Person B — Database & Shelf
+## Alur Kerja: TDD (Test-Driven Development)
 
-**Modul:** Room, Repository, Shelf CRUD, ViewModel Shelf.
+Semua modul yang punya **logic** (bukan cuma layout visual) wajib ditulis dengan alur **RED → GREEN → REFACTOR**:
 
-### Sprint 1
-- [ ] Review/lengkapi `ShelfDao`, `MaterialDao` — pastikan query yang dibutuhkan Person D (search/filter/sort) sudah ada atau siap ditambah kolaboratif.
-- [ ] `ShelfRepository` — implementasi penuh: `getAllShelves()`, `getShelfById()`, `insertShelf()`, `updateShelf()`, `deleteShelf()`.
-- [ ] `ShelfViewModel` (di `feature/shelf/`) — state: `Loading / Success(List<Shelf>) / Empty / Error`, expose via `StateFlow`.
+1. **RED** — tulis test dulu untuk perilaku yang diinginkan, jalankan, pastikan **gagal** (karena kode belum ada/belum benar). Ini membuktikan test-nya valid — kalau langsung hijau tanpa kode, test-nya salah.
+2. **GREEN** — tulis kode paling minimal yang bikin test itu lolos. Jangan sekalian nambah fitur lain.
+3. **REFACTOR** — rapikan kode (nama, struktur) sambil test tetap hijau. Tidak boleh mengubah perilaku di tahap ini.
 
-### Sprint 2
-- [ ] Create Shelf flow: validasi nama tidak kosong, simpan ke Room, refresh list otomatis (Flow reaktif dari Room, bukan manual refresh).
-- [ ] Edit Shelf: update record, handle Delete Shelf (dengan konfirmasi dialog — cek behavior di PRD section 27 "Delete Behavior": apa yang terjadi ke Material saat Shelf-nya dihapus — set null/cascade, putuskan & dokumentasikan).
-- [ ] `ShelfDetailViewModel` — ambil material by `shelfId`, expose count buat ditampilkan di card.
+Ulangi per unit perilaku kecil, bukan sekali nulis banyak lalu ditest belakangan.
 
-### Sprint 3
-- [ ] Database migration strategy kalau skema berubah (untuk MVP, `fallbackToDestructiveMigration()` cukup — jangan overengineer Migration class kalau belum perlu).
-- [ ] Unit test sederhana: insert Shelf → query balik → assert data sama (pakai in-memory Room DB).
-- [ ] Bantu integrasi: pastikan `MaterialRepository` (Person C) bisa query material by shelfId dengan benar (relasi FK).
+### Kapan wajib TDD vs kapan boleh skip
+- **Wajib**: DAO/Repository (query, CRUD), Search/Filter/Sort logic, ViewModel state transitions, parsing/validasi metadata file.
+- **Boleh skip test formal**: layout Composable murni (visual only, no logic), NavHost routing sederhana, theme/token files.
 
-**Definition of Done:** Create/Read/Update/Delete Shelf berfungsi penuh, persist setelah app di-restart, state Loading/Empty/Error kebaca di UI Person A.
+### Jenis test di project ini
+| Jenis | Lokasi | Kecepatan | Kapan pakai |
+|---|---|---|---|
+| Unit test (JVM) | `app/src/test/` | Cepat, tanpa device | Logic murni Kotlin (filter, sort, validasi) — tanpa Room, tanpa Context |
+| Instrumented test | `app/src/androidTest/` | Lambat, butuh emulator/device | Apapun yang sentuh Room/Android framework (DAO, Repository yang query DB) |
 
----
+Room butuh SQLite driver Android asli → DAO test **harus** di `androidTest`, bukan `test`. Sudah ada contoh jadi: `app/src/androidTest/java/com/shelfly/app/data/local/ShelfDaoTest.kt` — pakai ini sebagai template, tinggal ganti Entity/DAO-nya.
 
-## Person C — File Management
+Cara jalanin:
+```bash
+# Unit test (cepat, jalan tiap commit)
+./gradlew testDebugUnitTest
 
-**Modul:** File picker, import, metadata, open material, error handling.
-
-### Sprint 1
-- [ ] File picker: `ActivityResultContracts.OpenDocument()` (Storage Access Framework) — pilih file dari device, ambil `Uri`, minta persistable permission (`takePersistableUriPermission`) biar bisa diakses lagi setelah app restart.
-- [ ] Ekstrak metadata dari `Uri`: nama file, MIME type, ukuran file (pakai `ContentResolver.query` dengan `DocumentsContract`).
-- [ ] `AddMaterialScreen` (2 step sesuai design.md): step 1 pilih file, step 2 form Shelf dropdown + Category dropdown + Save.
-
-### Sprint 2
-- [ ] `MaterialDetailScreen`: tampilkan file icon by type (mapping PDF/DOCX/PPTX/XLSX/Image/Other — design.md section 20), metadata table (type, size, added, last opened).
-- [ ] Open Material: `Intent.ACTION_VIEW` dengan `Uri` + grant permission flag, handle "No compatible app found" (try-catch `ActivityNotFoundException` → tampilkan error state, bukan crash).
-- [ ] Update `lastOpenedAt` di Room setiap kali material dibuka (buat fitur Recent milik Person D).
-
-### Sprint 3
-- [ ] Error handling penuh: file hilang/dipindah (`Uri` gak bisa diakses lagi) → tampilkan "This file is no longer available" + opsi Remove from Shelf (bukan crash, bukan stack trace mentah — sesuai design.md microcopy tone).
-- [ ] Move Material antar Shelf (update `shelfId` di Room).
-- [ ] Delete Material (dengan konfirmasi dialog, warna Error).
-
-**Definition of Done:** Import file dari device → tersimpan di Shelf terpilih → bisa dibuka → metadata akurat → file hilang ditangani tanpa crash.
-
----
-
-## Person D — Search, Filter & State
-
-**Modul:** Search, filter, sort, favorite, recent, state management pattern.
-
-### Sprint 1
-- [ ] `SearchViewModel` + `SearchScreen`: query by title (case-insensitive, `LIKE '%query%'` di DAO), debounce input (jangan query tiap keystroke — pakai `snapshotFlow`/`debounce` 300ms).
-- [ ] Search result list pakai `MaterialCard` reusable dari Person A.
-- [ ] Empty state "No materials found" pakai komponen `EmptyState` dari Person A.
-
-### Sprint 2
-- [ ] Filter bottom sheet: by Shelf, File Type, Category (radio, sesuai design.md — bukan multi-select checkbox biar konsisten dgn spec). Reset/Apply button.
-- [ ] Sort: Newest / Oldest / Name A-Z / Z-A / Recently Opened — implement di query DAO (`ORDER BY`).
-- [ ] Favorite toggle: update `isFavorite` di Room, `FavoritesScreen` list terpisah (ambil `WHERE isFavorite = 1`).
-
-### Sprint 3
-- [ ] `RecentScreen`: ambil material `ORDER BY lastOpenedAt DESC`, group by Today/Yesterday/Earlier (logic date grouping pakai `LocalDate`).
-- [ ] Preserve state saat navigasi balik (search query & filter aktif tetap ada — simpan di ViewModel, jangan di Composable local state biar survive recomposition/navigation).
-- [ ] Kombinasi Search + Filter aktif bersamaan — pastikan query gabungan benar (title match AND filter shelf AND filter type).
-
-**Definition of Done:** Search real-time jalan, filter+sort mengubah hasil sesuai kombinasi, Favorite & Recent persist dan sinkron dengan aksi di screen lain.
-
----
-
-## Sprint 4 — Integrasi (semua orang, ±1-2 hari)
-
-- [ ] Semua screen connect end-to-end: Home → Shelf → Material → Open (full flow tanpa dummy data).
-- [ ] Jalankan Testing Plan PRD section 44 (T-01 s/d T-11) manual, catat hasil.
-- [ ] Cross-review: tiap orang baca kode modul teman (wajib paham semua bagian untuk sesi tanya-jawab individual — PRD section 47).
-- [ ] Rekam video demo sesuai flow PRD section 48 (Problem → Moodle/Download → File berantakan → Shelfly → Import → Organize → Search → Open).
-- [ ] Siapkan jawaban Tanya Jawab (PRD section 48): trade-off URI vs app storage, alasan local DB, alasan no backend, edge cases, error handling.
-
----
-
-## Dependency Graph (siapa nunggu siapa)
-
+# Instrumented test (butuh emulator/device nyala)
+./gradlew connectedAndroidTest
 ```
-A (theme+nav)  ──┬──> semua screen pakai token dari sini
-B (Room+Repo)  ──┼──> C butuh MaterialDao untuk simpan hasil import
-                 └──> D butuh query search/filter/sort di DAO
 
-Sprint 1: A & B jalan duluan (foundation dipakai C & D)
-Sprint 2: C & D mulai setelah DAO dasar dari B ready
-Sprint 3: semua paralel, saling isi gap
-Sprint 4: integrasi bareng
-```
+### Definition of Done tiap task
+Sebuah task dianggap selesai kalau:
+1. Kode jalan (build sukses, `./gradlew assembleDebug`)
+2. Test yang relevan **ada dan hijau** (bukan ditulis lalu dihapus/di-skip)
+3. Sesuai PRD section terkait (dicek ulang sebelum PR)
+4. Sesuai `docs/design.md` untuk bagian UI (warna/spacing dari `core/theme`, bukan angka hardcode baru)
+
+---
+
+## Sprint 0 — Foundation (Sequential, semua nunggu ini kelar)
+
+**PIC: Rifky (Person B)** — sudah dikerjakan di starter project ini:
+- [x] Gradle setup (Compose, Room, KSP, test dependencies)
+- [x] `core/theme` (Color, Dimens, Theme) sinkron dari `docs/design.md`
+- [x] Room Entity + DAO sesuai PRD section 35 (Shelf, Category, Material)
+- [x] `core/navigation` NavHost skeleton
+- [x] Repository stub (ShelfRepository, MaterialRepository)
+- [x] Contoh test TDD (`ShelfDaoTest.kt`)
+
+Begitu Sprint 0 di-pull semua anggota, Sprint 1 bisa mulai paralel.
+
+---
+
+## Sprint 1-3 — Kerja Paralel per Modul
+
+### Nadine — Modul A: UI & Navigation
+
+Referensi PRD: section 41 (UX/UI Direction), 42 (Navigation), 43 (Bottom Navigation).
+
+| # | Task | Referensi PRD | Test |
+|---|---|---|---|
+| A1 | Bottom Navigation (Home, Shelves, Recent, Favorites) di `core/navigation` | §43 | - (visual) |
+| A2 | Home Screen: My Shelves, Search bar, Recent, Favorites section | §41 Home | - (visual), tapi state loading/empty via ViewModel dari Yunan (D) |
+| A3 | Shelf Card component (reusable, dipakai Home + Shelves list) | §41 Material Card (adaptasi Shelf) | - (visual) |
+| A4 | Material Card component (reusable) | §41 Material Card | - (visual) |
+| A5 | Create/Edit Shelf bottom sheet (form: nama, deskripsi, icon) | §17 Shelf Management | Unit test validasi input (nama tidak boleh kosong) |
+| A6 | Empty states (No Shelves, Empty Shelf, No Search Results) | §28 Empty States | - (visual) |
+| A7 | Confirmation dialog pola reusable (Delete Shelf/Material) | §27 Delete Behavior | - (visual) |
+
+**Pitfall**: semua komponen di atas HARUS pakai token dari `core/theme` (Color, Dimens, Typography). Jangan hardcode `16.dp` atau `Color(0xFF...)` baru — kalau butuh nilai yang belum ada di token, koordinasi ke Rifky dulu.
+
+### Rifky — Modul B: Database & Shelf
+
+Referensi PRD: section 35 (Database Model), 17 (Shelf Management), 11-12 (Entitas & Struktur Data).
+
+| # | Task | Referensi PRD | Test |
+|---|---|---|---|
+| B1 | ~~Entity + DAO dasar~~ | §35 | ✅ selesai (Sprint 0) |
+| B2 | ShelfRepository: implementasi penuh (bukan stub) — insert/update/delete/getAll | §17 | `androidTest`: insert lalu getAll, update, delete |
+| B3 | Category Entity + DAO + Repository | §35, §11 | `androidTest` |
+| B4 | Migration strategy kalau schema Material/Shelf berubah nanti | §35 | - (dicatat di komentar) |
+| B5 | Shelf item count (query JOIN Material by shelfId) | §17, §41 Shelf Card butuh count | `androidTest`: shelf dengan N material → count = N |
+| B6 | Delete Shelf yang berisi Material — behavior sesuai §27 (konfirmasi + jelaskan dampak) | §27 | `androidTest`: delete shelf berisi material, verifikasi behavior sesuai keputusan tim (cascade atau block) |
+
+**Pitfall**: §27 (Delete Behavior) dan §34 (Keputusan Penyimpanan File) butuh keputusan desain tim sebelum B6 dikerjakan — baca dulu, diskusikan di grup kalau ambigu.
+
+### Intan — Modul C: File Management
+
+Referensi PRD: section 18 (Material Management), 25 (Open Material), 33-34 (Local-First Strategy, Keputusan Penyimpanan File), 26 (Move Material).
+
+| # | Task | Referensi PRD | Test |
+|---|---|---|---|
+| C1 | File picker integration (system picker, `ActivityResultContracts.OpenDocument`) | §18, Add Material Flow (design.md §5) | - (manual test di device) |
+| C2 | Ambil metadata dari URI: title, fileType, fileSize | §18 | Unit test: fungsi parsing metadata dari URI mock |
+| C3 | Persist URI permission (`takePersistableUriPermission`) supaya file tetap bisa diakses setelah app restart | §33, §34 | `androidTest`: buka lagi setelah simulasi restart |
+| C4 | MaterialRepository: implementasi penuh (insert dari hasil import) | §18 | `androidTest` |
+| C5 | Open Material — intent ke aplikasi eksternal sesuai MIME type | §25 | - (manual, tidak semua bisa diunit-test karena tergantung app eksternal device) |
+| C6 | Error handling: file tidak ditemukan, tidak bisa dibuka, permission issue | §29 Error Handling | Unit test: fungsi cek `fileExists`/error mapping dengan mock URI |
+| C7 | Move Material antar Shelf | §26 | `androidTest` |
+
+**Pitfall**: §34 penting dibaca duluan — MVP pakai URI reference (bukan copy file ke app storage). Ini keputusan arsitektur, jangan diubah sepihak.
+
+### Yunan — Modul D: Search, Filter & State
+
+Referensi PRD: section 19 (Search), 20 (Filter), 21 (Sort), 22 (Favorite), 23 (Recently Opened), 32 (State Management).
+
+| # | Task | Referensi PRD | Test |
+|---|---|---|---|
+| D1 | Search ViewModel: query by title, case-insensitive | §19 | Unit test: query "database" match "Database Room.pdf" |
+| D2 | UI State sealed class (Loading/Success/Empty/Error) dipakai semua ViewModel | §32 | Unit test: transisi state |
+| D3 | Filter state: by Shelf, File Type, Category | §20 | Unit test: kombinasi filter menghasilkan subset benar |
+| D4 | Sort: Newest, Oldest, Name A-Z/Z-A, Recently Opened | §21 | Unit test: tiap opsi sort menghasilkan urutan benar |
+| D5 | Favorite toggle + query getFavorites | §22 | `androidTest` (sentuh Room) |
+| D6 | Recently Opened — update `lastOpenedAt` saat Open Material dipanggil, query terbaru | §23 | `androidTest` |
+| D7 | Preserve search query/filter saat navigasi balik (§22 Interaction Principles / Preserve Context) | design.md §22 | Unit test: state tidak reset saat navigate back |
+
+**Pitfall**: Search/Filter/Sort harus reactive terhadap perubahan data (pakai `Flow`, bukan snapshot sekali query) — kalau Material baru ditambah Intan (C), list di Search (D) harus update otomatis tanpa refresh manual.
+
+---
+
+## Sprint 4 — Integrasi (Semua anggota)
+
+Setelah modul A-D masing-masing selesai dan di-PR:
+
+1. Hubungkan NavHost (Nadine) ke ViewModel nyata (Yunan) dan Repository nyata (Rifky, Intan) — ganti semua stub/dummy data.
+2. Compose UI test end-to-end untuk 2 flow utama sesuai design.md §29:
+   - Home → Shelf Detail → Add Material → Save → Shelf Detail → Open Material
+   - Home → Search → hasil → Material Detail → Open
+3. Uji Testing Plan penuh dari PRD section 44 (T-01 s/d T-11) — checklist manual + otomatis kalau memungkinkan.
+4. Review silang: tiap anggota baca kode modul lain, pastikan paham (persiapan tanya jawab individual, PRD §48).
+
+---
 
 ## Git Workflow
 
-- Branch: `feature/<nama>-<modul>` mis. `feature/rifky-search`.
-- Commit kecil sering, push tiap fitur kelar (bukan nunggu numpuk).
-- PR ke `develop`, 1 reviewer dari anggota lain (bukan self-merge).
-- `main` cuma menerima merge dari `develop` yang sudah stabil, biasanya menjelang deadline/demo.
+- `main` = stable/demo-ready, `develop` = integrasi harian.
+- Branch per task: `feature/a1-bottom-nav`, `feature/b2-shelf-repository`, dst — pakai kode task (A1, B2, ...) di nama branch biar gampang dilacak.
+- PR ke `develop`, minimal 1 reviewer dari anggota lain (bukan yang nulis) sebelum merge.
+- Commit kecil sering. Jangan gabung banyak task jadi 1 commit besar.
+- Push ke `main`/production menunggu aba-aba eksplisit (bukan otomatis tiap merge ke `develop`).
+
+## Persiapan Tanya Jawab (PRD §48)
+
+Tiap anggota harus bisa jawab, **bukan cuma untuk modul sendiri**:
+- Kenapa struktur folder ini dipilih (feature-based, bukan layer-based murni)?
+- Bagaimana data masuk ke database (alur Import → Repository → DAO → Room)?
+- Bagaimana data ditampilkan (Flow dari Room → ViewModel StateFlow → Compose recomposition)?
+- Bagaimana search/filter bekerja?
+- Bagaimana state berubah (Loading/Success/Empty/Error)?
+- Bagaimana file dibuka, dan apa yang terjadi kalau file hilang?
+- Trade-off URI reference vs copy file ke app storage — kenapa MVP pilih URI (§34)?
+- Kenapa tidak pakai backend/cloud sync di MVP (§33 Local-First)?
