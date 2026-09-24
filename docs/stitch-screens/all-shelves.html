@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shelfly - All Shelves</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error-container": "#ffdad6",
+            "surface-dim": "#d9dade",
+            "tertiary-fixed-dim": "#c2c6d3",
+            "on-surface-variant": "#434656",
+            "secondary": "#555f73",
+            "on-tertiary-container": "#edf1fe",
+            "tertiary-fixed": "#dee2ef",
+            "tertiary": "#515660",
+            "inverse-surface": "#2e3134",
+            "on-secondary-container": "#596377",
+            "inverse-primary": "#b9c3ff",
+            "primary-fixed": "#dde1ff",
+            "surface-bright": "#f8f9fd",
+            "on-primary": "#ffffff",
+            "on-background": "#171A24",
+            "on-surface": "#252938",
+            "on-secondary-fixed-variant": "#3d475a",
+            "outline": "#E2E5EC",
+            "on-error-container": "#93000a",
+            "on-primary-fixed": "#001356",
+            "on-primary-fixed-variant": "#0034bf",
+            "primary-container": "#315cff",
+            "on-secondary": "#ffffff",
+            "outline-variant": "#c4c5d9",
+            "surface-container-low": "#f2f3f7",
+            "warning": "#F79009",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed-variant": "#424751",
+            "surface-container": "#edeef2",
+            "on-primary-container": "#f1f0ff",
+            "tertiary-container": "#696e79",
+            "surface-variant": "#e1e2e6",
+            "surface": "#FFFFFF",
+            "background": "#f8f9fd",
+            "secondary-fixed": "#d9e3fb",
+            "on-secondary-fixed": "#111c2d",
+            "secondary-container": "#d6e0f8",
+            "primary": "#0040e3",
+            "on-tertiary": "#ffffff",
+            "success": "#12B76A",
+            "on-tertiary-fixed": "#171c25",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed-dim": "#b9c3ff",
+            "error": "#D92D20",
+            "surface-tint": "#154aef",
+            "surface-container-high": "#e7e8ec",
+            "secondary-fixed-dim": "#bdc7de",
+            "surface-container-highest": "#e1e2e6",
+            "inverse-on-surface": "#eff1f5"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "1.5rem",
+            "space-md": "0.75rem",
+            "gutter": "1rem",
+            "margin-tablet": "1.5rem",
+            "space-lg": "1rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "margin-desktop": "2rem",
+            "space-xs": "0.25rem",
+            "gutter-desktop": "1.5rem",
+            "space-2xl": "2rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "display-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "title-md": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+            "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700"}],
+            "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+            "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+            "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600"}],
+            "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex justify-center selection:bg-primary selection:text-on-primary">
+<div class="w-full max-w-md bg-background min-h-screen flex flex-col relative pb-28">
+<!-- TopAppBar from Shared Components JSON -->
+<header class="flex justify-between items-center w-full px-4 h-14 bg-surface dark:bg-inverse-surface border-b border-outline dark:border-outline-variant sticky top-0 z-40">
+<div class="flex items-center gap-3">
+<button aria-label="Kembali" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-container-low dark:hover:bg-surface-container-high text-primary dark:text-inverse-primary active:scale-95 transition-transform transition-colors">
+<span class="material-symbols-outlined text-[22px]">arrow_back</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-bold text-on-surface dark:text-inverse-on-surface tracking-tight">Shelfly</h1>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="Cari" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-container-low dark:hover:bg-surface-container-high text-secondary dark:text-secondary-fixed-dim active:scale-95 transition-transform transition-colors">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</button>
+<button aria-label="Tambah Rak Baru" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-container-low dark:hover:bg-surface-container-high text-primary dark:text-inverse-primary active:scale-95 transition-transform transition-colors">
+<span class="material-symbols-outlined text-[22px]">create_new_folder</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-4 pt-4 flex flex-col gap-4">
+<!-- Screen Title & Subtitle Context -->
+<section class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-lg font-headline-lg text-on-surface">Semua Rak</h2>
+<span class="px-2.5 py-1 bg-surface border border-outline rounded-full text-label-sm font-label-sm text-secondary flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+            Tersinkron
+          </span>
+</div>
+<p class="text-body-md font-body-md text-secondary">
+          Kelola dan susun ruang koleksi materi digital Anda
+        </p>
+</section>
+<!-- Search Input and Filter -->
+<section class="flex items-center gap-2">
+<div class="relative flex-1">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-secondary">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</span>
+<input class="w-full h-12 pl-10 pr-4 bg-surface border border-outline rounded-xl text-body-md font-body-md text-on-surface placeholder:text-secondary focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/15 transition-all shadow-[0_1px_3px_rgba(16,24,40,0.06)]" placeholder="Cari rak atau topik..." type="text"/>
+</div>
+<button aria-label="Filter" class="w-12 h-12 flex-shrink-0 bg-surface border border-outline rounded-xl flex items-center justify-center text-secondary hover:text-on-surface hover:bg-surface-container-low active:scale-95 transition-all shadow-[0_1px_3px_rgba(16,24,40,0.06)]">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</section>
+<!-- Metric / Stats Row -->
+<section class="grid grid-cols-2 gap-3">
+<div class="bg-surface border border-outline rounded-xl p-3.5 flex items-center gap-3 shadow-[0_1px_3px_rgba(16,24,40,0.06)]">
+<div class="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]">shelves</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-secondary block">Aktif</span>
+<span class="text-title-md font-title-md text-on-surface">4 Rak Aktif</span>
+</div>
+</div>
+<div class="bg-surface border border-outline rounded-xl p-3.5 flex items-center gap-3 shadow-[0_1px_3px_rgba(16,24,40,0.06)]">
+<div class="w-10 h-10 rounded-xl bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed-variant">
+<span class="material-symbols-outlined text-[22px]">description</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-secondary block">Koleksi</span>
+<span class="text-title-md font-title-md text-on-surface">60 Total Dokumen</span>
+</div>
+</div>
+</section>
+<!-- Category Filter Pills -->
+<section class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5 -mx-4 px-4">
+<button class="px-3.5 py-1.5 bg-[#EEF2FF] border border-primary-container rounded-full text-label-sm font-label-sm text-primary-container whitespace-nowrap shadow-sm">
+          Semua (4)
+        </button>
+<button class="px-3.5 py-1.5 bg-surface border border-outline rounded-full text-label-sm font-label-sm text-secondary hover:text-on-surface whitespace-nowrap transition-colors">
+          Semester 5 (3)
+        </button>
+<button class="px-3.5 py-1.5 bg-surface border border-outline rounded-full text-label-sm font-label-sm text-secondary hover:text-on-surface whitespace-nowrap transition-colors">
+          Mandiri (1)
+        </button>
+<button class="px-3.5 py-1.5 bg-surface border border-outline rounded-full text-label-sm font-label-sm text-secondary hover:text-on-surface whitespace-nowrap transition-colors">
+          Diarsipkan
+        </button>
+</section>
+<!-- Shelves List / Cards -->
+<section class="flex flex-col gap-3.5 pt-1">
+<!-- Card 1: Pemrograman Mobile -->
+<article class="bg-surface border border-outline rounded-2xl p-4 shadow-[0_1px_3px_rgba(16,24,40,0.06)] hover:border-primary-container/40 transition-colors">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-primary-fixed/60 border border-primary-fixed text-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">devices</span>
+</div>
+<div>
+<h3 class="text-title-md font-title-md text-on-surface">Pemrograman Mobile</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-[#EEF2FF] text-primary-container text-label-sm font-label-sm">
+                    24 Materi
+                  </span>
+<span class="text-label-sm font-label-sm text-secondary">
+                    • Semester 5
+                  </span>
+</div>
+</div>
+</div>
+<button aria-label="Menu Opsi" class="w-8 h-8 rounded-lg flex items-center justify-center text-secondary hover:bg-surface-container-low hover:text-on-surface active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<p class="text-body-md font-body-md text-secondary mt-3">
+            Modul kuliah, source code, dan materi Android Studio
+          </p>
+<div class="mt-3.5 pt-3 border-t border-outline flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-label-sm font-label-sm text-secondary">
+<span class="material-symbols-outlined text-[15px] text-secondary">schedule</span>
+<span>Terakhir diperbarui: Hari ini</span>
+</div>
+<span class="inline-flex items-center text-label-sm font-label-sm text-primary-container font-semibold group cursor-pointer">
+              Buka Rak
+              <span class="material-symbols-outlined text-[16px] ml-0.5 group-hover:translate-x-0.5 transition-transform">chevron_right</span>
+</span>
+</div>
+</article>
+<!-- Card 2: Basis Data -->
+<article class="bg-surface border border-outline rounded-2xl p-4 shadow-[0_1px_3px_rgba(16,24,40,0.06)] hover:border-primary-container/40 transition-colors">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-secondary-fixed/50 border border-secondary-fixed text-on-secondary-fixed-variant flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">database</span>
+</div>
+<div>
+<h3 class="text-title-md font-title-md text-on-surface">Basis Data</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-[#EEF2FF] text-primary-container text-label-sm font-label-sm">
+                    16 Materi
+                  </span>
+<span class="text-label-sm font-label-sm text-secondary">
+                    • Semester 5
+                  </span>
+</div>
+</div>
+</div>
+<button aria-label="Menu Opsi" class="w-8 h-8 rounded-lg flex items-center justify-center text-secondary hover:bg-surface-container-low hover:text-on-surface active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<p class="text-body-md font-body-md text-secondary mt-3">
+            Materi query SQL, normalisasi ERD, dan praktikum
+          </p>
+<div class="mt-3.5 pt-3 border-t border-outline flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-label-sm font-label-sm text-secondary">
+<span class="material-symbols-outlined text-[15px] text-secondary">schedule</span>
+<span>Terakhir diperbarui: Kemarin</span>
+</div>
+<span class="inline-flex items-center text-label-sm font-label-sm text-primary-container font-semibold group cursor-pointer">
+              Buka Rak
+              <span class="material-symbols-outlined text-[16px] ml-0.5 group-hover:translate-x-0.5 transition-transform">chevron_right</span>
+</span>
+</div>
+</article>
+<!-- Card 3: Jaringan Komputer -->
+<article class="bg-surface border border-outline rounded-2xl p-4 shadow-[0_1px_3px_rgba(16,24,40,0.06)] hover:border-primary-container/40 transition-colors">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-surface-container-high border border-outline text-secondary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">lan</span>
+</div>
+<div>
+<h3 class="text-title-md font-title-md text-on-surface">Jaringan Komputer</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-[#EEF2FF] text-primary-container text-label-sm font-label-sm">
+                    12 Materi
+                  </span>
+<span class="text-label-sm font-label-sm text-secondary">
+                    • Semester 5
+                  </span>
+</div>
+</div>
+</div>
+<button aria-label="Menu Opsi" class="w-8 h-8 rounded-lg flex items-center justify-center text-secondary hover:bg-surface-container-low hover:text-on-surface active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<p class="text-body-md font-body-md text-secondary mt-3">
+            Slide subnetting, TCP/IP, konfigurasi router Cisco
+          </p>
+<div class="mt-3.5 pt-3 border-t border-outline flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-label-sm font-label-sm text-secondary">
+<span class="material-symbols-outlined text-[15px] text-secondary">schedule</span>
+<span>Terakhir diperbarui: 3 hari lalu</span>
+</div>
+<span class="inline-flex items-center text-label-sm font-label-sm text-primary-container font-semibold group cursor-pointer">
+              Buka Rak
+              <span class="material-symbols-outlined text-[16px] ml-0.5 group-hover:translate-x-0.5 transition-transform">chevron_right</span>
+</span>
+</div>
+</article>
+<!-- Card 4: Project Akhir -->
+<article class="bg-surface border border-outline rounded-2xl p-4 shadow-[0_1px_3px_rgba(16,24,40,0.06)] hover:border-primary-container/40 transition-colors">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-tertiary-fixed/60 border border-outline text-tertiary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">rocket_launch</span>
+</div>
+<div>
+<h3 class="text-title-md font-title-md text-on-surface">Project Akhir</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-[#EEF2FF] text-primary-container text-label-sm font-label-sm">
+                    8 Materi
+                  </span>
+<span class="text-label-sm font-label-sm text-secondary">
+                    • Mandiri
+                  </span>
+</div>
+</div>
+</div>
+<button aria-label="Menu Opsi" class="w-8 h-8 rounded-lg flex items-center justify-center text-secondary hover:bg-surface-container-low hover:text-on-surface active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<p class="text-body-md font-body-md text-secondary mt-3">
+            Draft proposal skripsi, dokumentasi PRD, dan referensi paper
+          </p>
+<div class="mt-3.5 pt-3 border-t border-outline flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-label-sm font-label-sm text-secondary">
+<span class="material-symbols-outlined text-[15px] text-secondary">schedule</span>
+<span>Terakhir diperbarui: 5 hari lalu</span>
+</div>
+<span class="inline-flex items-center text-label-sm font-label-sm text-primary-container font-semibold group cursor-pointer">
+              Buka Rak
+              <span class="material-symbols-outlined text-[16px] ml-0.5 group-hover:translate-x-0.5 transition-transform">chevron_right</span>
+</span>
+</div>
+</article>
+</section>
+</main>
+<!-- Contextual Floating Action Button (FAB) -->
+<button aria-label="Buat Rak Baru" class="fixed bottom-20 right-5 z-40 w-14 h-14 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-[0_8px_24px_rgba(16,24,40,0.18)] active:scale-95 transition-transform focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+<!-- Bottom Navigation Bar from Shared Components JSON -->
+<!-- Destination count: 4, labels: ["Home", "Shelves", "Recent", "Favorites"], active: "Shelves" -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-4 pb-safe bg-surface dark:bg-inverse-surface border-t border-outline dark:border-outline-variant max-w-md mx-auto right-0">
+<!-- Tab: Home -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95 transition-transform py-1 px-3" href="#home">
+<span class="material-symbols-outlined text-[22px]">home</span>
+<span class="text-label-sm font-label-sm mt-0.5">Home</span>
+</a>
+<!-- Tab: Shelves (ACTIVE) -->
+<a class="flex flex-col items-center justify-center text-primary-container dark:text-inverse-primary font-bold hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95 transition-transform py-1 px-3" href="#shelves">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">shelves</span>
+<span class="text-label-sm font-label-sm mt-0.5">Shelves</span>
+</a>
+<!-- Tab: Recent -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95 transition-transform py-1 px-3" href="#recent">
+<span class="material-symbols-outlined text-[22px]">history</span>
+<span class="text-label-sm font-label-sm mt-0.5">Recent</span>
+</a>
+<!-- Tab: Favorites -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95 transition-transform py-1 px-3" href="#favorites">
+<span class="material-symbols-outlined text-[22px]">star</span>
+<span class="text-label-sm font-label-sm mt-0.5">Favorites</span>
+</a>
+</nav>
+</div>
+</body></html>
