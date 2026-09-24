@@ -30,9 +30,11 @@ Semua anggota wajib paham: arsitektur, data flow, struktur DB, state management 
 
 ## Cara mulai (per anggota)
 1. Clone repo, buka di Android Studio (Hedgehog+), biarkan Gradle sync.
-2. Butuh JDK 17. Emulator/device Android 8.0+ (minSdk 26).
-3. Branch per fitur: `feature/nama-fitur`, PR ke `develop`, 1 reviewer sebelum merge.
-4. Jangan ubah `core/theme` kalau bukan PIC — semua screen konsumsi token dari situ.
+2. **Butuh JDK 17** (bukan JDK bundled Android Studio versi baru yang kadang JDK 21/25 — Kotlin 1.9.24/KSP belum kompatibel dengan JDK 25). Install: `winget install EclipseAdoptium.Temurin.17.JDK` (Windows) atau download dari https://adoptium.net/temurin/releases/?version=17
+   Lalu di Android Studio: **File → Settings → Build, Execution, Deployment → Build Tools → Gradle → Gradle JDK** → pilih JDK 17 yang baru diinstall (atau "Download JDK" langsung dari situ).
+3. Emulator/device Android 8.0+ (minSdk 26).
+4. Branch per fitur: `feature/nama-fitur`, PR ke `develop`, 1 reviewer sebelum merge.
+5. Jangan ubah `core/theme` kalau bukan PIC — semua screen konsumsi token dari situ.
 
 ## Belum diisi (langkah selanjutnya)
 - ViewModel per screen (Loading/Success/Empty/Error state) — lihat PRD section 32.
