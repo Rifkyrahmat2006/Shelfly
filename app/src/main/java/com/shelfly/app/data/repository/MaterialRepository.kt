@@ -1,0 +1,23 @@
+package com.shelfly.app.data.repository
+
+import com.shelfly.app.data.local.dao.MaterialDao
+import com.shelfly.app.data.local.entity.MaterialEntity
+import kotlinx.coroutines.flow.Flow
+
+// PIC: Person C (import/CRUD) & Person D (search/filter/favorite/recent)
+class MaterialRepository(private val materialDao: MaterialDao) {
+    fun getByShelf(shelfId: Long): Flow<List<MaterialEntity>> = materialDao.getByShelf(shelfId)
+    fun search(query: String): Flow<List<MaterialEntity>> = materialDao.search(query)
+    fun getFavorites(): Flow<List<MaterialEntity>> = materialDao.getFavorites()
+    fun getRecent(): Flow<List<MaterialEntity>> = materialDao.getRecent()
+
+    suspend fun importMaterial(material: MaterialEntity): Long = materialDao.insert(material)
+
+    suspend fun toggleFavorite(material: MaterialEntity) =
+        materialDao.update(material.copy(isFavorite = !material.isFavorite))
+
+    suspend fun markOpened(material: MaterialEntity) =
+        materialDao.update(material.copy(lastOpenedAt = System.currentTimeMillis()))
+
+    suspend fun delete(material: MaterialEntity) = materialDao.delete(material)
+}
