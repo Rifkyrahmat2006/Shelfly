@@ -1,0 +1,342 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Shelfly — Home Dashboard</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-on-surface": "#eff1f5",
+            "on-primary-fixed": "#001356",
+            "on-primary-container": "#f1f0ff",
+            "on-secondary-fixed": "#111c2d",
+            "on-tertiary-fixed": "#171c25",
+            "surface-variant": "#EEF2FF",
+            "secondary-fixed-dim": "#bdc7de",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed-variant": "#424751",
+            "tertiary-container": "#696e79",
+            "on-secondary-container": "#596377",
+            "primary-container": "#315cff",
+            "surface-container-highest": "#e1e2e6",
+            "surface": "#FFFFFF",
+            "surface-container-high": "#e7e8ec",
+            "outline-variant": "#c4c5d9",
+            "on-surface": "#252938",
+            "on-surface-variant": "#667085",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#c2c6d3",
+            "secondary": "#667085",
+            "on-error": "#ffffff",
+            "error": "#D92D20",
+            "surface-container": "#edeef2",
+            "on-error-container": "#93000a",
+            "primary-fixed-dim": "#b9c3ff",
+            "primary": "#315CFF",
+            "on-secondary": "#ffffff",
+            "on-primary": "#ffffff",
+            "tertiary": "#515660",
+            "surface-container-low": "#f2f3f7",
+            "surface-tint": "#154aef",
+            "surface-bright": "#f8f9fd",
+            "error-container": "#ffdad6",
+            "tertiary-fixed": "#dee2ef",
+            "inverse-surface": "#2e3134",
+            "secondary-container": "#d6e0f8",
+            "primary-fixed": "#dde1ff",
+            "on-secondary-fixed-variant": "#3d475a",
+            "on-background": "#171A24",
+            "background": "#F7F8FC",
+            "inverse-primary": "#b9c3ff",
+            "success": "#12B76A",
+            "surface-dim": "#d9dade",
+            "secondary-fixed": "#d9e3fb",
+            "outline": "#E2E5EC",
+            "on-tertiary-container": "#edf1fe",
+            "on-primary-fixed-variant": "#0034bf",
+            "warning": "#F79009"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-tablet": "1.5rem",
+            "margin-desktop": "2rem",
+            "space-sm": "0.5rem",
+            "space-md": "0.75rem",
+            "space-2xl": "2rem",
+            "margin": "1rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "gutter-desktop": "1.5rem",
+            "space-lg": "1rem",
+            "space-xl": "1.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "title-md": ["Inter"],
+            "display-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .shadow-subtle {
+      box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+    }
+    .shadow-floating {
+      box-shadow: 0 8px 24px rgba(16, 24, 40, 0.10);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex justify-center selection:bg-surface-variant selection:text-primary">
+<!-- Mobile Viewport Container -->
+<div class="w-full max-w-md min-h-screen bg-background flex flex-col relative pb-28">
+<!-- Top App Header Section -->
+<header class="bg-surface w-full px-margin pt-4 pb-4">
+<div class="flex justify-between items-center">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Good evening,</span>
+<h1 class="font-headline-md text-headline-md text-on-background">Halo, Alex!</h1>
+</div>
+<div class="flex items-center gap-2">
+<button aria-label="Notifications" class="w-10 h-10 rounded-full flex items-center justify-center text-secondary hover:bg-surface-container-low transition-colors duration-150" type="button">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-variant border border-outline flex items-center justify-center text-primary font-label-md text-label-md overflow-hidden">
+<span>A</span>
+</div>
+</div>
+</div>
+<!-- Prominent Search Bar -->
+<div class="mt-4">
+<label class="sr-only" for="materials-search">Search materials</label>
+<div class="relative flex items-center w-full">
+<span class="absolute left-3.5 text-secondary flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-secondary" data-icon="search">search</span>
+</span>
+<input class="w-full h-12 pl-11 pr-4 bg-surface text-on-surface font-body-md text-body-md placeholder:text-secondary rounded-xl border border-outline focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all" id="materials-search" placeholder="Search materials..." type="search">
+</div>
+</div>
+</header>
+<!-- Main Content Flow -->
+<main class="flex-1 px-margin pt-4 space-y-6">
+<!-- Section: My Shelves -->
+<section aria-labelledby="shelves-heading">
+<div class="flex items-center justify-between mb-3">
+<h2 class="font-headline-md text-headline-md text-on-background" id="shelves-heading">My Shelves</h2>
+<button class="font-label-md text-label-md text-primary hover:underline" type="button">
+            See all
+          </button>
+</div>
+<!-- 2-Column Responsive Shelf Grid -->
+<div class="grid grid-cols-2 gap-3">
+<!-- Shelf Card 1 -->
+<div class="bg-surface rounded-xl border border-outline p-space-md shadow-subtle flex flex-col justify-between hover:border-primary/40 transition-colors duration-150 cursor-pointer">
+<div>
+<div class="w-10 h-10 rounded-lg bg-surface-variant text-primary flex items-center justify-center mb-3">
+<span class="material-symbols-outlined" data-icon="phone_android">phone_android</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-1 mb-1">Pemrograman Mobile</h3>
+<p class="font-label-sm text-label-sm text-secondary">Updated today</p>
+</div>
+<div class="mt-4 pt-3 border-t border-outline flex items-center justify-between">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+                24 materials
+              </span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Shelf Card 2 -->
+<div class="bg-surface rounded-xl border border-outline p-space-md shadow-subtle flex flex-col justify-between hover:border-primary/40 transition-colors duration-150 cursor-pointer">
+<div>
+<div class="w-10 h-10 rounded-lg bg-surface-variant text-primary flex items-center justify-center mb-3">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-1 mb-1">Basis Data</h3>
+<p class="font-label-sm text-label-sm text-secondary">Updated yesterday</p>
+</div>
+<div class="mt-4 pt-3 border-t border-outline flex items-center justify-between">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+                16 materials
+              </span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Shelf Card 3 -->
+<div class="bg-surface rounded-xl border border-outline p-space-md shadow-subtle flex flex-col justify-between hover:border-primary/40 transition-colors duration-150 cursor-pointer">
+<div>
+<div class="w-10 h-10 rounded-lg bg-surface-variant text-primary flex items-center justify-center mb-3">
+<span class="material-symbols-outlined" data-icon="network_wifi">network_wifi</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-1 mb-1">Jaringan Komputer</h3>
+<p class="font-label-sm text-label-sm text-secondary">Updated 3d ago</p>
+</div>
+<div class="mt-4 pt-3 border-t border-outline flex items-center justify-between">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+                12 materials
+              </span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Shelf Card 4 -->
+<div class="bg-surface rounded-xl border border-outline p-space-md shadow-subtle flex flex-col justify-between hover:border-primary/40 transition-colors duration-150 cursor-pointer">
+<div>
+<div class="w-10 h-10 rounded-lg bg-surface-variant text-primary flex items-center justify-center mb-3">
+<span class="material-symbols-outlined" data-icon="folder">folder</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-1 mb-1">Project Akhir</h3>
+<p class="font-label-sm text-label-sm text-secondary">Updated 5d ago</p>
+</div>
+<div class="mt-4 pt-3 border-t border-outline flex items-center justify-between">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+                8 materials
+              </span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Recently Opened -->
+<section aria-labelledby="recent-heading" class="pb-6">
+<div class="flex items-center justify-between mb-3">
+<h2 class="font-headline-md text-headline-md text-on-background" id="recent-heading">Recently Opened</h2>
+<button class="font-label-md text-label-md text-primary hover:underline" type="button">
+            See all
+          </button>
+</div>
+<div class="space-y-3">
+<!-- Material Card 1 -->
+<div class="bg-surface rounded-xl border border-outline p-3 shadow-subtle flex items-center justify-between hover:border-primary/30 transition-colors duration-150 cursor-pointer">
+<div class="flex items-center gap-3 min-w-0">
+<!-- Document Icon Badge -->
+<div class="w-11 h-11 rounded-lg bg-surface-variant text-primary flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<!-- Meta & Title -->
+<div class="min-w-0 pr-2">
+<h3 class="font-title-md text-title-md text-on-surface truncate">Materi Database Room.pdf</h3>
+<p class="font-label-sm text-label-sm text-secondary truncate mt-0.5">
+                  Learning • PDF • 2.4 MB • Opened 10m ago
+                </p>
+</div>
+</div>
+<!-- Star Favorite Filled Icon -->
+<button aria-label="Favorite item" class="p-2 text-warning flex-shrink-0 hover:scale-110 active:scale-95 transition-transform duration-100" type="button">
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+</div>
+<!-- Material Card 2 -->
+<div class="bg-surface rounded-xl border border-outline p-3 shadow-subtle flex items-center justify-between hover:border-primary/30 transition-colors duration-150 cursor-pointer">
+<div class="flex items-center gap-3 min-w-0">
+<!-- Document Icon Badge -->
+<div class="w-11 h-11 rounded-lg bg-surface-variant text-primary flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<!-- Meta & Title -->
+<div class="min-w-0 pr-2">
+<h3 class="font-title-md text-title-md text-on-surface truncate">Android Navigation Component.pdf</h3>
+<p class="font-label-sm text-label-sm text-secondary truncate mt-0.5">
+                  Mobile Dev • PDF • 1.8 MB • Opened 2h ago
+                </p>
+</div>
+</div>
+<!-- Star Favorite Outline Icon -->
+<button aria-label="Favorite item" class="p-2 text-secondary flex-shrink-0 hover:text-warning active:scale-95 transition-transform duration-100" type="button">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+</button>
+</div>
+<!-- Material Card 3 -->
+<div class="bg-surface rounded-xl border border-outline p-3 shadow-subtle flex items-center justify-between hover:border-primary/30 transition-colors duration-150 cursor-pointer">
+<div class="flex items-center gap-3 min-w-0">
+<!-- Presentation Icon Badge -->
+<div class="w-11 h-11 rounded-lg bg-surface-variant text-primary flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="slideshow">slideshow</span>
+</div>
+<!-- Meta & Title -->
+<div class="min-w-0 pr-2">
+<h3 class="font-title-md text-title-md text-on-surface truncate">Arsitektur MVVM &amp; Repository.pptx</h3>
+<p class="font-label-sm text-label-sm text-secondary truncate mt-0.5">
+                  Mobile Dev • PPTX • 4.1 MB • Opened yesterday
+                </p>
+</div>
+</div>
+<!-- Star Favorite Outline Icon -->
+<button aria-label="Favorite item" class="p-2 text-secondary flex-shrink-0 hover:text-warning active:scale-95 transition-transform duration-100" type="button">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button (FAB) -->
+<div class="fixed right-4 bottom-20 z-40 max-w-md">
+<button aria-label="Add Material" class="w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-floating hover:bg-primary/95 active:scale-95 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" type="button">
+<span class="material-symbols-outlined text-2xl" data-icon="add">add</span>
+</button>
+</div>
+<!-- Docked Bottom Navigation Bar (Execution from Shared Components JSON) -->
+<nav aria-label="Primary Navigation" class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-4 pb-safe bg-surface dark:bg-inverse-surface border-t border-outline dark:border-outline-variant">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-inverse-primary font-bold active:scale-95 transition-transform duration-100" href="#home">
+<span class="material-symbols-outlined" data-icon="home" data-weight="fill" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm mt-0.5">Home</span>
+</a>
+<!-- Shelves -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95 transition-transform duration-100" href="#shelves">
+<span class="material-symbols-outlined" data-icon="shelves">shelves</span>
+<span class="font-label-sm text-label-sm mt-0.5">Shelves</span>
+</a>
+<!-- Recent -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95 transition-transform duration-100" href="#recent">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-sm text-label-sm mt-0.5">Recent</span>
+</a>
+<!-- Favorites -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95 transition-transform duration-100" href="#favorites">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+<span class="font-label-sm text-label-sm mt-0.5">Favorites</span>
+</a>
+</nav>
+</div>
+</body></html>

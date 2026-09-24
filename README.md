@@ -1,7 +1,7 @@
 # Shelfly
 
 Personal Digital Material Organizer — Project Akhir Pemrograman Mobile.
-Full spec: `docs/prd.md` (PRD, 57 section). Design tokens: `docs/design.md` (Stitch export). Pembagian tugas detail per orang: `docs/TASKS.md`.
+Full spec: `docs/prd.md` (PRD, 57 section). Design tokens: `docs/design.md` (Stitch export). UI mockup per screen: `docs/stitch-screens/` (screenshot + HTML dari Stitch, lihat `index.md` di situ). Pembagian tugas detail per orang: `docs/TASKS.md`.
 
 ## Stack
 Kotlin + Jetpack Compose + Room + Navigation Compose. MVVM + Repository pattern. Alur kerja: TDD (RED-GREEN-REFACTOR) — detail di `docs/TASKS.md`.

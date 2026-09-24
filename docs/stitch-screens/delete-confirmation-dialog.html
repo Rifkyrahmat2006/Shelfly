@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shelfly - Delete Confirmation Dialog</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error-container": "#ffdad6",
+            "surface-dim": "#d9dade",
+            "tertiary-fixed-dim": "#c2c6d3",
+            "on-surface-variant": "#434656",
+            "secondary": "#555f73",
+            "on-tertiary-container": "#edf1fe",
+            "tertiary-fixed": "#dee2ef",
+            "tertiary": "#515660",
+            "inverse-surface": "#2e3134",
+            "on-secondary-container": "#596377",
+            "inverse-primary": "#b9c3ff",
+            "primary-fixed": "#dde1ff",
+            "surface-bright": "#f8f9fd",
+            "on-primary": "#ffffff",
+            "on-background": "#171A24",
+            "on-surface": "#252938",
+            "on-secondary-fixed-variant": "#3d475a",
+            "outline": "#E2E5EC",
+            "on-error-container": "#93000a",
+            "on-primary-fixed": "#001356",
+            "on-primary-fixed-variant": "#0034bf",
+            "primary-container": "#315cff",
+            "on-secondary": "#ffffff",
+            "outline-variant": "#c4c5d9",
+            "surface-container-low": "#f2f3f7",
+            "warning": "#F79009",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed-variant": "#424751",
+            "surface-container": "#edeef2",
+            "on-primary-container": "#f1f0ff",
+            "tertiary-container": "#696e79",
+            "surface-variant": "#e1e2e6",
+            "surface": "#FFFFFF",
+            "background": "#f8f9fd",
+            "secondary-fixed": "#d9e3fb",
+            "on-secondary-fixed": "#111c2d",
+            "secondary-container": "#d6e0f8",
+            "primary": "#0040e3",
+            "on-tertiary": "#ffffff",
+            "success": "#12B76A",
+            "on-tertiary-fixed": "#171c25",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed-dim": "#b9c3ff",
+            "error": "#D92D20",
+            "surface-tint": "#154aef",
+            "surface-container-high": "#e7e8ec",
+            "secondary-fixed-dim": "#bdc7de",
+            "surface-container-highest": "#e1e2e6",
+            "inverse-on-surface": "#eff1f5"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "1.5rem",
+            "space-md": "0.75rem",
+            "gutter": "1rem",
+            "margin-tablet": "1.5rem",
+            "space-lg": "1rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "margin-desktop": "2rem",
+            "space-xs": "0.25rem",
+            "gutter-desktop": "1.5rem",
+            "space-2xl": "2rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "display-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "title-md": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex justify-center items-center p-0 select-none overflow-hidden">
+<!-- Mobile Viewport Shell (390px base simulation) -->
+<div class="relative w-full max-w-md h-[844px] bg-background flex flex-col overflow-hidden shadow-2xl border border-outline">
+<!-- ========================================== -->
+<!-- BACKGROUND SCREEN (Dimmed & Blurred Shelf) -->
+<!-- ========================================== -->
+<div class="absolute inset-0 flex flex-col pointer-events-none select-none filter blur-[6px] opacity-75">
+<!-- Top App Bar (Shared Component Reference) -->
+<header class="flex justify-between items-center w-full px-4 h-14 bg-surface border-b border-outline">
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-xl text-secondary">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<span class="text-headline-md font-headline-md font-bold text-on-surface">Shelfly</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-10 h-10 flex items-center justify-center rounded-xl text-secondary">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl text-secondary">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Background Content Canvas: Shelf View -->
+<div class="flex-1 p-margin flex flex-col gap-space-lg overflow-hidden bg-background">
+<!-- Shelf Header Banner -->
+<div class="p-space-lg bg-surface border border-outline rounded-xl flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">shelves</span>
+<span class="text-label-sm font-label-sm uppercase tracking-wider text-primary">Koleksi Aktif</span>
+</div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Pemrograman Mobile</h1>
+<p class="text-body-md font-body-md text-secondary">24 dokumen terkurasi • Terakhir diakses kemarin</p>
+</div>
+<!-- Document Rows Sample -->
+<div class="flex flex-col gap-space-sm">
+<div class="p-space-md bg-surface border border-outline rounded-xl flex items-center gap-space-md">
+<div class="w-10 h-12 bg-primary-fixed flex items-center justify-center rounded-lg text-primary">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div class="flex-1">
+<p class="text-title-md font-title-md text-on-surface">Materi Database Room.pdf</p>
+<p class="text-label-sm font-label-sm text-secondary">PDF • 4.2 MB • Diperbarui 12 Mar</p>
+</div>
+</div>
+<div class="p-space-md bg-surface border border-outline rounded-xl flex items-center gap-space-md">
+<div class="w-10 h-12 bg-surface-container-low flex items-center justify-center rounded-lg text-secondary">
+<span class="material-symbols-outlined">code</span>
+</div>
+<div class="flex-1">
+<p class="text-title-md font-title-md text-on-surface">Jetpack Compose Layout.kt</p>
+<p class="text-label-sm font-label-sm text-secondary">Kotlin • 18 KB • Diperbarui 10 Mar</p>
+</div>
+</div>
+<div class="p-space-md bg-surface border border-outline rounded-xl flex items-center gap-space-md">
+<div class="w-10 h-12 bg-surface-container-low flex items-center justify-center rounded-lg text-secondary">
+<span class="material-symbols-outlined">slideshow</span>
+</div>
+<div class="flex-1">
+<p class="text-title-md font-title-md text-on-surface">Arsitektur MVVM &amp; StateFlow.pptx</p>
+<p class="text-label-sm font-label-sm text-secondary">Slides • 12.8 MB • Diperbarui 8 Mar</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- MODAL OVERLAY BACKDROP                     -->
+<!-- Tinted scrim rgba(23, 26, 36, 0.40) & Blur -->
+<!-- ========================================== -->
+<div class="absolute inset-0 z-30 bg-[#171A24]/50 backdrop-blur-[4px] transition-opacity"></div>
+<!-- ========================================== -->
+<!-- CONFIRMATION DIALOG MODAL (Center Aligned) -->
+<!-- ========================================== -->
+<div class="relative z-40 flex flex-col justify-end sm:justify-center items-center h-full p-4 sm:p-6">
+<!-- Card Container -->
+<div aria-describedby="dialog-desc" aria-labelledby="dialog-title" aria-modal="true" class="w-full bg-surface border border-outline rounded-2xl p-6 shadow-2xl flex flex-col gap-5 animate-in fade-in zoom-in-95 duration-200" role="dialog">
+<!-- Header: Destructive Warning Icon & Title -->
+<div class="flex flex-col items-center sm:items-start text-center sm:text-left gap-3">
+<!-- Destructive Icon in Light Red Circle -->
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">
+              delete_forever
+            </span>
+</div>
+<!-- Dialog Title -->
+<h2 class="text-headline-md font-headline-md text-on-surface tracking-tight" id="dialog-title">
+            Hapus Rak ‘Pemrograman Mobile’?
+          </h2>
+<!-- Descriptive Subtext -->
+<p class="text-body-md font-body-md text-secondary leading-relaxed" id="dialog-desc">
+            Rak ini berisi 24 material dokumen. Menghapus rak ini akan mencopot pengelompokan materi. File fisik di perangkat Anda tidak akan terhapus.
+          </p>
+</div>
+<!-- Summary Informational Card -->
+<div class="bg-surface-bright border border-outline rounded-xl p-3.5 flex flex-col gap-2.5">
+<!-- Total Material -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">folder_open</span>
+<span class="text-label-sm font-label-sm text-secondary">Total Material</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface font-semibold">24 Dokumen</span>
+</div>
+<div class="w-full h-px bg-outline"></div>
+<!-- Dokumen Terakhir -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">schedule</span>
+<span class="text-label-sm font-label-sm text-secondary">Dokumen Terakhir</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface truncate max-w-[160px] text-right" title="Materi Database Room.pdf">
+              Materi Database Room.pdf
+            </span>
+</div>
+<div class="w-full h-px bg-outline"></div>
+<!-- Peringatan Badge -->
+<div class="flex items-center gap-2 pt-0.5">
+<span class="material-symbols-outlined text-warning text-[18px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="text-label-sm font-label-sm text-on-surface font-medium">Peringatan:</span>
+<span class="text-label-sm font-label-sm text-error font-semibold ml-auto">Tindakan ini tidak dapat dibatalkan</span>
+</div>
+</div>
+<!-- Action Buttons Cluster -->
+<div class="flex flex-col gap-2.5 pt-1">
+<!-- Destructive Primary Button -->
+<button class="w-full h-12 bg-error hover:bg-error/90 active:scale-[0.98] transition-all text-on-error rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-error focus:ring-offset-2" type="button">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+<span>Hapus Rak</span>
+</button>
+<!-- Secondary Dismiss Button -->
+<button class="w-full h-12 bg-surface hover:bg-surface-container-low active:scale-[0.98] transition-all border border-outline text-on-surface rounded-xl font-label-md text-label-md flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" type="button">
+<span>Batal / Tetap Simpan</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

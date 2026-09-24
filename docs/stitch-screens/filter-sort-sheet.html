@@ -1,0 +1,361 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Shelfly - Filter &amp; Sort</title>
+<!-- Material Symbols Outlined Font -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration matching the Shelfly Design System Tokens -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-primary": "#b9c3ff",
+            "error-container": "#ffdad6",
+            "inverse-surface": "#2e3134",
+            "secondary": "#555f73",
+            "primary-container": "#315cff",
+            "surface-container-low": "#f2f3f7",
+            "secondary-container": "#d6e0f8",
+            "primary-fixed-dim": "#b9c3ff",
+            "on-primary-fixed-variant": "#0034bf",
+            "on-tertiary": "#ffffff",
+            "tertiary-container": "#696e79",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed-variant": "#424751",
+            "inverse-on-surface": "#eff1f5",
+            "on-background": "#171A24",
+            "success": "#12B76A",
+            "tertiary-fixed-dim": "#c2c6d3",
+            "background": "#f8f9fd",
+            "primary-fixed": "#dde1ff",
+            "surface-container": "#edeef2",
+            "on-primary-fixed": "#001356",
+            "surface-tint": "#154aef",
+            "on-primary-container": "#f1f0ff",
+            "tertiary": "#515660",
+            "surface-container-highest": "#e1e2e6",
+            "on-secondary-fixed": "#111c2d",
+            "secondary-fixed-dim": "#bdc7de",
+            "on-primary": "#ffffff",
+            "outline": "#E2E5EC",
+            "surface-bright": "#f8f9fd",
+            "surface-container-high": "#e7e8ec",
+            "error": "#D92D20",
+            "on-tertiary-fixed": "#171c25",
+            "on-error-container": "#93000a",
+            "on-tertiary-container": "#edf1fe",
+            "surface-dim": "#d9dade",
+            "warning": "#F79009",
+            "on-secondary-fixed-variant": "#3d475a",
+            "on-secondary": "#ffffff",
+            "on-surface-variant": "#434656",
+            "on-surface": "#191c1f",
+            "tertiary-fixed": "#dee2ef",
+            "surface": "#FFFFFF",
+            "primary": "#0040e3",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#d9e3fb",
+            "surface-variant": "#e1e2e6",
+            "outline-variant": "#c4c5d9",
+            "on-secondary-container": "#596377"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "3xl": "1.25rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-tablet": "1.5rem",
+            "margin": "1rem",
+            "space-xl": "1.5rem",
+            "gutter": "1rem",
+            "space-md": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1rem",
+            "gutter-desktop": "1.5rem",
+            "space-2xl": "2rem",
+            "space-sm": "0.5rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Inter"],
+            "title-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "display-lg": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"]
+          },
+          "fontSize": {
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary min-h-screen relative overflow-x-hidden flex justify-center">
+<!-- Mobile Device Container Viewport Simulation -->
+<div class="w-full max-w-md min-h-screen bg-background relative flex flex-col justify-between overflow-hidden shadow-2xl">
+<!-- Underlaying Content: Search & Shelf Material Workspace (De-emphasized via Scrim) -->
+<div aria-hidden="true" class="w-full flex-1 flex flex-col pointer-events-none select-none filter blur-[2px] opacity-75">
+<!-- Top App Bar (Shared Components standard header context) -->
+<header class="bg-surface text-primary border-b border-outline flex justify-between items-center w-full px-4 h-14 shrink-0">
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-xl text-secondary">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<span class="font-headline-md text-headline-md font-bold text-on-surface">Shelfly</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-10 h-10 flex items-center justify-center rounded-xl text-secondary">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</div>
+</header>
+<!-- Background Material Search Header & List Sample -->
+<main class="p-4 space-y-4">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface">Materi &amp; Dokumen</span>
+<span class="font-label-sm text-label-sm text-secondary">24 item</span>
+</div>
+<!-- Simulated Search Input Row -->
+<div class="h-12 w-full bg-surface border border-outline rounded-xl px-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="search">search</span>
+<span class="text-secondary font-body-md">Cari modul, referensi, slide...</span>
+</div>
+<!-- Material Row 1 -->
+<div class="p-4 bg-surface rounded-xl border border-outline shadow-sm flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-xl bg-red-50 text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-title-md text-title-md text-on-surface truncate">Modul 04 - Arsitektur Flutter</h4>
+<p class="font-label-sm text-label-sm text-secondary mt-0.5">Pemrograman Mobile • 4.2 MB • PDF</p>
+</div>
+</div>
+<!-- Material Row 2 -->
+<div class="p-4 bg-surface rounded-xl border border-outline shadow-sm flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-xl bg-blue-50 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-title-md text-title-md text-on-surface truncate">ERD &amp; Skema Normalisasi v2</h4>
+<p class="font-label-sm text-label-sm text-secondary mt-0.5">Basis Data • 1.8 MB • DOCX</p>
+</div>
+</div>
+<!-- Material Row 3 -->
+<div class="p-4 bg-surface rounded-xl border border-outline shadow-sm flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-xl bg-amber-50 text-warning flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="slideshow">slideshow</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-title-md text-title-md text-on-surface truncate">Presentasi Subnetting CIDR</h4>
+<p class="font-label-sm text-label-sm text-secondary mt-0.5">Jaringan Komputer • 8.6 MB • PPTX</p>
+</div>
+</div>
+</main>
+</div>
+<!-- Tinted Scrim / Modal Backdrop Overlay (Level 2 Elevation context) -->
+<div aria-label="Tutup Lembar Filter" class="absolute inset-0 z-40 bg-[#171A24]/40 backdrop-blur-[4px] transition-opacity duration-300" role="button" tabindex="0"></div>
+<!-- Bottom Sheet Container (Slides up from bottom, pure white #FFFFFF, rounded top corners 20px) -->
+<section aria-labelledby="sheet-title" aria-modal="true" class="absolute bottom-0 left-0 right-0 z-50 bg-surface rounded-t-[20px] shadow-[0_-8px_24px_rgba(16,24,40,0.12)] border-t border-outline flex flex-col max-h-[795px] transition-transform duration-300 transform translate-y-0" role="dialog">
+<!-- Drag Handle Bar -->
+<div class="w-full pt-3 pb-2 flex items-center justify-center cursor-grab active:cursor-grabbing">
+<div class="w-10 h-1.5 rounded-full bg-outline-variant"></div>
+</div>
+<!-- Header Bottom Sheet -->
+<div class="flex items-center justify-between px-6 py-3 border-b border-outline">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-20" data-icon="tune">tune</span>
+<h2 class="font-headline-md text-headline-md text-on-surface" id="sheet-title">Filter &amp; Urutkan</h2>
+</div>
+<button class="font-label-md text-label-md text-primary hover:text-primary-container active:scale-95 transition-all py-1 px-2 rounded-lg hover:bg-surface-container-low" type="button">
+          Reset
+        </button>
+</div>
+<!-- Scrollable Sheet Content -->
+<div class="overflow-y-auto px-6 py-5 space-y-6 no-scrollbar flex-1">
+<!-- SECTION 1: Urutkan Berdasarkan (Sort By) -->
+<fieldset class="space-y-3">
+<legend class="font-title-md text-title-md text-on-surface mb-2">Urutkan Berdasarkan</legend>
+<div class="space-y-2">
+<!-- Radio Option 1: Terbaru (Selected Highlight) -->
+<label class="flex items-center justify-between p-3.5 rounded-xl border border-primary-container bg-[#EEF2FF] cursor-pointer transition-colors duration-150">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="schedule">schedule</span>
+<span class="font-body-md text-body-md font-semibold text-primary">Terbaru</span>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-primary-container flex items-center justify-center bg-surface">
+<div class="w-2.5 h-2.5 rounded-full bg-primary-container"></div>
+</div>
+</label>
+<!-- Radio Option 2: Terlama -->
+<label class="flex items-center justify-between p-3.5 rounded-xl border border-outline bg-surface hover:bg-surface-container-low cursor-pointer transition-colors duration-150">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-xl" data-icon="history">history</span>
+<span class="font-body-md text-body-md text-on-surface">Terlama</span>
+</div>
+<div class="w-5 h-5 rounded-full border border-outline bg-surface"></div>
+</label>
+<!-- Radio Option 3: Nama (A - Z) -->
+<label class="flex items-center justify-between p-3.5 rounded-xl border border-outline bg-surface hover:bg-surface-container-low cursor-pointer transition-colors duration-150">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-xl" data-icon="sort_by_alpha">sort_by_alpha</span>
+<span class="font-body-md text-body-md text-on-surface">Nama (A - Z)</span>
+</div>
+<div class="w-5 h-5 rounded-full border border-outline bg-surface"></div>
+</label>
+<!-- Radio Option 4: Terakhir Dibuka -->
+<label class="flex items-center justify-between p-3.5 rounded-xl border border-outline bg-surface hover:bg-surface-container-low cursor-pointer transition-colors duration-150">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-xl" data-icon="visibility">visibility</span>
+<span class="font-body-md text-body-md text-on-surface">Terakhir Dibuka</span>
+</div>
+<div class="w-5 h-5 rounded-full border border-outline bg-surface"></div>
+</label>
+</div>
+</fieldset>
+<div class="h-px bg-outline w-full"></div>
+<!-- SECTION 2: Pilih Rak (Shelf) -->
+<section class="space-y-3">
+<div class="flex items-center justify-between">
+<h3 class="font-title-md text-title-md text-on-surface">Pilih Rak</h3>
+<span class="font-label-sm text-label-sm text-secondary">1 terpilih</span>
+</div>
+<!-- Horizontal Scrolling Chips -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1 -mx-6 px-6 no-scrollbar">
+<!-- Chip: Semua Rak (Default) -->
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline bg-surface text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+              Semua Rak
+            </button>
+<!-- Chip: Pemrograman Mobile (Active/Selected) -->
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-primary-container bg-[#EEF2FF] text-primary-container font-label-sm text-label-sm flex items-center gap-1.5 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px] leading-none text-primary-container font-bold" data-icon="check">check</span>
+              Pemrograman Mobile
+            </button>
+<!-- Chip: Basis Data -->
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline bg-surface text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+              Basis Data
+            </button>
+<!-- Chip: Jaringan Komputer -->
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline bg-surface text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+              Jaringan Komputer
+            </button>
+<!-- Chip: Project Akhir -->
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline bg-surface text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+              Project Akhir
+            </button>
+</div>
+</section>
+<div class="h-px bg-outline w-full"></div>
+<!-- SECTION 3: Tipe Dokumen (File Type) -->
+<section class="space-y-3">
+<div class="flex items-center justify-between">
+<h3 class="font-title-md text-title-md text-on-surface">Tipe Dokumen</h3>
+<span class="font-label-sm text-label-sm text-primary">Multi-pilih</span>
+</div>
+<!-- Multi-select Pills Grid / Wrap -->
+<div class="flex flex-wrap gap-2">
+<!-- Chip: Semua -->
+<button class="px-4 py-2 rounded-full border border-outline bg-surface text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+              Semua
+            </button>
+<!-- Chip: PDF (Active Selected State) -->
+<button class="px-4 py-2 rounded-full border border-primary-container bg-[#EEF2FF] text-primary-container font-label-sm text-label-sm flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px] leading-none text-primary-container font-bold" data-icon="check">check</span>
+              PDF
+            </button>
+<!-- Chip: DOCX -->
+<button class="px-4 py-2 rounded-full border border-outline bg-surface text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+              DOCX
+            </button>
+<!-- Chip: PPTX -->
+<button class="px-4 py-2 rounded-full border border-outline bg-surface text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+              PPTX
+            </button>
+<!-- Chip: XLSX -->
+<button class="px-4 py-2 rounded-full border border-outline bg-surface text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+              XLSX
+            </button>
+</div>
+</section>
+<div class="h-px bg-outline w-full"></div>
+<!-- SECTION 4: Kategori (Category) -->
+<section class="space-y-3">
+<h3 class="font-title-md text-title-md text-on-surface">Kategori</h3>
+<!-- Filter Pills -->
+<div class="flex flex-wrap gap-2">
+<!-- Chip: Semua Kategori -->
+<button class="px-4 py-2 rounded-full border border-outline bg-surface text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+              Semua Kategori
+            </button>
+<!-- Chip: Modul (Active Selected) -->
+<button class="px-4 py-2 rounded-full border border-primary-container bg-[#EEF2FF] text-primary-container font-label-sm text-label-sm flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px] leading-none text-primary-container font-bold" data-icon="check">check</span>
+              Modul
+            </button>
+<!-- Chip: Materi -->
+<button class="px-4 py-2 rounded-full border border-outline bg-surface text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+              Materi
+            </button>
+<!-- Chip: Tugas -->
+<button class="px-4 py-2 rounded-full border border-outline bg-surface text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+              Tugas
+            </button>
+<!-- Chip: Referensi -->
+<button class="px-4 py-2 rounded-full border border-outline bg-surface text-secondary font-label-sm text-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+              Referensi
+            </button>
+</div>
+</section>
+</div>
+<!-- Footer Bottom Sheet (Sticky at bottom of sheet) -->
+<footer class="px-6 py-4 border-t border-outline bg-surface flex items-center gap-3">
+<!-- Sekunder: Batal -->
+<button class="w-1/3 h-12 bg-surface text-on-surface border border-outline rounded-xl font-label-md text-label-md hover:bg-surface-container-low active:scale-95 transition-all duration-150 flex items-center justify-center" type="button">
+          Batal
+        </button>
+<!-- Utama (CTA): Terapkan Filter -->
+<button class="flex-1 h-12 bg-primary-container text-on-primary rounded-xl font-label-md text-label-md shadow-sm hover:brightness-105 active:scale-95 transition-all duration-150 flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-lg leading-none" data-icon="filter_list">filter_list</span>
+<span>Terapkan Filter (3 Hasil)</span>
+</button>
+</footer>
+</section>
+</div>
+</body></html>

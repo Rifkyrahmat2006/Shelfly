@@ -1,0 +1,351 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Shelfly - Buat Rak Baru</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#c2c6d3",
+            "surface-container-lowest": "#ffffff",
+            "surface-bright": "#f8f9fd",
+            "warning": "#F79009",
+            "surface-dim": "#d9dade",
+            "surface-container": "#edeef2",
+            "on-tertiary-fixed-variant": "#424751",
+            "on-tertiary-container": "#edf1fe",
+            "surface-tint": "#154aef",
+            "inverse-surface": "#2e3134",
+            "secondary-fixed-dim": "#bdc7de",
+            "error": "#D92D20",
+            "surface": "#FFFFFF",
+            "inverse-primary": "#b9c3ff",
+            "primary": "#0040e3",
+            "on-secondary-fixed": "#111c2d",
+            "error-container": "#ffdad6",
+            "tertiary-fixed": "#dee2ef",
+            "secondary-container": "#d6e0f8",
+            "outline": "#E2E5EC",
+            "secondary": "#555f73",
+            "tertiary-container": "#696e79",
+            "surface-container-highest": "#e1e2e6",
+            "primary-fixed-dim": "#b9c3ff",
+            "primary-container": "#315cff",
+            "background": "#f8f9fd",
+            "inverse-on-surface": "#eff1f5",
+            "on-tertiary": "#ffffff",
+            "surface-container-low": "#f2f3f7",
+            "on-secondary-container": "#596377",
+            "on-secondary": "#ffffff",
+            "on-primary-fixed": "#001356",
+            "on-background": "#171A24",
+            "success": "#12B76A",
+            "primary-fixed": "#dde1ff",
+            "tertiary": "#515660",
+            "on-surface-variant": "#434656",
+            "on-primary-container": "#f1f0ff",
+            "on-primary": "#ffffff",
+            "on-primary-fixed-variant": "#0034bf",
+            "surface-variant": "#e1e2e6",
+            "secondary-fixed": "#d9e3fb",
+            "outline-variant": "#c4c5d9",
+            "on-secondary-fixed-variant": "#3d475a",
+            "on-error-container": "#93000a",
+            "on-error": "#ffffff",
+            "on-surface": "#252938",
+            "on-tertiary-fixed": "#171c25",
+            "surface-container-high": "#e7e8ec"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "space-2xl": "2rem",
+            "space-lg": "1rem",
+            "margin-desktop": "2rem",
+            "space-md": "0.75rem",
+            "space-xs": "0.25rem",
+            "gutter-desktop": "1.5rem",
+            "space-xl": "1.5rem",
+            "margin-tablet": "1.5rem"
+          },
+          "fontFamily": {
+            "title-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "display-lg": ["Inter"]
+          },
+          "fontSize": {
+            "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #E2E5EC;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-[#11131a] min-h-screen flex justify-center items-end sm:items-center p-0 font-body-md text-body-md text-on-surface antialiased select-none">
+<!-- Mobile Screen Frame Container (390px viewport simulation) -->
+<div class="relative w-full max-w-[390px] h-[844px] bg-background overflow-hidden flex flex-col justify-end shadow-2xl rounded-[32px] border border-outline/20">
+<!-- Dimmed Screen Background Context (Shelves Home View) -->
+<div class="absolute inset-0 bg-background pointer-events-none flex flex-col">
+<!-- Background App Top Bar -->
+<header class="flex justify-between items-center w-full px-4 h-14 bg-surface border-b border-outline">
+<div class="flex items-center gap-2">
+<span class="text-headline-md font-headline-md font-bold text-on-surface">Shelfly</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[24px]">search</span>
+<span class="material-symbols-outlined text-secondary text-[24px]">more_vert</span>
+</div>
+</header>
+<!-- Background Shelves Grid Preview (De-emphasized) -->
+<div class="p-4 space-y-4 filter blur-[1.5px] opacity-40">
+<div class="flex items-center justify-between">
+<span class="text-headline-md font-headline-md text-on-surface">Rak Saya</span>
+<span class="text-label-sm font-label-sm text-primary">Lihat Semua</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-surface rounded-xl p-3 border border-outline shadow-sm space-y-2">
+<div class="w-9 h-9 rounded-lg bg-primary-fixed flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[20px]">menu_book</span>
+</div>
+<div>
+<div class="text-title-md font-title-md text-on-surface">Algoritma</div>
+<div class="text-label-sm font-label-sm text-secondary">14 berkas</div>
+</div>
+</div>
+<div class="bg-surface rounded-xl p-3 border border-outline shadow-sm space-y-2">
+<div class="w-9 h-9 rounded-lg bg-secondary-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">science</span>
+</div>
+<div>
+<div class="text-title-md font-title-md text-on-surface">Riset UI/UX</div>
+<div class="text-label-sm font-label-sm text-secondary">8 berkas</div>
+</div>
+</div>
+</div>
+<div class="bg-surface rounded-xl p-4 border border-outline shadow-sm flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[22px]">description</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="text-title-md font-title-md truncate text-on-surface">Silabus Semester 6.pdf</div>
+<div class="text-label-sm font-label-sm text-secondary">Diperbarui 2 jam lalu • 2.4 MB</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Scrim Modal Tint (rgba(23, 26, 36, 0.45) with backdrop blur) -->
+<div class="absolute inset-0 bg-[#171A24]/45 backdrop-blur-[4px] z-10 transition-opacity"></div>
+<!-- Bottom Sheet Modal Surface -->
+<div class="relative z-20 w-full max-h-[85%] bg-surface rounded-t-[24px] border-t border-outline flex flex-col shadow-[0_-8px_24px_rgba(16,24,40,0.12)]">
+<!-- Drag Handle Indicator -->
+<div class="w-full flex justify-center pt-3 pb-1 cursor-grab active:cursor-grabbing">
+<div class="w-10 h-1 rounded-full bg-outline"></div>
+</div>
+<!-- Sheet Header -->
+<div class="px-5 pt-2 pb-3 border-b border-outline flex items-start justify-between">
+<div class="pr-3">
+<h2 class="text-headline-md font-headline-md text-on-surface tracking-tight">Buat Rak Baru</h2>
+<p class="text-label-sm font-label-sm text-secondary mt-0.5 font-normal">
+            Atur materi digital Anda ke dalam konteks atau mata kuliah baru.
+          </p>
+</div>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-secondary hover:bg-surface-container-low transition-colors duration-150 flex-shrink-0 active:scale-95">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Scrollable Form Body -->
+<div class="px-5 py-4 overflow-y-auto custom-scrollbar flex-1 space-y-5">
+<!-- Section 1: Icon & Color Tint Selector -->
+<div class="space-y-3">
+<label class="block text-label-sm font-label-sm text-on-surface uppercase tracking-wider">
+            Ikon &amp; Warna Rak
+          </label>
+<!-- Selected Icon Preview Card -->
+<div class="flex items-center gap-3.5 p-3 rounded-xl bg-surface-container-low border border-outline">
+<div class="w-14 h-14 rounded-xl bg-primary-container text-white flex items-center justify-center shadow-sm transition-all duration-200" id="icon-preview-box">
+<span class="material-symbols-outlined text-[30px]" id="preview-icon-glyph" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="text-title-md font-title-md text-on-surface truncate">Pratinjau Rak</span>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-primary-fixed text-primary font-medium">Aktif</span>
+</div>
+<p class="text-label-sm font-label-sm text-secondary mt-0.5">Ikon 'Kecerdasan Buatan' • Aksen Biru</p>
+</div>
+</div>
+<!-- Quick Icon Selector Pills -->
+<div>
+<span class="text-label-sm font-label-sm text-secondary block mb-2 font-medium">Pilih Ikon Cepat</span>
+<div class="grid grid-cols-6 gap-2">
+<!-- Item 1: Buku (Belajar) -->
+<button class="icon-chip h-11 flex items-center justify-center rounded-xl bg-surface border border-outline hover:bg-surface-container-low text-secondary transition-all active:scale-95" title="Buku &amp; Belajar" type="button">
+<span class="material-symbols-outlined text-[20px]">menu_book</span>
+</button>
+<!-- Item 2: AI / Sains (Selected) -->
+<button class="icon-chip h-11 flex items-center justify-center rounded-xl bg-primary-fixed/40 border-2 border-primary-container text-primary-container font-semibold transition-all active:scale-95 shadow-sm" title="Kecerdasan Buatan" type="button">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</button>
+<!-- Item 3: Pemrograman -->
+<button class="icon-chip h-11 flex items-center justify-center rounded-xl bg-surface border border-outline hover:bg-surface-container-low text-secondary transition-all active:scale-95" title="Pemrograman" type="button">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+</button>
+<!-- Item 4: Pekerjaan / Tugas -->
+<button class="icon-chip h-11 flex items-center justify-center rounded-xl bg-surface border border-outline hover:bg-surface-container-low text-secondary transition-all active:scale-95" title="Pekerjaan" type="button">
+<span class="material-symbols-outlined text-[20px]">work</span>
+</button>
+<!-- Item 5: Penelitian -->
+<button class="icon-chip h-11 flex items-center justify-center rounded-xl bg-surface border border-outline hover:bg-surface-container-low text-secondary transition-all active:scale-95" title="Penelitian" type="button">
+<span class="material-symbols-outlined text-[20px]">science</span>
+</button>
+<!-- Item 6: Kreatif / Desain -->
+<button class="icon-chip h-11 flex items-center justify-center rounded-xl bg-surface border border-outline hover:bg-surface-container-low text-secondary transition-all active:scale-95" title="Kreatif &amp; Desain" type="button">
+<span class="material-symbols-outlined text-[20px]">palette</span>
+</button>
+</div>
+</div>
+<!-- Color Accent Picker Chips -->
+<div>
+<span class="text-label-sm font-label-sm text-secondary block mb-2 font-medium">Aksen Warna Rak</span>
+<div class="flex items-center gap-2.5">
+<!-- Blue #315CFF (Active) -->
+<button class="w-7 h-7 rounded-full bg-primary-container ring-2 ring-offset-2 ring-primary-container flex items-center justify-center text-white transition-all active:scale-90" type="button">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</button>
+<!-- Emerald -->
+<button class="w-7 h-7 rounded-full bg-success flex items-center justify-center text-white transition-all hover:opacity-90 active:scale-90" type="button"></button>
+<!-- Amber -->
+<button class="w-7 h-7 rounded-full bg-warning flex items-center justify-center text-white transition-all hover:opacity-90 active:scale-90" type="button"></button>
+<!-- Violet -->
+<button class="w-7 h-7 rounded-full bg-[#7C3AED] flex items-center justify-center text-white transition-all hover:opacity-90 active:scale-90" type="button"></button>
+<!-- Rose -->
+<button class="w-7 h-7 rounded-full bg-error flex items-center justify-center text-white transition-all hover:opacity-90 active:scale-90" type="button"></button>
+<!-- Slate Neutral -->
+<button class="w-7 h-7 rounded-full bg-tertiary flex items-center justify-center text-white transition-all hover:opacity-90 active:scale-90" type="button"></button>
+</div>
+</div>
+</div>
+<!-- Section 2: Nama Rak (Required) -->
+<div class="space-y-1.5">
+<div class="flex justify-between items-center">
+<label class="text-label-md font-label-md text-on-surface" for="shelf-name">
+              Nama Rak <span class="text-error">*</span>
+</label>
+<span class="text-label-sm font-label-sm text-secondary font-normal">18 / 40</span>
+</div>
+<div class="relative">
+<input class="w-full h-12 px-3.5 bg-surface text-on-surface border border-primary-container rounded-xl text-body-md font-body-md focus:outline-none focus:ring-2 focus:ring-primary-container/20 transition-all shadow-[0_1px_3px_rgba(16,24,40,0.06)]" id="shelf-name" name="shelf_name" placeholder="Contoh: Pemrograman Mobile, Skripsi, dll." type="text" value="Kecerdasan Buatan">
+<div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-success">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Section 3: Deskripsi Rak (Opsional) -->
+<div class="space-y-1.5">
+<label class="text-label-md font-label-md text-on-surface" for="shelf-desc">
+            Deskripsi Rak <span class="text-label-sm font-label-sm text-secondary font-normal">(Opsional)</span>
+</label>
+<textarea class="w-full p-3 bg-surface text-on-surface border border-outline rounded-xl text-body-md font-body-md placeholder:text-secondary/60 focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/15 transition-all resize-none shadow-[0_1px_3px_rgba(16,24,40,0.06)]" id="shelf-desc" name="shelf_description" placeholder="Tambahkan catatan atau konteks rak ini (opsional)..." rows="3">Materi kuliah, slide presentasi, dan referensi paper AI</textarea>
+</div>
+<!-- Section 4: Pengaturan Kategori Awal (Quick Tags) -->
+<div class="space-y-2 pb-1">
+<div>
+<label class="text-label-md font-label-md text-on-surface">Kategori Bawaan</label>
+<p class="text-label-sm font-label-sm text-secondary font-normal">Kategori yang sering digunakan untuk memilah materi di rak ini</p>
+</div>
+<div class="flex flex-wrap gap-2 pt-1">
+<!-- Selected Tag 1: Modul -->
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary-fixed text-primary border border-primary-container text-label-sm font-label-sm transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[14px]">check</span>
+              Modul
+            </button>
+<!-- Selected Tag 2: Materi -->
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary-fixed text-primary border border-primary-container text-label-sm font-label-sm transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[14px]">check</span>
+              Materi
+            </button>
+<!-- Unselected Tag: Tugas -->
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface text-secondary border border-outline text-label-sm font-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span>
+              Tugas
+            </button>
+<!-- Unselected Tag: Referensi -->
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface text-secondary border border-outline text-label-sm font-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span>
+              Referensi
+            </button>
+<!-- Unselected Tag: Praktikum -->
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface text-secondary border border-outline text-label-sm font-label-sm hover:bg-surface-container-low transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span>
+              Praktikum
+            </button>
+<!-- Add Custom Category -->
+<button class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-dashed border-outline-variant text-secondary text-label-sm font-label-sm hover:border-primary-container hover:text-primary transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[14px]">edit_note</span>
+              + Tambah Kategori
+            </button>
+</div>
+</div>
+</div>
+<!-- Sticky Action Footer inside Sheet -->
+<div class="px-5 py-3.5 bg-surface border-t border-outline flex items-center gap-3">
+<!-- Secondary Action: Batal -->
+<button class="h-12 px-5 rounded-xl border border-outline bg-surface text-on-surface text-label-md font-label-md hover:bg-surface-container-low active:scale-95 transition-all" type="button">
+          Batal
+        </button>
+<!-- Primary CTA: Buat Rak -->
+<button class="flex-1 h-12 px-5 rounded-xl bg-primary-container text-white text-label-md font-label-md shadow-sm hover:bg-primary active:scale-[0.98] transition-all flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>Buat Rak</span>
+</button>
+</div>
+</div>
+</div>
+</body></html>

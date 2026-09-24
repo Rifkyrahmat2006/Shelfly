@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shelfly - Detail Rak Kecerdasan Buatan</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-container": "#f1f0ff",
+            "surface-bright": "#f8f9fd",
+            "background": "#f8f9fd",
+            "surface": "#FFFFFF",
+            "on-primary-fixed": "#001356",
+            "secondary": "#555f73",
+            "on-tertiary-fixed": "#171c25",
+            "primary-fixed": "#dde1ff",
+            "on-secondary": "#ffffff",
+            "on-primary-fixed-variant": "#0034bf",
+            "on-surface": "#252938",
+            "inverse-surface": "#2e3134",
+            "on-secondary-fixed": "#111c2d",
+            "on-error-container": "#93000a",
+            "on-secondary-fixed-variant": "#3d475a",
+            "tertiary": "#515660",
+            "surface-container-low": "#f2f3f7",
+            "on-background": "#171A24",
+            "outline": "#E2E5EC",
+            "on-secondary-container": "#596377",
+            "secondary-container": "#d6e0f8",
+            "inverse-primary": "#b9c3ff",
+            "primary": "#0040e3",
+            "tertiary-fixed-dim": "#c2c6d3",
+            "surface-container-highest": "#e1e2e6",
+            "on-error": "#ffffff",
+            "warning": "#F79009",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#edf1fe",
+            "on-tertiary-fixed-variant": "#424751",
+            "surface-tint": "#154aef",
+            "secondary-fixed-dim": "#bdc7de",
+            "secondary-fixed": "#d9e3fb",
+            "surface-variant": "#e1e2e6",
+            "on-tertiary": "#ffffff",
+            "error": "#D92D20",
+            "tertiary-fixed": "#dee2ef",
+            "primary-container": "#315cff",
+            "outline-variant": "#c4c5d9",
+            "tertiary-container": "#696e79",
+            "inverse-on-surface": "#eff1f5",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#434656",
+            "success": "#12B76A",
+            "surface-container-high": "#e7e8ec",
+            "surface-container": "#edeef2",
+            "surface-dim": "#d9dade",
+            "primary-fixed-dim": "#b9c3ff",
+            "on-primary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1rem",
+            "margin-desktop": "2rem",
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "space-xl": "1.5rem",
+            "gutter-desktop": "1.5rem",
+            "space-md": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "space-2xl": "2rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1rem"
+          },
+          "fontFamily": {
+            "title-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "display-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "label-md": ["Inter"]
+          },
+          "fontSize": {
+            "title-md": [
+              "16px",
+              { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }
+            ],
+            "headline-lg": [
+              "24px",
+              { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }
+            ],
+            "display-lg": [
+              "32px",
+              { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }
+            ],
+            "headline-md": [
+              "20px",
+              { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }
+            ],
+            "body-lg": [
+              "16px",
+              { "lineHeight": "24px", "fontWeight": "400" }
+            ],
+            "body-md": [
+              "14px",
+              { "lineHeight": "20px", "fontWeight": "400" }
+            ],
+            "label-sm": [
+              "12px",
+              { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }
+            ],
+            "label-md": [
+              "14px",
+              { "lineHeight": "20px", "fontWeight": "600" }
+            ]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 22px;
+      line-height: 1;
+      display: inline-block;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-body-md text-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-40 bg-surface border-b border-outline w-full px-4 h-14 flex items-center justify-between transition-colors">
+<div class="flex items-center space-x-3 overflow-hidden">
+<!-- Back Action -->
+<button aria-label="Kembali ke Rak" class="p-1.5 -ml-1 text-on-surface hover:bg-surface-container-low rounded-xl transition-colors active:scale-95 duration-150 flex items-center justify-center" type="button">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<!-- Shelf Title & Category Tag -->
+<div class="flex items-center space-x-2.5 truncate">
+<h1 class="font-title-md text-title-md text-on-surface truncate">Kecerdasan Buatan</h1>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container-low border border-outline text-secondary font-label-sm text-label-sm shrink-0">
+          Semester 5
+        </span>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center space-x-1 shrink-0">
+<button aria-label="Cari di Rak" class="p-2 text-secondary hover:bg-surface-container-low rounded-xl transition-colors active:scale-95 duration-150 flex items-center justify-center" type="button">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button aria-label="Menu Opsi" class="p-2 text-secondary hover:bg-surface-container-low rounded-xl transition-colors active:scale-95 duration-150 flex items-center justify-center" type="button">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas Content Area -->
+<main class="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 pt-5 pb-24 flex flex-col">
+<!-- Shelf Info Header Section -->
+<section class="mb-5 bg-surface border border-outline rounded-xl p-4 sm:p-5 shadow-[0_1px_3px_rgba(16,24,40,0.04)]">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+<div class="flex items-center space-x-2 text-secondary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px] text-secondary">folder_open</span>
+<span>0 material</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span>Dibuat hari ini</span>
+</div>
+<div class="flex items-center space-x-1.5 self-start sm:self-auto">
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm text-secondary bg-surface-container-low px-2 py-0.5 rounded-lg border border-outline">
+<span class="material-symbols-outlined text-[14px]">lock</span> Pribadi
+          </span>
+</div>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md leading-relaxed">
+        Materi kuliah, slide presentasi, dan referensi paper AI
+      </p>
+</section>
+<!-- Filter & Sort Bar (Quiet / Zero-State) -->
+<section class="mb-6 flex items-center justify-between gap-2 overflow-x-auto pb-1 no-scrollbar">
+<div class="flex items-center space-x-2">
+<!-- Selected Pill -->
+<button class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-[#EEF2FF] border border-primary text-primary font-label-sm text-label-sm shrink-0" type="button">
+<span>Semua</span>
+<span class="px-1.5 py-0.2 bg-primary text-white rounded-full text-[10px] leading-tight">0</span>
+</button>
+<!-- Neutral Inactive Pills -->
+<button class="inline-flex items-center space-x-1 px-3 py-1.5 rounded-full bg-surface border border-outline text-secondary font-label-sm text-label-sm shrink-0 hover:bg-surface-container-low transition-colors opacity-60" type="button">
+<span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+<span>PDF</span>
+</button>
+<button class="inline-flex items-center space-x-1 px-3 py-1.5 rounded-full bg-surface border border-outline text-secondary font-label-sm text-label-sm shrink-0 hover:bg-surface-container-low transition-colors opacity-60" type="button">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span>DOCX</span>
+</button>
+<button class="inline-flex items-center space-x-1 px-3 py-1.5 rounded-full bg-surface border border-outline text-secondary font-label-sm text-label-sm shrink-0 hover:bg-surface-container-low transition-colors opacity-60" type="button">
+<span class="material-symbols-outlined text-[16px]">slideshow</span>
+<span>PPTX</span>
+</button>
+</div>
+<div class="shrink-0 pl-2">
+<button aria-label="Urutkan Dokumen" class="inline-flex items-center space-x-1 text-secondary opacity-50 px-2 py-1.5 rounded-lg border border-outline bg-surface text-label-sm font-label-sm cursor-not-allowed" disabled="" type="button">
+<span class="material-symbols-outlined text-[18px]">swap_vert</span>
+<span class="hidden sm:inline">Urutan</span>
+</button>
+</div>
+</section>
+<!-- Empty State Container (Spacious, Calm & Actionable) -->
+<div class="flex-1 flex flex-col items-center justify-center min-h-[380px] bg-surface border border-outline rounded-xl p-6 sm:p-10 text-center shadow-[0_1px_3px_rgba(16,24,40,0.05)]">
+<!-- Serene Architectural Graphic Illustration -->
+<div class="relative w-24 h-24 mb-5 flex items-center justify-center">
+<!-- Subtle backplate disc -->
+<div class="absolute inset-0 rounded-2xl bg-[#EEF2FF] border border-[#DCE4FF] flex items-center justify-center transform -rotate-3"></div>
+<div class="relative w-20 h-20 rounded-xl bg-surface border border-outline flex flex-col items-center justify-center shadow-[0_4px_12px_rgba(49,92,255,0.06)]">
+<span class="material-symbols-outlined text-primary text-[36px]">shelves</span>
+<div class="mt-1 flex gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary opacity-60"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary opacity-30"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary opacity-20"></span>
+</div>
+</div>
+</div>
+<!-- Headline and Narrative Copy -->
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2 tracking-tight">
+        Rak ini masih kosong
+      </h2>
+<p class="max-w-md text-secondary font-body-md text-body-md leading-relaxed mb-6">
+        Tambahkan file pertama dari perangkat Anda untuk mulai mengorganisasi koleksi materi ini.
+      </p>
+<!-- Primary Action Button -->
+<button class="inline-flex items-center justify-center space-x-2 px-6 h-12 bg-primary-container hover:bg-primary text-white font-title-md text-title-md rounded-xl transition-all duration-150 active:scale-[0.98] shadow-[0_8px_20px_rgba(49,92,255,0.22)] focus:ring-2 focus:ring-primary focus:ring-offset-2" type="button">
+<span class="material-symbols-outlined text-[20px]">upload_file</span>
+<span>Tambah Material Pertama</span>
+</button>
+<!-- Guidance Box: Brief Tip -->
+<div class="mt-8 w-full max-w-lg bg-surface-bright border border-outline rounded-xl p-3.5 sm:p-4 text-left flex items-start space-x-3 transition-all hover:border-outline-variant">
+<span aria-label="Tip Lamp" class="text-lg select-none leading-none pt-0.5" role="img">💡</span>
+<div class="flex-1 text-on-surface-variant font-body-md text-[13px] leading-snug">
+<strong class="font-semibold text-on-surface">Tips:</strong> Anda bisa mengimpor dokumen PDF modul, slide PPTX kuliah, atau catatan DOCX yang telah Anda unduh dari Moodle atau browser.
+        </div>
+</div>
+</div>
+</main>
+<!-- Mobile Floating Action Button (FAB) -->
+<aside class="fixed bottom-20 right-4 sm:right-8 z-40">
+<button aria-label="Tambah Dokumen Baru" class="w-14 h-14 rounded-full bg-primary-container text-white flex items-center justify-center shadow-[0_8px_24px_rgba(49,92,255,0.30)] hover:bg-primary transition-all duration-150 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" type="button">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+</aside>
+<!-- Bottom Navigation Bar (Docked Bottom, Shelves Active) -->
+<nav aria-label="Navigasi Utama" class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-4 bg-surface border-t border-outline">
+<!-- Home Tab -->
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors duration-150 active:scale-95 w-16 py-1" href="#">
+<span class="material-symbols-outlined text-[22px]">home</span>
+<span class="text-label-sm font-label-sm mt-0.5">Home</span>
+</a>
+<!-- Shelves Tab (ACTIVE MATCH) -->
+<a aria-current="page" class="flex flex-col items-center justify-center text-primary font-bold hover:text-primary transition-colors duration-150 active:scale-95 w-16 py-1" href="#">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">shelves</span>
+<span class="text-label-sm font-label-sm mt-0.5">Shelves</span>
+</a>
+<!-- Recent Tab -->
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors duration-150 active:scale-95 w-16 py-1" href="#">
+<span class="material-symbols-outlined text-[22px]">history</span>
+<span class="text-label-sm font-label-sm mt-0.5">Recent</span>
+</a>
+<!-- Favorites Tab -->
+<a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors duration-150 active:scale-95 w-16 py-1" href="#">
+<span class="material-symbols-outlined text-[22px]">star</span>
+<span class="text-label-sm font-label-sm mt-0.5">Favorites</span>
+</a>
+</nav>
+</body></html>

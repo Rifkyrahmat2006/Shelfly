@@ -1,0 +1,279 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Shelfly — Material Details</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-on-surface": "#eff1f5",
+            "on-primary-fixed": "#001356",
+            "on-primary-container": "#f1f0ff",
+            "on-secondary-fixed": "#111c2d",
+            "on-tertiary-fixed": "#171c25",
+            "surface-variant": "#e1e2e6",
+            "secondary-fixed-dim": "#bdc7de",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed-variant": "#424751",
+            "tertiary-container": "#696e79",
+            "on-secondary-container": "#596377",
+            "primary-container": "#315cff",
+            "surface-container-highest": "#e1e2e6",
+            "surface": "#FFFFFF",
+            "surface-container-high": "#e7e8ec",
+            "outline-variant": "#c4c5d9",
+            "on-surface": "#252938",
+            "on-surface-variant": "#434656",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#c2c6d3",
+            "secondary": "#555f73",
+            "on-error": "#ffffff",
+            "error": "#D92D20",
+            "surface-container": "#edeef2",
+            "on-error-container": "#93000a",
+            "primary-fixed-dim": "#b9c3ff",
+            "primary": "#0040e3",
+            "on-secondary": "#ffffff",
+            "on-primary": "#ffffff",
+            "tertiary": "#515660",
+            "surface-container-low": "#f2f3f7",
+            "surface-tint": "#154aef",
+            "surface-bright": "#f8f9fd",
+            "error-container": "#ffdad6",
+            "tertiary-fixed": "#dee2ef",
+            "inverse-surface": "#2e3134",
+            "secondary-container": "#d6e0f8",
+            "primary-fixed": "#dde1ff",
+            "on-secondary-fixed-variant": "#3d475a",
+            "on-background": "#171A24",
+            "background": "#f8f9fd",
+            "inverse-primary": "#b9c3ff",
+            "success": "#12B76A",
+            "surface-dim": "#d9dade",
+            "secondary-fixed": "#d9e3fb",
+            "outline": "#E2E5EC",
+            "on-tertiary-container": "#edf1fe",
+            "on-primary-fixed-variant": "#0034bf",
+            "warning": "#F79009"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-tablet": "1.5rem",
+            "margin-desktop": "2rem",
+            "space-sm": "0.5rem",
+            "space-md": "0.75rem",
+            "space-2xl": "2rem",
+            "margin": "1rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "gutter-desktop": "1.5rem",
+            "space-lg": "1rem",
+            "space-xl": "1.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "title-md": ["Inter"],
+            "display-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex justify-center selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Mobile Portrait Viewport Wrapper -->
+<div class="w-full max-w-md bg-surface min-h-screen flex flex-col relative shadow-[0_1px_3px_rgba(16,24,40,0.06)] border-x border-outline">
+<!-- Top Bar: Task-Focused Navigation Header -->
+<header class="sticky top-0 z-40 bg-surface flex items-center justify-between px-margin h-14 border-b border-outline">
+<button aria-label="Back" class="w-10 h-10 flex items-center justify-center rounded-xl text-on-surface hover:bg-surface-container-low transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-bold text-on-surface tracking-tight text-center">
+        Material Details
+      </h1>
+<button aria-label="More options" class="w-10 h-10 flex items-center justify-center rounded-xl text-secondary hover:bg-surface-container-low transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</header>
+<!-- Scrollable Content Canvas -->
+<main class="flex-1 overflow-y-auto px-margin pt-space-lg pb-10 space-y-space-xl">
+<!-- Big Visual Document Hero Preview Card -->
+<section class="bg-surface-container-low border border-outline rounded-[16px] p-space-xl flex flex-col items-center justify-center relative overflow-hidden">
+<!-- Subtle tactile background geometric accents representing organized study material -->
+<div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-primary-fixed opacity-40 pointer-events-none blur-xl"></div>
+<div class="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-secondary-fixed opacity-30 pointer-events-none blur-xl"></div>
+<div class="relative flex flex-col items-center">
+<!-- Document Card Representation -->
+<div class="w-28 h-36 bg-surface border border-outline rounded-xl shadow-[0_1px_3px_rgba(16,24,40,0.06)] flex flex-col items-center justify-between p-3 relative group transition-transform duration-200 hover:-translate-y-0.5">
+<!-- PDF File Pill/Chip -->
+<div class="self-end bg-error-container text-error rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide">
+              PDF
+            </div>
+<!-- Large Document Icon Glyph -->
+<div class="w-12 h-12 rounded-xl bg-[#EEF2FF] flex items-center justify-center text-primary-container mb-2">
+<span class="material-symbols-outlined text-[32px]" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<!-- Mimic Document Text Lines -->
+<div class="w-full space-y-1.5 pb-1">
+<div class="h-1 bg-surface-container-highest rounded-full w-full"></div>
+<div class="h-1 bg-surface-container-highest rounded-full w-4/5"></div>
+<div class="h-1 bg-surface-container-highest rounded-full w-1/2"></div>
+</div>
+</div>
+<span class="mt-space-md text-label-sm font-label-sm text-secondary tracking-wider">
+            Ready to Read • 12 Pages
+          </span>
+</div>
+</section>
+<!-- Material Title & Main Tags -->
+<section class="space-y-space-md">
+<h2 class="text-headline-md font-headline-md text-on-background break-all">
+          Materi Database Room.pdf
+        </h2>
+<!-- Context Badges / Chips -->
+<div class="flex flex-wrap gap-space-sm items-center">
+<!-- Shelf Chip -->
+<div class="inline-flex items-center gap-1.5 bg-[#EEF2FF] border border-primary-container text-primary-container px-3 py-1.5 rounded-full text-label-sm font-label-sm">
+<span>📚</span>
+<span>Pemrograman Mobile</span>
+</div>
+<!-- Category Chip -->
+<div class="inline-flex items-center gap-1.5 bg-surface border border-outline text-secondary px-3 py-1.5 rounded-full text-label-sm font-label-sm">
+<span>🔖</span>
+<span>Modul</span>
+</div>
+</div>
+</section>
+<!-- Hairline Divider -->
+<hr class="border-t border-outline">
+<!-- Detailed Metadata Grid -->
+<section class="space-y-space-md">
+<h3 class="text-label-md font-label-md text-on-surface-variant tracking-wide">
+          File Information
+        </h3>
+<div class="bg-surface border border-outline rounded-xl p-space-md space-y-3.5 shadow-[0_1px_3px_rgba(16,24,40,0.06)]">
+<!-- Item: File Type -->
+<div class="flex items-start justify-between text-body-md font-body-md gap-4">
+<span class="text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="description">description</span>
+              File type
+            </span>
+<span class="text-on-surface font-semibold text-right">PDF Document (.pdf)</span>
+</div>
+<div class="border-t border-outline"></div>
+<!-- Item: File Size -->
+<div class="flex items-start justify-between text-body-md font-body-md gap-4">
+<span class="text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="straighten">straighten</span>
+              File size
+            </span>
+<span class="text-on-surface font-semibold text-right">2.4 MB</span>
+</div>
+<div class="border-t border-outline"></div>
+<!-- Item: Shelf -->
+<div class="flex items-start justify-between text-body-md font-body-md gap-4">
+<span class="text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="shelves">shelves</span>
+              Shelf
+            </span>
+<span class="text-on-surface font-semibold text-right">Pemrograman Mobile</span>
+</div>
+<div class="border-t border-outline"></div>
+<!-- Item: Category -->
+<div class="flex items-start justify-between text-body-md font-body-md gap-4">
+<span class="text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="label">label</span>
+              Category
+            </span>
+<span class="text-on-surface font-semibold text-right">Modul</span>
+</div>
+<div class="border-t border-outline"></div>
+<!-- Item: Added Date -->
+<div class="flex items-start justify-between text-body-md font-body-md gap-4">
+<span class="text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="calendar_today">calendar_today</span>
+              Added date
+            </span>
+<span class="text-on-surface font-semibold text-right">12 Sep 2026, 14:20</span>
+</div>
+<div class="border-t border-outline"></div>
+<!-- Item: Last Opened -->
+<div class="flex items-start justify-between text-body-md font-body-md gap-4">
+<span class="text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="history">history</span>
+              Last opened
+            </span>
+<span class="text-on-surface font-semibold text-right">Hari ini, 10 menit yang lalu</span>
+</div>
+<div class="border-t border-outline"></div>
+<!-- Item: Storage Location -->
+<div class="flex flex-col gap-1 text-body-md font-body-md pt-0.5">
+<span class="text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="folder">folder</span>
+              Storage location
+            </span>
+<span class="text-on-surface text-xs font-mono break-all pl-6 text-secondary">
+              Device Storage (/Download/Materi Database Room.pdf)
+            </span>
+</div>
+</div>
+</section>
+<!-- Primary Action & Quick Buttons -->
+<section class="space-y-space-md pt-space-xs">
+<!-- Main Primary CTA -->
+<button class="w-full h-12 bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md rounded-xl flex items-center justify-center gap-2 shadow-[0_1px_3px_rgba(16,24,40,0.06)] active:scale-[0.99] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="open_in_new">open_in_new</span>
+<span>Open Material</span>
+</button>
+<!-- Secondary Action Row -->
+<div class="grid grid-cols-2 gap-space-md">
+<button class="h-12 bg-surface hover:bg-surface-container-low border border-outline text-on-surface font-label-md text-label-md rounded-xl flex items-center justify-center gap-2 transition-colors duration-150 active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-[20px] text-secondary" data-icon="star">star</span>
+<span>Add to Favorites</span>
+</button>
+<button class="h-12 bg-surface hover:bg-surface-container-low border border-outline text-on-surface font-label-md text-label-md rounded-xl flex items-center justify-center gap-2 transition-colors duration-150 active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-[20px] text-secondary" data-icon="drive_file_move">drive_file_move</span>
+<span>Move to Shelf</span>
+</button>
+</div>
+<!-- Subtle Destructive Action -->
+<div class="pt-space-sm text-center">
+<button class="inline-flex items-center justify-center gap-1.5 py-2 px-4 text-error font-label-md text-label-md rounded-lg hover:bg-error-container/30 transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="delete_outline">delete_outline</span>
+<span>Remove from Shelf</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Safe Bottom Area Inset -->
+<footer class="h-6 bg-surface shrink-0"></footer>
+</div>
+</body></html>

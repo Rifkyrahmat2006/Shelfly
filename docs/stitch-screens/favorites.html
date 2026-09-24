@@ -1,0 +1,350 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Shelfly - Favorit</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary": "#ffffff",
+            "on-primary-container": "#f1f0ff",
+            "tertiary-fixed": "#dee2ef",
+            "tertiary-container": "#696e79",
+            "secondary-fixed-dim": "#bdc7de",
+            "surface-dim": "#d9dade",
+            "tertiary-fixed-dim": "#c2c6d3",
+            "on-primary-fixed": "#001356",
+            "on-background": "#191c1f",
+            "on-secondary-fixed": "#111c2d",
+            "on-surface": "#252938",
+            "on-surface-variant": "#434656",
+            "on-primary-fixed-variant": "#0034bf",
+            "outline": "#E2E5EC",
+            "inverse-primary": "#b9c3ff",
+            "warning": "#F79009",
+            "outline-variant": "#c4c5d9",
+            "on-error-container": "#93000a",
+            "background": "#f8f9fd",
+            "on-primary": "#ffffff",
+            "primary-container": "#315cff",
+            "on-tertiary": "#ffffff",
+            "surface-container-high": "#e7e8ec",
+            "secondary-container": "#d6e0f8",
+            "surface-tint": "#154aef",
+            "on-tertiary-fixed-variant": "#424751",
+            "on-tertiary-fixed": "#171c25",
+            "on-secondary-container": "#596377",
+            "error": "#D92D20",
+            "tertiary": "#515660",
+            "on-error": "#ffffff",
+            "surface": "#FFFFFF",
+            "primary": "#0040e3",
+            "surface-variant": "#e1e2e6",
+            "surface-container-low": "#f2f3f7",
+            "surface-bright": "#f8f9fd",
+            "inverse-on-surface": "#eff1f5",
+            "secondary": "#555f73",
+            "surface-container": "#edeef2",
+            "success": "#12B76A",
+            "primary-fixed-dim": "#b9c3ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-highest": "#e1e2e6",
+            "secondary-fixed": "#d9e3fb",
+            "on-tertiary-container": "#edf1fe",
+            "inverse-surface": "#2e3134",
+            "on-secondary-fixed-variant": "#3d475a",
+            "error-container": "#ffdad6",
+            "primary-fixed": "#dde1ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-2xl": "2rem",
+            "space-lg": "1rem",
+            "space-xl": "1.5rem",
+            "gutter-desktop": "1.5rem",
+            "space-md": "0.75rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "margin-desktop": "2rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "margin-tablet": "1.5rem"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "display-lg": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "title-md": ["Inter"]
+          },
+          "fontSize": {
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .custom-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary">
+<div class="min-h-screen flex flex-col justify-between max-w-md mx-auto bg-background relative shadow-sm border-x border-outline">
+<!-- TopAppBar (from Shared Components JSON) -->
+<header class="sticky top-0 z-40 bg-surface dark:bg-inverse-surface border-b border-outline dark:border-outline-variant flex justify-between items-center w-full px-4 h-14">
+<button aria-label="Kembali" class="w-10 h-10 flex items-center justify-center rounded-xl text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors duration-150 active:scale-95 transition-transform duration-100" type="button">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-inverse-on-surface tracking-tight">
+        Shelfly
+      </span>
+<button aria-label="Pencarian" class="w-10 h-10 flex items-center justify-center rounded-xl text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors duration-150 active:scale-95 transition-transform duration-100" type="button">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 px-4 pt-4 pb-24 space-y-5">
+<!-- Screen Title & Contextual Helper -->
+<section class="space-y-1">
+<div class="flex items-center justify-between">
+<h1 class="text-headline-lg font-headline-lg text-on-surface tracking-tight">
+            Favorit
+          </h1>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-surface-container-low border border-outline text-label-sm font-label-sm text-secondary">
+            4 material favorit
+          </span>
+</div>
+<p class="text-body-md font-body-md text-secondary">
+          Material yang Anda tandai sebagai penting
+        </p>
+</section>
+<!-- Search Field -->
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-secondary pointer-events-none">
+          search
+        </span>
+<input class="w-full h-12 pl-11 pr-4 bg-surface text-on-surface text-body-md font-body-md placeholder:text-secondary rounded-xl border border-outline focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all outline-none" placeholder="Cari di Favorit..." type="text">
+</div>
+<!-- Quick Filter Chips -->
+<div class="flex items-center space-x-2 overflow-x-auto custom-scrollbar -mx-4 px-4 py-0.5">
+<button class="shrink-0 px-3.5 py-1.5 rounded-full bg-secondary-container/50 border border-primary text-primary text-label-sm font-label-sm shadow-xs transition-colors" type="button">
+          Semua
+        </button>
+<button class="shrink-0 px-3.5 py-1.5 rounded-full bg-surface border border-outline text-secondary text-label-sm font-label-sm hover:bg-surface-container-low transition-colors" type="button">
+          PDF
+        </button>
+<button class="shrink-0 px-3.5 py-1.5 rounded-full bg-surface border border-outline text-secondary text-label-sm font-label-sm hover:bg-surface-container-low transition-colors" type="button">
+          Modul
+        </button>
+<button class="shrink-0 px-3.5 py-1.5 rounded-full bg-surface border border-outline text-secondary text-label-sm font-label-sm hover:bg-surface-container-low transition-colors" type="button">
+          Pemrograman Mobile
+        </button>
+</div>
+<!-- Sort Filter & Visual Separator -->
+<div class="flex items-center justify-between pt-1">
+<span class="text-label-sm font-label-sm text-secondary">
+          Tersimpan di Rak Anda
+        </span>
+<button class="flex items-center space-x-1 py-1 px-2 rounded-lg text-label-sm font-label-sm text-on-surface hover:bg-surface-container-low transition-colors" type="button">
+<span>Urutkan: Terbaru</span>
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+<!-- Material Cards Stack -->
+<div class="space-y-3">
+<!-- Card 1: Materi Database Room.pdf -->
+<article class="bg-surface rounded-xl border border-outline p-4 hover:border-primary-fixed-dim transition-all shadow-[0_1px_3px_rgba(16,24,40,0.04)]">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-start gap-3 flex-1 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-error-container/40 text-error flex items-center justify-center shrink-0 border border-outline">
+<span class="material-symbols-outlined">picture_as_pdf</span>
+</div>
+<div class="flex-1 min-w-0">
+<h2 class="text-title-md font-title-md text-on-surface truncate">
+                  Materi Database Room.pdf
+                </h2>
+<div class="flex flex-wrap items-center gap-1.5 mt-1 text-label-sm font-label-sm text-secondary">
+<span class="text-primary font-semibold">Pemrograman Mobile</span>
+<span>•</span>
+<span>Modul</span>
+<span>•</span>
+<span>PDF • 2.4 MB</span>
+</div>
+<div class="flex items-center gap-1 mt-2 text-label-sm font-label-sm text-secondary">
+<span class="material-symbols-outlined text-[15px]">schedule</span>
+<span>Dibuka 10 menit lalu</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center space-x-1 shrink-0">
+<button aria-label="Hapus dari favorit" class="w-8 h-8 flex items-center justify-center rounded-lg text-warning hover:bg-surface-container-low transition-colors" type="button">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button aria-label="Menu opsi" class="w-8 h-8 flex items-center justify-center rounded-lg text-secondary hover:bg-surface-container-low transition-colors" type="button">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 2: Database Normalization.pdf -->
+<article class="bg-surface rounded-xl border border-outline p-4 hover:border-primary-fixed-dim transition-all shadow-[0_1px_3px_rgba(16,24,40,0.04)]">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-start gap-3 flex-1 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-error-container/40 text-error flex items-center justify-center shrink-0 border border-outline">
+<span class="material-symbols-outlined">picture_as_pdf</span>
+</div>
+<div class="flex-1 min-w-0">
+<h2 class="text-title-md font-title-md text-on-surface truncate">
+                  Database Normalization.pdf
+                </h2>
+<div class="flex flex-wrap items-center gap-1.5 mt-1 text-label-sm font-label-sm text-secondary">
+<span class="text-primary font-semibold">Basis Data</span>
+<span>•</span>
+<span>Materi</span>
+<span>•</span>
+<span>PDF • 1.8 MB</span>
+</div>
+<div class="flex items-center gap-1 mt-2 text-label-sm font-label-sm text-secondary">
+<span class="material-symbols-outlined text-[15px]">folder_open</span>
+<span>Diperbarui kemarin</span>
+</div>
+</div>
+</div>
+<div class="flex items-center space-x-1 shrink-0">
+<button aria-label="Hapus dari favorit" class="w-8 h-8 flex items-center justify-center rounded-lg text-warning hover:bg-surface-container-low transition-colors" type="button">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button aria-label="Menu opsi" class="w-8 h-8 flex items-center justify-center rounded-lg text-secondary hover:bg-surface-container-low transition-colors" type="button">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 3: Android Navigation Component.pdf -->
+<article class="bg-surface rounded-xl border border-outline p-4 hover:border-primary-fixed-dim transition-all shadow-[0_1px_3px_rgba(16,24,40,0.04)]">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-start gap-3 flex-1 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-error-container/40 text-error flex items-center justify-center shrink-0 border border-outline">
+<span class="material-symbols-outlined">picture_as_pdf</span>
+</div>
+<div class="flex-1 min-w-0">
+<h2 class="text-title-md font-title-md text-on-surface truncate">
+                  Android Navigation Component.pdf
+                </h2>
+<div class="flex flex-wrap items-center gap-1.5 mt-1 text-label-sm font-label-sm text-secondary">
+<span class="text-primary font-semibold">Pemrograman Mobile</span>
+<span>•</span>
+<span>Modul</span>
+<span>•</span>
+<span>PDF • 3.2 MB</span>
+</div>
+<div class="flex items-center gap-1 mt-2 text-label-sm font-label-sm text-secondary">
+<span class="material-symbols-outlined text-[15px]">schedule</span>
+<span>Dibuka 3 hari lalu</span>
+</div>
+</div>
+</div>
+<div class="flex items-center space-x-1 shrink-0">
+<button aria-label="Hapus dari favorit" class="w-8 h-8 flex items-center justify-center rounded-lg text-warning hover:bg-surface-container-low transition-colors" type="button">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button aria-label="Menu opsi" class="w-8 h-8 flex items-center justify-center rounded-lg text-secondary hover:bg-surface-container-low transition-colors" type="button">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 4: Arsitektur MVVM & Repository.pptx -->
+<article class="bg-surface rounded-xl border border-outline p-4 hover:border-primary-fixed-dim transition-all shadow-[0_1px_3px_rgba(16,24,40,0.04)]">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-start gap-3 flex-1 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-warning/10 text-warning flex items-center justify-center shrink-0 border border-outline">
+<span class="material-symbols-outlined">slideshow</span>
+</div>
+<div class="flex-1 min-w-0">
+<h2 class="text-title-md font-title-md text-on-surface truncate">
+                  Arsitektur MVVM &amp; Repository.pptx
+                </h2>
+<div class="flex flex-wrap items-center gap-1.5 mt-1 text-label-sm font-label-sm text-secondary">
+<span class="text-primary font-semibold">Pemrograman Mobile</span>
+<span>•</span>
+<span>Slide</span>
+<span>•</span>
+<span>PPTX • 4.1 MB</span>
+</div>
+<div class="flex items-center gap-1 mt-2 text-label-sm font-label-sm text-secondary">
+<span class="material-symbols-outlined text-[15px]">schedule</span>
+<span>Dibuka minggu lalu</span>
+</div>
+</div>
+</div>
+<div class="flex items-center space-x-1 shrink-0">
+<button aria-label="Hapus dari favorit" class="w-8 h-8 flex items-center justify-center rounded-lg text-warning hover:bg-surface-container-low transition-colors" type="button">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<button aria-label="Menu opsi" class="w-8 h-8 flex items-center justify-center rounded-lg text-secondary hover:bg-surface-container-low transition-colors" type="button">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- BottomNavBar (from Shared Components JSON with semantic mapping for 'Favorites') -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-4 pb-safe bg-surface dark:bg-inverse-surface border-t border-outline dark:border-outline-variant max-w-md mx-auto right-0">
+<!-- Tab: Home (inactive) -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95 transition-transform duration-100 flex-1 py-1" href="#">
+<span class="material-symbols-outlined text-[22px]">home</span>
+<span class="text-label-sm font-label-sm mt-0.5">Home</span>
+</a>
+<!-- Tab: Shelves (inactive) -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95 transition-transform duration-100 flex-1 py-1" href="#">
+<span class="material-symbols-outlined text-[22px]">shelves</span>
+<span class="text-label-sm font-label-sm mt-0.5">Shelves</span>
+</a>
+<!-- Tab: Recent (inactive) -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95 transition-transform duration-100 flex-1 py-1" href="#">
+<span class="material-symbols-outlined text-[22px]">history</span>
+<span class="text-label-sm font-label-sm mt-0.5">Recent</span>
+</a>
+<!-- Tab: Favorites (Active Target) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-inverse-primary font-bold hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95 transition-transform duration-100 flex-1 py-1" href="#">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm font-label-sm mt-0.5">Favorites</span>
+</a>
+</nav>
+</div>
+</body></html>
