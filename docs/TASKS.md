@@ -100,8 +100,8 @@ Referensi PRD: section 35 (Database Model), 17 (Shelf Management), 11-12 (Entita
 | # | Task | Referensi PRD | Test |
 |---|---|---|---|
 | B1 | ~~Entity + DAO dasar~~ | §35 | ✅ selesai (Sprint 0) |
-| B2 | ShelfRepository: implementasi penuh (bukan stub) — insert/update/delete/getAll | §17 | `androidTest`: insert lalu getAll, update, delete |
-| B3 | Category Entity + DAO + Repository | §35, §11 | `androidTest` |
+| B2 | ✅ ShelfRepository: implementasi penuh (bukan stub) — insert/update/delete/getAll/getById + validasi nama kosong | §17 | `androidTest`: insert lalu getAll, update, delete, getById, blank name |
+| B3 | ✅ Category Entity + DAO + Repository | §35, §11 | `androidTest`: CategoryDaoTest, CategoryRepositoryTest (insert/getAll/delete, blank name reject) |
 | B4 | Migration strategy kalau schema Material/Shelf berubah nanti | §35 | - (dicatat di komentar) |
 | B5 | Shelf item count (query JOIN Material by shelfId) | §17, §41 Shelf Card butuh count | `androidTest`: shelf dengan N material → count = N |
 | B6 | Delete Shelf yang berisi Material — behavior sesuai §27 (konfirmasi + jelaskan dampak) | §27 | `androidTest`: delete shelf berisi material, verifikasi behavior sesuai keputusan tim (cascade atau block) |
