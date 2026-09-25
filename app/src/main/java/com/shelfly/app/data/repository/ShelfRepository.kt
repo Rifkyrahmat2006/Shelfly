@@ -8,11 +8,17 @@ import kotlinx.coroutines.flow.Flow
 class ShelfRepository(private val shelfDao: ShelfDao) {
     fun getAllShelves(): Flow<List<ShelfEntity>> = shelfDao.getAll()
 
-    suspend fun createShelf(name: String, description: String? = null, icon: String? = null): Long =
-        shelfDao.insert(ShelfEntity(name = name, description = description, icon = icon))
+    suspend fun getShelfById(id: Long): ShelfEntity? = shelfDao.getById(id)
 
-    suspend fun renameShelf(shelf: ShelfEntity, newName: String) =
-        shelfDao.update(shelf.copy(name = newName))
+    suspend fun createShelf(name: String, description: String? = null, icon: String? = null): Long {
+        require(name.isNotBlank()) { "Nama Shelf tidak boleh kosong" }
+        return shelfDao.insert(ShelfEntity(name = name.trim(), description = description, icon = icon))
+    }
+
+    suspend fun renameShelf(shelf: ShelfEntity, newName: String) {
+        require(newName.isNotBlank()) { "Nama Shelf tidak boleh kosong" }
+        shelfDao.update(shelf.copy(name = newName.trim()))
+    }
 
     suspend fun deleteShelf(shelf: ShelfEntity) = shelfDao.delete(shelf)
 }
