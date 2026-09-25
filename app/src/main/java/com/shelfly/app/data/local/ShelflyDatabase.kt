@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.shelfly.app.data.local.dao.CategoryDao
 import com.shelfly.app.data.local.dao.MaterialDao
 import com.shelfly.app.data.local.dao.ShelfDao
 import com.shelfly.app.data.local.entity.CategoryEntity
@@ -18,6 +19,7 @@ import com.shelfly.app.data.local.entity.ShelfEntity
 abstract class ShelflyDatabase : RoomDatabase() {
     abstract fun shelfDao(): ShelfDao
     abstract fun materialDao(): MaterialDao
+    abstract fun categoryDao(): CategoryDao
 
     companion object {
         @Volatile private var INSTANCE: ShelflyDatabase? = null
