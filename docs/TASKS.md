@@ -86,7 +86,7 @@ Referensi PRD: section 41 (UX/UI Direction), 42 (Navigation), 43 (Bottom Navigat
 | # | Task | Referensi PRD | Test |
 |---|---|---|---|
 | A1 | Bottom Navigation (Home, Shelves, Recent, Favorites) di `core/navigation` | §43 | - (visual) |
-| A2 | Home Screen: My Shelves, Search bar, Recent, Favorites section | §41 Home | - (visual), tapi state loading/empty via ViewModel dari Yunan (D) |
+| A2 | ✅ Home Screen: My Shelves, Search bar, Recent, Favorites section | §41 Home | `HomeViewModel` combine getShelfWithMaterialCount+getRecent, wired ke ShelvesScreen/FavoritesScreen/RecentScreen/SearchScreen/ShelfDetailScreen (bug "shelf tidak muncul" root cause — semua screen ini sebelumnya cuma TODO placeholder). Verified manual di device fisik: shelf baru langsung muncul di Home+Shelves, Favorites/Recent render MaterialCard asli, ShelfDetail+Import Material tombol nyambung shelfId benar (fix bug hardcode `1L`), SearchScreen render search+filter+sort. 39/39 androidTest tetap lolos |
 | A3 | Shelf Card component (reusable, dipakai Home + Shelves list) | §41 Material Card (adaptasi Shelf) | - (visual) |
 | A4 | Material Card component (reusable) | §41 Material Card | - (visual) |
 | A5 | ✅ Create/Edit Shelf form (nama, deskripsi, icon) | §17 Shelf Management | `ShelfFormViewModelTest` 4 case, run-verified di device fisik (35/35 androidTest lolos). Verified manual: FAB Shelves -> form -> Save -> data terbukti masuk DB (`SELECT * FROM shelf` return row baru) |
