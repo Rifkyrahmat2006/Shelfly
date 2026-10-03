@@ -67,6 +67,25 @@ class MaterialRepositoryTest {
     }
 
     @Test
+    fun moveToShelf_validTargetShelf_updatesShelfId() = runBlocking {
+        val id = repository.importMaterial(
+            title = "Materi",
+            fileUri = "content://fake/file1",
+            fileType = "pdf",
+            fileSize = 1024L,
+            shelfId = shelfId,
+        )
+        val targetShelfId = db.shelfDao().insert(ShelfEntity(name = "Target Shelf"))
+
+        repository.moveToShelf(id, targetShelfId)
+
+        val inOld = repository.getByShelf(shelfId).first()
+        val inNew = repository.getByShelf(targetShelfId).first()
+        assertEquals(0, inOld.size)
+        assertEquals(1, inNew.size)
+    }
+
+    @Test
     fun importMaterial_blankFileUri_throws() {
         assertThrows(IllegalArgumentException::class.java) {
             runBlocking {

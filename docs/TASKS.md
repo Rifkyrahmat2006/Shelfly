@@ -120,9 +120,9 @@ Referensi PRD: section 18 (Material Management), 25 (Open Material), 33-34 (Loca
 | C2 | ✅ Ambil metadata dari URI: title, fileType, fileSize | §18 | `FileMetadataExtractorTest` — real file via FileProvider, **run-verified di device fisik** |
 | C3 | ✅ Persist URI permission (`takePersistableUriPermission`) supaya file tetap bisa diakses setelah app restart | §33, §34 | `UriPermissionManagerTest` — URI tanpa flag persistable return false tanpa crash, **run-verified di device fisik** |
 | C4 | ✅ MaterialRepository: implementasi penuh (insert dari hasil import) + validasi title/fileUri kosong | §18 | `androidTest`: MaterialRepositoryTest — **run-verified di device fisik** |
-| C5 | Open Material — intent ke aplikasi eksternal sesuai MIME type | §25 | - (manual, tidak semua bisa diunit-test karena tergantung app eksternal device) |
+| C5 | ✅ Open Material — intent ke aplikasi eksternal sesuai MIME type | §25 | `OpenMaterialIntentTest` run-verified di device fisik |
 | C6 | ✅ Error handling: file tidak ditemukan, tidak bisa dibuka, permission issue | §29 Error Handling | Unit test: `MaterialErrorMapperTest` — 4 case (JVM unit test gagal run di environment lokal karena konflik classpath Windows/MSYS — tolong jalankan `./gradlew testDebugUnitTest` di Android Studio buat verifikasi) |
-| C7 | Move Material antar Shelf | §26 | `androidTest` |
+| C7 | ✅ Move Material antar Shelf | §26 | `MaterialRepositoryTest.moveToShelf_validTargetShelf_updatesShelfId` — run-verified di device fisik |
 
 **Pitfall**: §34 penting dibaca duluan — MVP pakai URI reference (bukan copy file ke app storage). Ini keputusan arsitektur, jangan diubah sepihak.
 
