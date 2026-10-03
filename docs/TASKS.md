@@ -132,11 +132,11 @@ Referensi PRD: section 19 (Search), 20 (Filter), 21 (Sort), 22 (Favorite), 23 (R
 |---|---|---|---|
 | D1 | ✅ Search ViewModel: query by title, case-insensitive | §19 | `androidTest`: `SearchViewModelTest` — match, case-insensitive, no-match, blank query (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
 | D2 | ✅ UI State sealed class (Loading/Success/Empty/Error) dipakai semua ViewModel | §32 | Unit test: `UiStateTest` — 5 case (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
-| D3 | Filter state: by Shelf, File Type, Category | §20 | Unit test: kombinasi filter menghasilkan subset benar |
-| D4 | Sort: Newest, Oldest, Name A-Z/Z-A, Recently Opened | §21 | Unit test: tiap opsi sort menghasilkan urutan benar |
-| D5 | Favorite toggle + query getFavorites | §22 | `androidTest` (sentuh Room) |
-| D6 | Recently Opened — update `lastOpenedAt` saat Open Material dipanggil, query terbaru | §23 | `androidTest` |
-| D7 | Preserve search query/filter saat navigasi balik (§22 Interaction Principles / Preserve Context) | design.md §22 | Unit test: state tidak reset saat navigate back |
+| D3 | ✅ Filter state: by Shelf, File Type, Category | §20 | `FilterStateTest` — 7 case (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
+| D4 | ✅ Sort: Newest, Oldest, Name A-Z/Z-A, Recently Opened | §21 | `SortOptionTest` — 5 case (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
+| D5 | ✅ Favorite toggle + query getFavorites | §22 | `FavoritesViewModelTest` — no favorites/with favorites (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
+| D6 | ✅ Recently Opened — update `lastOpenedAt` saat Open Material dipanggil, query terbaru | §23 | `RecentViewModelTest` — never opened/mark opened (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
+| D7 | ✅ Preserve search query/filter saat navigasi balik (§22 Interaction Principles / Preserve Context) | design.md §22 | `SearchFilterStateHolderTest` — 5 case, state dipegang scope ViewModel |
 
 **Pitfall**: Search/Filter/Sort harus reactive terhadap perubahan data (pakai `Flow`, bukan snapshot sekali query) — kalau Material baru ditambah Intan (C), list di Search (D) harus update otomatis tanpa refresh manual.
 
