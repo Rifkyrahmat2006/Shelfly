@@ -43,7 +43,7 @@ class CategoryRepositoryTest {
     }
 
     @Test
-    fun createCategory_blankName_throws() = runBlocking {
+    fun createCategory_blankName_throws() {
         assertThrows(IllegalArgumentException::class.java) {
             runBlocking { repository.createCategory("   ") }
         }
