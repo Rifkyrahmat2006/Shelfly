@@ -5,10 +5,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,10 +26,12 @@ import kotlinx.coroutines.launch
 
 // PIC: Person A — Create/Edit Shelf bottom sheet form (PRD section 17)
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun ShelfFormScreen(
     viewModel: ShelfFormViewModel,
     isEditMode: Boolean,
     onSaved: () -> Unit,
+    onBack: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
     val name by viewModel.name
@@ -34,7 +42,18 @@ fun ShelfFormScreen(
         if (isEditMode) viewModel.loadExisting()
     }
 
-    Scaffold { padding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(if (isEditMode) "Edit Shelf" else "Create Shelf") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+            )
+        },
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -42,7 +61,6 @@ fun ShelfFormScreen(
                 .padding(Spacing.lg),
             verticalArrangement = Arrangement.spacedBy(Spacing.md),
         ) {
-            Text(if (isEditMode) "Edit Shelf" else "Create Shelf")
             OutlinedTextField(
                 value = name,
                 onValueChange = { viewModel.name.value = it },
