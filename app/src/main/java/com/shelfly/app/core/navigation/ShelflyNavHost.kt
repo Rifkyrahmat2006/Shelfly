@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold as M3Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
@@ -12,11 +13,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.shelfly.app.feature.favorites.FavoritesScreen
 import com.shelfly.app.feature.home.HomeScreen
+import com.shelfly.app.feature.material.AddMaterialScreen
+import com.shelfly.app.feature.material.AddMaterialViewModel
 import com.shelfly.app.feature.material.MaterialDetailScreen
 import com.shelfly.app.feature.recent.RecentScreen
 import com.shelfly.app.feature.search.SearchScreen
 import com.shelfly.app.feature.shelf.ShelfDetailScreen
 import com.shelfly.app.feature.shelves.ShelvesScreen
+import com.shelfly.app.data.local.ShelflyDatabase
+import com.shelfly.app.data.repository.MaterialRepository
+import androidx.compose.ui.platform.LocalContext
 
 // PIC: Person A - Navigation graph (PRD section 42, 43)
 object Routes {
@@ -27,9 +33,11 @@ object Routes {
     const val SHELF_DETAIL = "shelf/{shelfId}"
     const val MATERIAL_DETAIL = "material/{materialId}"
     const val SEARCH = "search"
+    const val ADD_MATERIAL = "add-material/{shelfId}"
 
     fun shelfDetail(shelfId: Long) = "shelf/$shelfId"
     fun materialDetail(materialId: Long) = "material/$materialId"
+    fun addMaterial(shelfId: Long) = "add-material/$shelfId"
 }
 
 private val BOTTOM_NAV_ROUTES = setOf(Routes.HOME, Routes.SHELVES, Routes.RECENT, Routes.FAVORITES)
@@ -65,6 +73,7 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                     onOpenShelf = { id -> navController.navigate(Routes.shelfDetail(id)) },
                     onOpenSearch = { navController.navigate(Routes.SEARCH) },
                     onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) },
+                    onAddMaterial = { navController.navigate(Routes.addMaterial(1L)) },
                 )
             }
             composable(Routes.SHELVES) {
@@ -89,6 +98,17 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
             }
             composable(Routes.SEARCH) {
                 SearchScreen(onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) })
+            }
+            composable(Routes.ADD_MATERIAL) { backStackEntry ->
+                val shelfId = backStackEntry.arguments?.getString("shelfId")?.toLongOrNull() ?: 0L
+                val context = LocalContext.current
+                val repository = remember { MaterialRepository(ShelflyDatabase.getInstance(context).materialDao()) }
+                val viewModel = remember { AddMaterialViewModel(repository, context) }
+                AddMaterialScreen(
+                    viewModel = viewModel,
+                    shelfId = shelfId,
+                    onSaved = { navController.popBackStack() },
+                )
             }
         }
     }
