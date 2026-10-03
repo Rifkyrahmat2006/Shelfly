@@ -104,9 +104,9 @@ Referensi PRD: section 35 (Database Model), 17 (Shelf Management), 11-12 (Entita
 | B3 | ✅ Category Entity + DAO + Repository | §35, §11 | `androidTest`: CategoryDaoTest, CategoryRepositoryTest (insert/getAll/delete, blank name reject) |
 | B4 | ✅ Migration strategy kalau schema Material/Shelf berubah nanti | §35 | - (dicatat di komentar `ShelflyDatabase.kt`) |
 | B5 | ✅ Shelf item count (query JOIN Material by shelfId) | §17, §41 Shelf Card butuh count | `androidTest`: ShelfItemCountTest — shelf 3 material, shelf 0 material |
-| B6 | Delete Shelf yang berisi Material — behavior sesuai §27 (konfirmasi + jelaskan dampak) | §27 | `androidTest`: delete shelf berisi material, verifikasi behavior sesuai keputusan tim (cascade atau block) |
+| B6 | ✅ Delete Shelf yang berisi Material — Cascade via Room ForeignKey (keputusan tim) | §27, §34 | `androidTest`: DeleteShelfCascadeTest — shelf 2 material terhapus, shelf lain tidak terpengaruh |
 
-**Pitfall**: §27 (Delete Behavior) dan §34 (Keputusan Penyimpanan File) butuh keputusan desain tim sebelum B6 dikerjakan — baca dulu, diskusikan di grup kalau ambigu.
+**Keputusan B6**: Cascade dipilih (bukan Block). Alasan: PRD §34 menetapkan Shelfly menyimpan URI/reference ke file, bukan copy file fisik — jadi delete Shelf di app tidak pernah menghapus file asli di perangkat, cuma metadata/referensi. Implementasi: `ForeignKey(onDelete = ForeignKey.CASCADE)` di `MaterialEntity.shelfId` (database-level, bukan logic manual di Repository) — jamin atomicity dan tidak mungkin lupa di-handle di satu tempat. Konfirmasi dialog delete harus jelasin ke user: "File asli tidak akan terhapus dari perangkat" (sesuai pola §27).
 
 ### Intan — Modul C: File Management
 
