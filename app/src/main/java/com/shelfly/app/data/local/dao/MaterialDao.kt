@@ -26,6 +26,9 @@ interface MaterialDao {
     @Query("SELECT * FROM material WHERE lastOpenedAt IS NOT NULL ORDER BY lastOpenedAt DESC LIMIT 20")
     fun getRecent(): Flow<List<MaterialEntity>>
 
+    @Query("SELECT * FROM material WHERE id = :id")
+    suspend fun getById(id: Long): MaterialEntity?
+
     @Insert
     suspend fun insert(material: MaterialEntity): Long
 
