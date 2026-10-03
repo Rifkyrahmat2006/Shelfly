@@ -43,6 +43,8 @@ Ulangi per unit perilaku kecil, bukan sekali nulis banyak lalu ditest belakangan
 
 Room butuh SQLite driver Android asli → DAO test **harus** di `androidTest`, bukan `test`. Sudah ada contoh jadi: `app/src/androidTest/java/com/shelfly/app/data/local/ShelfDaoTest.kt` — pakai ini sebagai template, tinggal ganti Entity/DAO-nya.
 
+**Fix penting (sudah diterapkan):** `testInstrumentationRunner` harus diset manual ke `androidx.test.runner.AndroidJUnitRunner` di `app/build.gradle.kts` `defaultConfig` — tanpa ini, semua `@RunWith(AndroidJUnit4::class)` gagal start dengan `Failed to instantiate test runner class`. 26 androidTest sudah **run-verified di device fisik** setelah fix ini (2026-10-03).
+
 Cara jalanin:
 ```bash
 # Unit test (cepat, jalan tiap commit)
@@ -100,11 +102,11 @@ Referensi PRD: section 35 (Database Model), 17 (Shelf Management), 11-12 (Entita
 | # | Task | Referensi PRD | Test |
 |---|---|---|---|
 | B1 | ~~Entity + DAO dasar~~ | §35 | ✅ selesai (Sprint 0) |
-| B2 | ✅ ShelfRepository: implementasi penuh (bukan stub) — insert/update/delete/getAll/getById + validasi nama kosong | §17 | `androidTest`: insert lalu getAll, update, delete, getById, blank name |
-| B3 | ✅ Category Entity + DAO + Repository | §35, §11 | `androidTest`: CategoryDaoTest, CategoryRepositoryTest (insert/getAll/delete, blank name reject) |
+| B2 | ✅ ShelfRepository: implementasi penuh (bukan stub) — insert/update/delete/getAll/getById + validasi nama kosong | §17 | `androidTest`: insert lalu getAll, update, delete, getById, blank name — **run-verified di device fisik** |
+| B3 | ✅ Category Entity + DAO + Repository | §35, §11 | `androidTest`: CategoryDaoTest, CategoryRepositoryTest — **run-verified di device fisik** (fix: method test `_throws` harus `void` return, bukan expression body `= runBlocking`) |
 | B4 | ✅ Migration strategy kalau schema Material/Shelf berubah nanti | §35 | - (dicatat di komentar `ShelflyDatabase.kt`) |
-| B5 | ✅ Shelf item count (query JOIN Material by shelfId) | §17, §41 Shelf Card butuh count | `androidTest`: ShelfItemCountTest — shelf 3 material, shelf 0 material |
-| B6 | ✅ Delete Shelf yang berisi Material — Cascade via Room ForeignKey (keputusan tim) | §27, §34 | `androidTest`: DeleteShelfCascadeTest — shelf 2 material terhapus, shelf lain tidak terpengaruh |
+| B5 | ✅ Shelf item count (query JOIN Material by shelfId) | §17, §41 Shelf Card butuh count | `androidTest`: ShelfItemCountTest — **run-verified di device fisik** |
+| B6 | ✅ Delete Shelf yang berisi Material — Cascade via Room ForeignKey (keputusan tim) | §27, §34 | `androidTest`: DeleteShelfCascadeTest — **run-verified di device fisik** |
 
 **Keputusan B6**: Cascade dipilih (bukan Block). Alasan: PRD §34 menetapkan Shelfly menyimpan URI/reference ke file, bukan copy file fisik — jadi delete Shelf di app tidak pernah menghapus file asli di perangkat, cuma metadata/referensi. Implementasi: `ForeignKey(onDelete = ForeignKey.CASCADE)` di `MaterialEntity.shelfId` (database-level, bukan logic manual di Repository) — jamin atomicity dan tidak mungkin lupa di-handle di satu tempat. Konfirmasi dialog delete harus jelasin ke user: "File asli tidak akan terhapus dari perangkat" (sesuai pola §27).
 
@@ -117,9 +119,9 @@ Referensi PRD: section 18 (Material Management), 25 (Open Material), 33-34 (Loca
 | C1 | File picker integration (system picker, `ActivityResultContracts.OpenDocument`) | §18, Add Material Flow (design.md §5) | - (manual test di device) |
 | C2 | Ambil metadata dari URI: title, fileType, fileSize | §18 | Unit test: fungsi parsing metadata dari URI mock |
 | C3 | Persist URI permission (`takePersistableUriPermission`) supaya file tetap bisa diakses setelah app restart | §33, §34 | `androidTest`: buka lagi setelah simulasi restart |
-| C4 | ✅ MaterialRepository: implementasi penuh (insert dari hasil import) + validasi title/fileUri kosong | §18 | `androidTest`: MaterialRepositoryTest (insert, blank title, blank fileUri) |
+| C4 | ✅ MaterialRepository: implementasi penuh (insert dari hasil import) + validasi title/fileUri kosong | §18 | `androidTest`: MaterialRepositoryTest — **run-verified di device fisik** |
 | C5 | Open Material — intent ke aplikasi eksternal sesuai MIME type | §25 | - (manual, tidak semua bisa diunit-test karena tergantung app eksternal device) |
-| C6 | ✅ Error handling: file tidak ditemukan, tidak bisa dibuka, permission issue | §29 Error Handling | Unit test: `MaterialErrorMapperTest` — 4 case (compile verified; `testDebugUnitTest` run gagal di environment lokal karena konflik classpath Windows/MSYS — Intan/anggota lain tolong jalankan `./gradlew testDebugUnitTest` di Android Studio buat verifikasi run beneran) |
+| C6 | ✅ Error handling: file tidak ditemukan, tidak bisa dibuka, permission issue | §29 Error Handling | Unit test: `MaterialErrorMapperTest` — 4 case (JVM unit test gagal run di environment lokal karena konflik classpath Windows/MSYS — tolong jalankan `./gradlew testDebugUnitTest` di Android Studio buat verifikasi) |
 | C7 | Move Material antar Shelf | §26 | `androidTest` |
 
 **Pitfall**: §34 penting dibaca duluan — MVP pakai URI reference (bukan copy file ke app storage). Ini keputusan arsitektur, jangan diubah sepihak.
@@ -130,13 +132,13 @@ Referensi PRD: section 19 (Search), 20 (Filter), 21 (Sort), 22 (Favorite), 23 (R
 
 | # | Task | Referensi PRD | Test |
 |---|---|---|---|
-| D1 | ✅ Search ViewModel: query by title, case-insensitive | §19 | `androidTest`: `SearchViewModelTest` — match, case-insensitive, no-match, blank query (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
-| D2 | ✅ UI State sealed class (Loading/Success/Empty/Error) dipakai semua ViewModel | §32 | Unit test: `UiStateTest` — 5 case (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
-| D3 | ✅ Filter state: by Shelf, File Type, Category | §20 | `FilterStateTest` — 7 case (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
-| D4 | ✅ Sort: Newest, Oldest, Name A-Z/Z-A, Recently Opened | §21 | `SortOptionTest` — 5 case (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
-| D5 | ✅ Favorite toggle + query getFavorites | §22 | `FavoritesViewModelTest` — no favorites/with favorites (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
-| D6 | ✅ Recently Opened — update `lastOpenedAt` saat Open Material dipanggil, query terbaru | §23 | `RecentViewModelTest` — never opened/mark opened (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
-| D7 | ✅ Preserve search query/filter saat navigasi balik (§22 Interaction Principles / Preserve Context) | design.md §22 | `SearchFilterStateHolderTest` — 5 case, state dipegang scope ViewModel |
+| D1 | ✅ Search ViewModel: query by title, case-insensitive | §19 | `SearchViewModelTest` — 4 case, **run-verified di device fisik** (26/26 androidTest lolos) |
+| D2 | ✅ UI State sealed class (Loading/Success/Empty/Error) dipakai semua ViewModel | §32 | Unit test: `UiStateTest` — 5 case (JVM unit test gagal run di environment lokal, sama catatan C6) |
+| D3 | ✅ Filter state: by Shelf, File Type, Category | §20 | `FilterStateTest` — 7 case (JVM unit test gagal run di environment lokal, sama catatan C6) |
+| D4 | ✅ Sort: Newest, Oldest, Name A-Z/Z-A, Recently Opened | §21 | `SortOptionTest` — 5 case (JVM unit test gagal run di environment lokal, sama catatan C6) |
+| D5 | ✅ Favorite toggle + query getFavorites | §22 | `FavoritesViewModelTest` — 2 case, **run-verified di device fisik** |
+| D6 | ✅ Recently Opened — update `lastOpenedAt` saat Open Material dipanggil, query terbaru | §23 | `RecentViewModelTest` — 2 case, **run-verified di device fisik** |
+| D7 | ✅ Preserve search query/filter saat navigasi balik (§22 Interaction Principles / Preserve Context) | design.md §22 | `SearchFilterStateHolderTest` — 5 case (JVM unit test gagal run di environment lokal, sama catatan C6) |
 
 **Pitfall**: Search/Filter/Sort harus reactive terhadap perubahan data (pakai `Flow`, bukan snapshot sekali query) — kalau Material baru ditambah Intan (C), list di Search (D) harus update otomatis tanpa refresh manual.
 
