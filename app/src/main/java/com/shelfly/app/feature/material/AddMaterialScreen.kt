@@ -3,14 +3,20 @@ package com.shelfly.app.feature.material
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -23,10 +29,12 @@ import kotlinx.coroutines.launch
 // integrasi UI penuh — screen ini pakai shelfId yang sudah diketahui (dipanggil
 // dari Shelf Detail "Add Material" FAB).
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun AddMaterialScreen(
     viewModel: AddMaterialViewModel,
     shelfId: Long,
     onSaved: () -> Unit,
+    onBack: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
     val title by viewModel.title
@@ -39,7 +47,18 @@ fun AddMaterialScreen(
         }
     }
 
-    Scaffold { padding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Add Material") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+            )
+        },
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -47,7 +66,6 @@ fun AddMaterialScreen(
                 .padding(Spacing.lg),
             verticalArrangement = Arrangement.spacedBy(Spacing.md),
         ) {
-            Text("Add Material")
             Button(onClick = { launcher.launch(arrayOf("*/*")) }) {
                 Text(if (title.isBlank()) "Choose File" else "Change File")
             }

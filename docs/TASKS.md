@@ -91,7 +91,7 @@ Referensi PRD: section 41 (UX/UI Direction), 42 (Navigation), 43 (Bottom Navigat
 | A4 | Material Card component (reusable) | §41 Material Card | - (visual) |
 | A5 | ✅ Create/Edit Shelf form (nama, deskripsi, icon) | §17 Shelf Management | `ShelfFormViewModelTest` 4 case, run-verified di device fisik (35/35 androidTest lolos). Verified manual: FAB Shelves -> form -> Save -> data terbukti masuk DB (`SELECT * FROM shelf` return row baru) |
 | A6 | Empty states (No Shelves, Empty Shelf, No Search Results) | §28 Empty States | - (visual) |
-| A7 | Confirmation dialog pola reusable (Delete Shelf/Material) | §27 Delete Behavior | - (visual) |
+| A7 | ✅ Confirmation dialog pola reusable (Delete Shelf/Material) + tombol back di semua screen navigate (ShelfDetail, MaterialDetail, Search, AddMaterial, ShelfForm) | §27 Delete Behavior | ConfirmationDialog reusable dipakai Shelves/ShelfDetail (delete shelf+cascade material) dan ShelfDetail (delete material). Semua 5 screen navigate (ShelfDetail, MaterialDetail, Search, AddMaterial, ShelfForm) punya TopAppBar+navigationIcon ArrowBack. **Build sukses (assembleDebug+compileDebugAndroidTestKotlin). connectedDebugAndroidTest + verifikasi visual delete/back BELUM dijalankan ulang di sesi ini — device terputus saat run test, menunggu device nyambung lagi untuk konfirmasi final.** |
 
 **Pitfall**: semua komponen di atas HARUS pakai token dari `core/theme` (Color, Dimens, Typography). Jangan hardcode `16.dp` atau `Color(0xFF...)` baru — kalau butuh nilai yang belum ada di token, koordinasi ke Rifky dulu.
 
