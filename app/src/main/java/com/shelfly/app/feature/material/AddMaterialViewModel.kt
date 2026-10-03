@@ -42,6 +42,7 @@ class AddMaterialViewModel(
     suspend fun save() {
         val uri = selectedUri ?: return
         val shelf = shelfId ?: return
+        check(shelf > 0) { "Tidak ada Shelf dipilih. Buat Shelf terlebih dahulu sebelum menambah Material." }
         repository.importMaterial(
             title = title.value,
             fileUri = uri.toString(),

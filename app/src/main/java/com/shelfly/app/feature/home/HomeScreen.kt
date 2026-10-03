@@ -44,6 +44,7 @@ fun HomeScreen(
     onOpenSearch: () -> Unit,
     onOpenMaterial: (Long) -> Unit = {},
     onAddMaterial: (Long) -> Unit = {},
+    onCreateShelf: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val viewModel = remember {
@@ -54,7 +55,16 @@ fun HomeScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { onAddMaterial(state.shelves.firstOrNull()?.shelf?.id ?: 0L) }) {
+            FloatingActionButton(
+                onClick = {
+                    val firstShelfId = state.shelves.firstOrNull()?.shelf?.id
+                    if (firstShelfId != null) {
+                        onAddMaterial(firstShelfId)
+                    } else {
+                        onCreateShelf()
+                    }
+                },
+            ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add Material")
             }
         },
