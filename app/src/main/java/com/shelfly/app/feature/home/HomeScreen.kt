@@ -1,5 +1,6 @@
 package com.shelfly.app.feature.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,38 +23,38 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.shelfly.app.core.component.MaterialCard
 import com.shelfly.app.core.component.ShelfCard
 import com.shelfly.app.core.theme.Spacing
+import com.shelfly.app.data.local.ShelflyDatabase
+import com.shelfly.app.data.repository.MaterialRepository
+import com.shelfly.app.data.repository.ShelfRepository
 
 // PIC: Person A - Home (My Shelves, Search entry, Recent) - PRD section 41
-// Data dummy di bawah: placeholder layout. Person D (Yunan) sambungkan ViewModel + state asli
-// (Loading/Success/Empty/Error) menggantikan dummyShelves/dummyRecent ini.
-data class HomeShelfUi(val id: Long, val name: String, val materialCount: Int)
-data class HomeMaterialUi(val id: Long, val title: String, val subtitle: String, val isFavorite: Boolean)
-
-private val dummyShelves = listOf(
-    HomeShelfUi(1, "Pemrograman Mobile", 24),
-    HomeShelfUi(2, "Basis Data", 16),
-)
-private val dummyRecent = listOf(
-    HomeMaterialUi(1, "Materi Database Room.pdf", "Learning . PDF . 2.4 MB", false),
-    HomeMaterialUi(2, "Android Navigation Compose.pdf", "Mobile Dev . PDF . 1.8 MB", true),
-)
-
 @Composable
 fun HomeScreen(
     onOpenShelf: (Long) -> Unit,
     onOpenSearch: () -> Unit,
     onOpenMaterial: (Long) -> Unit = {},
-    onAddMaterial: () -> Unit = {},
+    onAddMaterial: (Long) -> Unit = {},
 ) {
+    val context = LocalContext.current
+    val viewModel = remember {
+        val db = ShelflyDatabase.getInstance(context)
+        HomeViewModel(ShelfRepository(db.shelfDao()), MaterialRepository(db.materialDao()))
+    }
+    val state by viewModel.observeHome().collectAsState(initial = HomeUiState())
+
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = onAddMaterial) {
+            FloatingActionButton(onClick = { onAddMaterial(state.shelves.firstOrNull()?.shelf?.id ?: 0L) }) {
                 Icon(Icons.Filled.Add, contentDescription = "Add Material")
             }
         },
@@ -77,7 +78,9 @@ fun HomeScreen(
                     placeholder = { Text("Search materials...") },
                     leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
                     shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.fillMaxWidth().padding(top = Spacing.sm),
+                    modifier = Modifier.fillMaxWidth().padding(top = Spacing.sm)
+                        .clickable(onClick = onOpenSearch),
+                    enabled = false,
                 )
             }
             item {
@@ -91,14 +94,18 @@ fun HomeScreen(
                 }
             }
             item {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(Spacing.md)) {
-                    items(dummyShelves) { shelf ->
-                        Box(modifier = Modifier.padding(bottom = Spacing.xs)) {
-                            ShelfCard(
-                                name = shelf.name,
-                                materialCount = shelf.materialCount,
-                                onClick = { onOpenShelf(shelf.id) },
-                            )
+                if (state.shelves.isEmpty()) {
+                    Text("Belum ada Shelf.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                } else {
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(Spacing.md)) {
+                        items(state.shelves) { shelfWithCount ->
+                            Box(modifier = Modifier.padding(bottom = Spacing.xs)) {
+                                ShelfCard(
+                                    name = shelfWithCount.shelf.name,
+                                    materialCount = shelfWithCount.materialCount,
+                                    onClick = { onOpenShelf(shelfWithCount.shelf.id) },
+                                )
+                            }
                         }
                     }
                 }
@@ -113,13 +120,17 @@ fun HomeScreen(
                     Text("See all", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
                 }
             }
-            items(dummyRecent) { material ->
-                MaterialCard(
-                    title = material.title,
-                    subtitle = material.subtitle,
-                    isFavorite = material.isFavorite,
-                    onClick = { onOpenMaterial(material.id) },
-                )
+            if (state.recent.isEmpty()) {
+                item { Text("Belum ada Material yang dibuka.", color = MaterialTheme.colorScheme.onSurfaceVariant) }
+            } else {
+                items(state.recent) { material ->
+                    MaterialCard(
+                        title = material.title,
+                        subtitle = material.fileType,
+                        isFavorite = material.isFavorite,
+                        onClick = { onOpenMaterial(material.id) },
+                    )
+                }
             }
         }
     }
