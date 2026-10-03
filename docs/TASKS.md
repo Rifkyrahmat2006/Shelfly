@@ -117,9 +117,9 @@ Referensi PRD: section 18 (Material Management), 25 (Open Material), 33-34 (Loca
 | C1 | File picker integration (system picker, `ActivityResultContracts.OpenDocument`) | §18, Add Material Flow (design.md §5) | - (manual test di device) |
 | C2 | Ambil metadata dari URI: title, fileType, fileSize | §18 | Unit test: fungsi parsing metadata dari URI mock |
 | C3 | Persist URI permission (`takePersistableUriPermission`) supaya file tetap bisa diakses setelah app restart | §33, §34 | `androidTest`: buka lagi setelah simulasi restart |
-| C4 | MaterialRepository: implementasi penuh (insert dari hasil import) | §18 | `androidTest` |
+| C4 | ✅ MaterialRepository: implementasi penuh (insert dari hasil import) + validasi title/fileUri kosong | §18 | `androidTest`: MaterialRepositoryTest (insert, blank title, blank fileUri) |
 | C5 | Open Material — intent ke aplikasi eksternal sesuai MIME type | §25 | - (manual, tidak semua bisa diunit-test karena tergantung app eksternal device) |
-| C6 | Error handling: file tidak ditemukan, tidak bisa dibuka, permission issue | §29 Error Handling | Unit test: fungsi cek `fileExists`/error mapping dengan mock URI |
+| C6 | ✅ Error handling: file tidak ditemukan, tidak bisa dibuka, permission issue | §29 Error Handling | Unit test: `MaterialErrorMapperTest` — 4 case (compile verified; `testDebugUnitTest` run gagal di environment lokal karena konflik classpath Windows/MSYS — Intan/anggota lain tolong jalankan `./gradlew testDebugUnitTest` di Android Studio buat verifikasi run beneran) |
 | C7 | Move Material antar Shelf | §26 | `androidTest` |
 
 **Pitfall**: §34 penting dibaca duluan — MVP pakai URI reference (bukan copy file ke app storage). Ini keputusan arsitektur, jangan diubah sepihak.
