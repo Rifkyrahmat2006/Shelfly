@@ -79,7 +79,7 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                     onOpenShelf = { id -> navController.navigate(Routes.shelfDetail(id)) },
                     onOpenSearch = { navController.navigate(Routes.SEARCH) },
                     onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) },
-                    onAddMaterial = { navController.navigate(Routes.addMaterial(1L)) },
+                    onAddMaterial = { shelfId -> navController.navigate(Routes.addMaterial(shelfId)) },
                 )
             }
             composable(Routes.SHELVES) {
@@ -99,6 +99,7 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                 ShelfDetailScreen(
                     shelfId = shelfId,
                     onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) },
+                    onAddMaterial = { sid -> navController.navigate(Routes.addMaterial(sid)) },
                 )
             }
             composable(Routes.MATERIAL_DETAIL) { backStackEntry ->
