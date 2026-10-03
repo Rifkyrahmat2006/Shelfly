@@ -1,6 +1,8 @@
 package com.shelfly.app.data.local.entity
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 // PIC: Person B — Database Model (PRD section 35)
@@ -20,7 +22,18 @@ data class CategoryEntity(
     val createdAt: Long = System.currentTimeMillis(),
 )
 
-@Entity(tableName = "material")
+@Entity(
+    tableName = "material",
+    foreignKeys = [
+        ForeignKey(
+            entity = ShelfEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["shelfId"],
+            onDelete = ForeignKey.CASCADE,
+        )
+    ],
+    indices = [Index("shelfId")],
+)
 data class MaterialEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val title: String,

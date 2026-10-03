@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.Flow
 // PIC: Person C (import/CRUD) & Person D (search/filter/sort/favorite/recent)
 @Dao
 interface MaterialDao {
+    @Query("SELECT * FROM material ORDER BY createdAt DESC")
+    fun getAll(): Flow<List<MaterialEntity>>
+
     @Query("SELECT * FROM material WHERE shelfId = :shelfId ORDER BY createdAt DESC")
     fun getByShelf(shelfId: Long): Flow<List<MaterialEntity>>
 
