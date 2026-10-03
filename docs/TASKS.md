@@ -89,7 +89,7 @@ Referensi PRD: section 41 (UX/UI Direction), 42 (Navigation), 43 (Bottom Navigat
 | A2 | Home Screen: My Shelves, Search bar, Recent, Favorites section | §41 Home | - (visual), tapi state loading/empty via ViewModel dari Yunan (D) |
 | A3 | Shelf Card component (reusable, dipakai Home + Shelves list) | §41 Material Card (adaptasi Shelf) | - (visual) |
 | A4 | Material Card component (reusable) | §41 Material Card | - (visual) |
-| A5 | Create/Edit Shelf bottom sheet (form: nama, deskripsi, icon) | §17 Shelf Management | Unit test validasi input (nama tidak boleh kosong) |
+| A5 | ✅ Create/Edit Shelf form (nama, deskripsi, icon) | §17 Shelf Management | `ShelfFormViewModelTest` 4 case, run-verified di device fisik (35/35 androidTest lolos). Verified manual: FAB Shelves -> form -> Save -> data terbukti masuk DB (`SELECT * FROM shelf` return row baru) |
 | A6 | Empty states (No Shelves, Empty Shelf, No Search Results) | §28 Empty States | - (visual) |
 | A7 | Confirmation dialog pola reusable (Delete Shelf/Material) | §27 Delete Behavior | - (visual) |
 
