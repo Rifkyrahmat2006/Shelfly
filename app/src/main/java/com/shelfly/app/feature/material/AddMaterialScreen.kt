@@ -13,7 +13,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.shelfly.app.core.theme.Spacing
 import kotlinx.coroutines.launch
@@ -30,6 +33,7 @@ fun AddMaterialScreen(
 ) {
     val scope = rememberCoroutineScope()
     val title by viewModel.title
+    var errorMessage by remember { mutableStateOf<String?>(null) }
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
@@ -61,13 +65,20 @@ fun AddMaterialScreen(
                 Button(
                     onClick = {
                         scope.launch {
-                            viewModel.save()
-                            onSaved()
+                            try {
+                                viewModel.save()
+                                onSaved()
+                            } catch (e: IllegalStateException) {
+                                errorMessage = e.message
+                            }
                         }
                     },
                 ) {
                     Text("Save")
                 }
+            }
+            if (errorMessage != null) {
+                Text(errorMessage!!)
             }
         }
     }
