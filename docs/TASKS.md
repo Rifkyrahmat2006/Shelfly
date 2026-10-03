@@ -130,7 +130,7 @@ Referensi PRD: section 19 (Search), 20 (Filter), 21 (Sort), 22 (Favorite), 23 (R
 
 | # | Task | Referensi PRD | Test |
 |---|---|---|---|
-| D1 | Search ViewModel: query by title, case-insensitive | §19 | Unit test: query "database" match "Database Room.pdf" |
+| D1 | ✅ Search ViewModel: query by title, case-insensitive | §19 | `androidTest`: `SearchViewModelTest` — match, case-insensitive, no-match, blank query (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
 | D2 | ✅ UI State sealed class (Loading/Success/Empty/Error) dipakai semua ViewModel | §32 | Unit test: `UiStateTest` — 5 case (compile verified; run belum diverifikasi, env lokal sama seperti catatan C6) |
 | D3 | Filter state: by Shelf, File Type, Category | §20 | Unit test: kombinasi filter menghasilkan subset benar |
 | D4 | Sort: Newest, Oldest, Name A-Z/Z-A, Recently Opened | §21 | Unit test: tiap opsi sort menghasilkan urutan benar |
