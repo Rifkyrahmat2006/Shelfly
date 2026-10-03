@@ -11,7 +11,27 @@ class MaterialRepository(private val materialDao: MaterialDao) {
     fun getFavorites(): Flow<List<MaterialEntity>> = materialDao.getFavorites()
     fun getRecent(): Flow<List<MaterialEntity>> = materialDao.getRecent()
 
-    suspend fun importMaterial(material: MaterialEntity): Long = materialDao.insert(material)
+    suspend fun importMaterial(
+        title: String,
+        fileUri: String,
+        fileType: String,
+        fileSize: Long,
+        shelfId: Long,
+        categoryId: Long? = null,
+    ): Long {
+        require(title.isNotBlank()) { "Judul Material tidak boleh kosong" }
+        require(fileUri.isNotBlank()) { "fileUri tidak boleh kosong" }
+        return materialDao.insert(
+            MaterialEntity(
+                title = title.trim(),
+                fileUri = fileUri,
+                fileType = fileType,
+                fileSize = fileSize,
+                shelfId = shelfId,
+                categoryId = categoryId,
+            )
+        )
+    }
 
     suspend fun toggleFavorite(material: MaterialEntity) =
         materialDao.update(material.copy(isFavorite = !material.isFavorite))
