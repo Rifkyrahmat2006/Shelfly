@@ -19,9 +19,12 @@ import com.shelfly.app.feature.material.MaterialDetailScreen
 import com.shelfly.app.feature.recent.RecentScreen
 import com.shelfly.app.feature.search.SearchScreen
 import com.shelfly.app.feature.shelf.ShelfDetailScreen
+import com.shelfly.app.feature.shelf.ShelfFormScreen
+import com.shelfly.app.feature.shelf.ShelfFormViewModel
 import com.shelfly.app.feature.shelves.ShelvesScreen
 import com.shelfly.app.data.local.ShelflyDatabase
 import com.shelfly.app.data.repository.MaterialRepository
+import com.shelfly.app.data.repository.ShelfRepository
 import androidx.compose.ui.platform.LocalContext
 
 // PIC: Person A - Navigation graph (PRD section 42, 43)
@@ -34,10 +37,13 @@ object Routes {
     const val MATERIAL_DETAIL = "material/{materialId}"
     const val SEARCH = "search"
     const val ADD_MATERIAL = "add-material/{shelfId}"
+    const val SHELF_FORM_CREATE = "shelf-form"
+    const val SHELF_FORM_EDIT = "shelf-form/{shelfId}"
 
     fun shelfDetail(shelfId: Long) = "shelf/$shelfId"
     fun materialDetail(materialId: Long) = "material/$materialId"
     fun addMaterial(shelfId: Long) = "add-material/$shelfId"
+    fun shelfFormEdit(shelfId: Long) = "shelf-form/$shelfId"
 }
 
 private val BOTTOM_NAV_ROUTES = setOf(Routes.HOME, Routes.SHELVES, Routes.RECENT, Routes.FAVORITES)
@@ -77,7 +83,10 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                 )
             }
             composable(Routes.SHELVES) {
-                ShelvesScreen(onOpenShelf = { id -> navController.navigate(Routes.shelfDetail(id)) })
+                ShelvesScreen(
+                    onOpenShelf = { id -> navController.navigate(Routes.shelfDetail(id)) },
+                    onCreateShelf = { navController.navigate(Routes.SHELF_FORM_CREATE) },
+                )
             }
             composable(Routes.RECENT) {
                 RecentScreen(onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) })
@@ -107,6 +116,27 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                 AddMaterialScreen(
                     viewModel = viewModel,
                     shelfId = shelfId,
+                    onSaved = { navController.popBackStack() },
+                )
+            }
+            composable(Routes.SHELF_FORM_CREATE) {
+                val context = LocalContext.current
+                val repository = remember { ShelfRepository(ShelflyDatabase.getInstance(context).shelfDao()) }
+                val viewModel = remember { ShelfFormViewModel(repository, existingShelfId = null) }
+                ShelfFormScreen(
+                    viewModel = viewModel,
+                    isEditMode = false,
+                    onSaved = { navController.popBackStack() },
+                )
+            }
+            composable(Routes.SHELF_FORM_EDIT) { backStackEntry ->
+                val shelfId = backStackEntry.arguments?.getString("shelfId")?.toLongOrNull() ?: 0L
+                val context = LocalContext.current
+                val repository = remember { ShelfRepository(ShelflyDatabase.getInstance(context).shelfDao()) }
+                val viewModel = remember { ShelfFormViewModel(repository, existingShelfId = shelfId) }
+                ShelfFormScreen(
+                    viewModel = viewModel,
+                    isEditMode = true,
                     onSaved = { navController.popBackStack() },
                 )
             }
