@@ -20,5 +20,10 @@ class ShelfRepository(private val shelfDao: ShelfDao) {
         shelfDao.update(shelf.copy(name = newName.trim()))
     }
 
+    suspend fun updateShelf(shelf: ShelfEntity) {
+        require(shelf.name.isNotBlank()) { "Nama Shelf tidak boleh kosong" }
+        shelfDao.update(shelf)
+    }
+
     suspend fun deleteShelf(shelf: ShelfEntity) = shelfDao.delete(shelf)
 }
