@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 // PIC: Person C (import/CRUD) & Person D (search/filter/favorite/recent)
 class MaterialRepository(private val materialDao: MaterialDao) {
     fun getByShelf(shelfId: Long): Flow<List<MaterialEntity>> = materialDao.getByShelf(shelfId)
+    suspend fun getById(id: Long): MaterialEntity? = materialDao.getById(id)
     fun search(query: String): Flow<List<MaterialEntity>> = materialDao.search(query)
     fun getFavorites(): Flow<List<MaterialEntity>> = materialDao.getFavorites()
     fun getRecent(): Flow<List<MaterialEntity>> = materialDao.getRecent()
