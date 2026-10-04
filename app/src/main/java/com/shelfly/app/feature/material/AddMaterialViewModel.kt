@@ -8,6 +8,8 @@ import com.shelfly.app.data.repository.MaterialRepository
 
 // PIC: Person C — Add Material flow ViewModel (PRD §18, Add Material Flow design.md §5).
 // Context disimpan sebagai applicationContext (bukan Activity context) supaya aman dari leak.
+// Bulk upload (user request): saveBulk() terima banyak Uri sekaligus, tiap file
+// title-nya diambil langsung dari nama file asli (gak ada form per-file manual).
 class AddMaterialViewModel(
     private val repository: MaterialRepository,
     context: Context,
@@ -52,5 +54,27 @@ class AddMaterialViewModel(
             shelfId = shelf,
             categoryId = categoryId,
         )
+    }
+
+    // Bulk upload: tiap Uri diimport langsung pakai metadata filenya sendiri
+    // (title = nama file asli), tanpa melalui state title/fileType/fileSize
+    // single-file di atas. Return jumlah file yang berhasil diimport.
+    suspend fun saveBulk(uris: List<Uri>, targetShelfId: Long): Int {
+        check(targetShelfId > 0) { "Tidak ada Shelf dipilih. Buat Shelf terlebih dahulu sebelum menambah Material." }
+        var successCount = 0
+        for (uri in uris) {
+            persistUriPermission(appContext, uri)
+            val metadata = extractFileMetadata(appContext, uri)
+            repository.importMaterial(
+                title = metadata.title,
+                fileUri = uri.toString(),
+                fileType = metadata.fileType,
+                fileSize = metadata.fileSize,
+                shelfId = targetShelfId,
+                categoryId = null,
+            )
+            successCount++
+        }
+        return successCount
     }
 }
