@@ -20,7 +20,10 @@ class ShelfDetailViewModel(
 
     suspend fun deleteMaterial(material: MaterialEntity) = materialRepository.delete(material)
 
-    // Multi-select (user request): hapus/pindah banyak Material sekaligus.
+    suspend fun renameMaterial(material: MaterialEntity, newTitle: String) =
+        materialRepository.rename(material, newTitle)
+
+
     suspend fun deleteMaterials(materials: Set<MaterialEntity>) {
         materials.forEach { materialRepository.delete(it) }
     }

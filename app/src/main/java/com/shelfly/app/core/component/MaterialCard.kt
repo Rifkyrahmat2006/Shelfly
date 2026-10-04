@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarBorder
@@ -46,6 +47,7 @@ fun MaterialCard(
     onLongClick: () -> Unit = {},
     onToggleSelect: () -> Unit = {},
     onToggleFavorite: () -> Unit = {},
+    onEdit: (() -> Unit)? = null,
     onShare: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
 ) {
@@ -89,6 +91,15 @@ fun MaterialCard(
                     contentDescription = "Favorite",
                     tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+            }
+            if (onEdit != null) {
+                IconButton(onClick = onEdit) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        contentDescription = "Edit",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
             if (onShare != null) {
                 IconButton(onClick = onShare) {

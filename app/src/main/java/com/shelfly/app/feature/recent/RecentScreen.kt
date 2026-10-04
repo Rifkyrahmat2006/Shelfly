@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +41,7 @@ fun RecentScreen(onOpenMaterial: (Long) -> Unit) {
     }
     val viewModel = remember { RecentViewModel(repository) }
     val state by viewModel.recent().collectAsState(initial = UiState.Loading)
+    var materialToRename by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<com.shelfly.app.data.local.entity.MaterialEntity?>(null) }
 
     Scaffold { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
@@ -79,6 +81,7 @@ fun RecentScreen(onOpenMaterial: (Long) -> Unit) {
                                 onToggleFavorite = {
                                     scope.launch { repository.toggleFavorite(material) }
                                 },
+                                onEdit = { materialToRename = material },
                                 onShare = {
                                     context.startActivity(
                                         com.shelfly.app.feature.material.buildShareMaterialIntent(
@@ -101,5 +104,16 @@ fun RecentScreen(onOpenMaterial: (Long) -> Unit) {
                 }
             }
         }
+    }
+
+    materialToRename?.let { material ->
+        com.shelfly.app.core.component.RenameMaterialDialog(
+            currentTitle = material.title,
+            onConfirm = { newTitle ->
+                scope.launch { repository.rename(material, newTitle) }
+                materialToRename = null
+            },
+            onDismiss = { materialToRename = null },
+        )
     }
 }

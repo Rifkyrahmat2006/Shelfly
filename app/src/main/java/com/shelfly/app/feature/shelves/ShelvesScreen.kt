@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 
 // PIC: Person A - All Shelves list (PRD section 41 pt 2)
 @Composable
-fun ShelvesScreen(onOpenShelf: (Long) -> Unit, onCreateShelf: () -> Unit = {}) {
+fun ShelvesScreen(onOpenShelf: (Long) -> Unit, onCreateShelf: () -> Unit = {}, onEditShelf: (Long) -> Unit = {}) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val viewModel = remember {
@@ -92,6 +92,7 @@ fun ShelvesScreen(onOpenShelf: (Long) -> Unit, onCreateShelf: () -> Unit = {}) {
                                 name = shelfWithCount.shelf.name,
                                 materialCount = shelfWithCount.materialCount,
                                 onClick = { onOpenShelf(shelfWithCount.shelf.id) },
+                                onEdit = { onEditShelf(shelfWithCount.shelf.id) },
                                 onDelete = { shelfToDelete = shelfWithCount.shelf },
                             )
                         }
