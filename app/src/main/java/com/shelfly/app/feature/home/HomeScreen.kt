@@ -52,6 +52,8 @@ fun HomeScreen(
     onOpenMaterial: (Long) -> Unit = {},
     onAddMaterial: (Long) -> Unit = {},
     onCreateShelf: () -> Unit = {},
+    onSeeAllShelves: () -> Unit = {},
+    onSeeAllRecent: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -110,7 +112,12 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text("My Shelves", style = MaterialTheme.typography.titleMedium)
-                    Text("See all", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                    Text(
+                        "See all",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.clickable(onClick = onSeeAllShelves),
+                    )
                 }
             }
             item {
@@ -137,7 +144,12 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text("Recently Opened", style = MaterialTheme.typography.titleMedium)
-                    Text("See all", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                    Text(
+                        "See all",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.clickable(onClick = onSeeAllRecent),
+                    )
                 }
             }
             if (state.recent.isEmpty()) {
