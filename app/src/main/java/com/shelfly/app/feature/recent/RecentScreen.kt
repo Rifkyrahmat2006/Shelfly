@@ -65,6 +65,14 @@ fun RecentScreen(onOpenMaterial: (Long) -> Unit) {
                                 onToggleFavorite = {
                                     scope.launch { repository.toggleFavorite(material) }
                                 },
+                                onShare = {
+                                    context.startActivity(
+                                        com.shelfly.app.feature.material.buildShareMaterialIntent(
+                                            android.net.Uri.parse(material.fileUri),
+                                            material.fileType,
+                                        ),
+                                    )
+                                },
                                 onDelete = {
                                     scope.launch { repository.delete(material) }
                                 },
