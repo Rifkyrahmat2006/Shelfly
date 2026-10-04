@@ -1,0 +1,116 @@
+package com.shelfly.app.feature.favorites
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.shelfly.app.R
+import com.shelfly.app.core.component.MaterialCard
+import com.shelfly.app.data.local.ShelflyDatabase
+import com.shelfly.app.data.repository.MaterialRepository
+import com.shelfly.app.feature.state.UiState
+import kotlinx.coroutines.launch
+
+// PIC: Person A - Favorites (PRD section 22)
+@Composable
+fun FavoritesScreen(onOpenMaterial: (Long) -> Unit) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val repository = remember {
+        MaterialRepository(ShelflyDatabase.getInstance(context).materialDao())
+    }
+    val viewModel = remember { FavoritesViewModel(repository) }
+    val state by viewModel.favorites().collectAsState(initial = UiState.Loading)
+    var materialToRename by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<com.shelfly.app.data.local.entity.MaterialEntity?>(null) }
+
+    Scaffold { padding ->
+        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
+            Text("Favorites", style = MaterialTheme.typography.headlineLarge)
+            when (val s = state) {
+                is UiState.Loading -> {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                }
+                is UiState.Empty -> {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.illustration_favorites_empty),
+                                contentDescription = null,
+                                modifier = Modifier.height(160.dp),
+                            )
+                            Text("Belum ada Favorite.")
+                        }
+                    }
+                }
+                is UiState.Success -> {
+                    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(s.data) { material ->
+                            MaterialCard(
+                                title = material.title,
+                                subtitle = material.fileType,
+                                isFavorite = material.isFavorite,
+                                onClick = { onOpenMaterial(material.id) },
+                                onToggleFavorite = {
+                                    scope.launch { repository.toggleFavorite(material) }
+                                },
+                                onEdit = { materialToRename = material },
+                                onShare = {
+                                    context.startActivity(
+                                        com.shelfly.app.feature.material.buildShareMaterialIntent(
+                                            android.net.Uri.parse(material.fileUri),
+                                            material.fileType,
+                                        ),
+                                    )
+                                },
+                                onDelete = {
+                                    scope.launch { repository.delete(material) }
+                                },
+                            )
+                        }
+                    }
+                }
+                is UiState.Error -> {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(s.message)
+                    }
+                }
+            }
+        }
+    }
+
+    materialToRename?.let { material ->
+        com.shelfly.app.core.component.RenameMaterialDialog(
+            currentTitle = material.title,
+            onConfirm = { newTitle ->
+                scope.launch { repository.rename(material, newTitle) }
+                materialToRename = null
+            },
+            onDismiss = { materialToRename = null },
+        )
+    }
+}

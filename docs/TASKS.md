@@ -43,6 +43,8 @@ Ulangi per unit perilaku kecil, bukan sekali nulis banyak lalu ditest belakangan
 
 Room butuh SQLite driver Android asli → DAO test **harus** di `androidTest`, bukan `test`. Sudah ada contoh jadi: `app/src/androidTest/java/com/shelfly/app/data/local/ShelfDaoTest.kt` — pakai ini sebagai template, tinggal ganti Entity/DAO-nya.
 
+**Fix penting (sudah diterapkan):** `testInstrumentationRunner` harus diset manual ke `androidx.test.runner.AndroidJUnitRunner` di `app/build.gradle.kts` `defaultConfig` — tanpa ini, semua `@RunWith(AndroidJUnit4::class)` gagal start dengan `Failed to instantiate test runner class`. 26 androidTest sudah **run-verified di device fisik** setelah fix ini (2026-10-03).
+
 Cara jalanin:
 ```bash
 # Unit test (cepat, jalan tiap commit)
@@ -84,12 +86,12 @@ Referensi PRD: section 41 (UX/UI Direction), 42 (Navigation), 43 (Bottom Navigat
 | # | Task | Referensi PRD | Test |
 |---|---|---|---|
 | A1 | Bottom Navigation (Home, Shelves, Recent, Favorites) di `core/navigation` | §43 | - (visual) |
-| A2 | Home Screen: My Shelves, Search bar, Recent, Favorites section | §41 Home | - (visual), tapi state loading/empty via ViewModel dari Yunan (D) |
-| A3 | Shelf Card component (reusable, dipakai Home + Shelves list) | §41 Material Card (adaptasi Shelf) | - (visual) |
-| A4 | Material Card component (reusable) | §41 Material Card | - (visual) |
-| A5 | Create/Edit Shelf bottom sheet (form: nama, deskripsi, icon) | §17 Shelf Management | Unit test validasi input (nama tidak boleh kosong) |
+| A2 | ✅ Home Screen: My Shelves, Search bar, Recent, Favorites section | §41 Home | `HomeViewModel` combine getShelfWithMaterialCount+getRecent, wired ke ShelvesScreen/FavoritesScreen/RecentScreen/SearchScreen/ShelfDetailScreen (bug "shelf tidak muncul" root cause — semua screen ini sebelumnya cuma TODO placeholder). Verified manual di device fisik: shelf baru langsung muncul di Home+Shelves, Favorites/Recent render MaterialCard asli, ShelfDetail+Import Material tombol nyambung shelfId benar (fix bug hardcode `1L`), SearchScreen render search+filter+sort. FAB Home juga fix 2 bug lanjutan: (1) crash shelfId=0 saat belum ada Shelf — sekarang arahkan ke Create Shelf dulu; (2) selalu ambil shelf pertama kalau Shelf > 1 — sekarang munculkan dialog "Pilih Shelf" (ListItem Material3). 45/45 androidTest tetap lolos, verified manual pilih shelf dari dialog -> Add Material benar |
+| A3 | ✅ Shelf Card component (reusable, dipakai Home + Shelves list) + parameter `onDelete` opsional (icon delete, nullable default null) | §41 Material Card (adaptasi Shelf) | - (visual), dipakai di `ShelvesScreen` untuk trigger delete shelf |
+| A4 | ✅ Material Card component (reusable) + parameter `onDelete` opsional (icon delete, nullable default null) | §41 Material Card | - (visual), dipakai di `ShelfDetailScreen`/`FavoritesScreen`/`RecentScreen` untuk trigger delete material |
+| A5 | ✅ Create/Edit Shelf form (nama, deskripsi, icon) | §17 Shelf Management | `ShelfFormViewModelTest` 4 case, run-verified di device fisik (35/35 androidTest lolos). Verified manual: FAB Shelves -> form -> Save -> data terbukti masuk DB (`SELECT * FROM shelf` return row baru) |
 | A6 | Empty states (No Shelves, Empty Shelf, No Search Results) | §28 Empty States | - (visual) |
-| A7 | Confirmation dialog pola reusable (Delete Shelf/Material) | §27 Delete Behavior | - (visual) |
+| A7 | ✅ Confirmation dialog pola reusable (Delete Shelf/Material) + tombol back di semua screen navigate (ShelfDetail, MaterialDetail, Search, AddMaterial, ShelfForm) | §27 Delete Behavior | ConfirmationDialog reusable dipakai Shelves/ShelfDetail (delete shelf+cascade material) dan ShelfDetail (delete material). Semua 5 screen navigate (ShelfDetail, MaterialDetail, Search, AddMaterial, ShelfForm) punya TopAppBar+navigationIcon ArrowBack. **Build sukses (assembleDebug+compileDebugAndroidTestKotlin). connectedDebugAndroidTest + verifikasi visual delete/back BELUM dijalankan ulang di sesi ini — device terputus saat run test, menunggu device nyambung lagi untuk konfirmasi final.** |
 
 **Pitfall**: semua komponen di atas HARUS pakai token dari `core/theme` (Color, Dimens, Typography). Jangan hardcode `16.dp` atau `Color(0xFF...)` baru — kalau butuh nilai yang belum ada di token, koordinasi ke Rifky dulu.
 
@@ -100,13 +102,13 @@ Referensi PRD: section 35 (Database Model), 17 (Shelf Management), 11-12 (Entita
 | # | Task | Referensi PRD | Test |
 |---|---|---|---|
 | B1 | ~~Entity + DAO dasar~~ | §35 | ✅ selesai (Sprint 0) |
-| B2 | ✅ ShelfRepository: implementasi penuh (bukan stub) — insert/update/delete/getAll/getById + validasi nama kosong | §17 | `androidTest`: insert lalu getAll, update, delete, getById, blank name |
-| B3 | Category Entity + DAO + Repository | §35, §11 | `androidTest` |
-| B4 | Migration strategy kalau schema Material/Shelf berubah nanti | §35 | - (dicatat di komentar) |
-| B5 | Shelf item count (query JOIN Material by shelfId) | §17, §41 Shelf Card butuh count | `androidTest`: shelf dengan N material → count = N |
-| B6 | Delete Shelf yang berisi Material — behavior sesuai §27 (konfirmasi + jelaskan dampak) | §27 | `androidTest`: delete shelf berisi material, verifikasi behavior sesuai keputusan tim (cascade atau block) |
+| B2 | ✅ ShelfRepository: implementasi penuh (bukan stub) — insert/update/delete/getAll/getById + validasi nama kosong | §17 | `androidTest`: insert lalu getAll, update, delete, getById, blank name — **run-verified di device fisik** |
+| B3 | ✅ Category Entity + DAO + Repository | §35, §11 | `androidTest`: CategoryDaoTest, CategoryRepositoryTest — **run-verified di device fisik** (fix: method test `_throws` harus `void` return, bukan expression body `= runBlocking`) |
+| B4 | ✅ Migration strategy kalau schema Material/Shelf berubah nanti | §35 | - (dicatat di komentar `ShelflyDatabase.kt`) |
+| B5 | ✅ Shelf item count (query JOIN Material by shelfId) | §17, §41 Shelf Card butuh count | `androidTest`: ShelfItemCountTest — **run-verified di device fisik** |
+| B6 | ✅ Delete Shelf yang berisi Material — Cascade via Room ForeignKey (keputusan tim) | §27, §34 | `androidTest`: DeleteShelfCascadeTest — **run-verified di device fisik** |
 
-**Pitfall**: §27 (Delete Behavior) dan §34 (Keputusan Penyimpanan File) butuh keputusan desain tim sebelum B6 dikerjakan — baca dulu, diskusikan di grup kalau ambigu.
+**Keputusan B6**: Cascade dipilih (bukan Block). Alasan: PRD §34 menetapkan Shelfly menyimpan URI/reference ke file, bukan copy file fisik — jadi delete Shelf di app tidak pernah menghapus file asli di perangkat, cuma metadata/referensi. Implementasi: `ForeignKey(onDelete = ForeignKey.CASCADE)` di `MaterialEntity.shelfId` (database-level, bukan logic manual di Repository) — jamin atomicity dan tidak mungkin lupa di-handle di satu tempat. Konfirmasi dialog delete harus jelasin ke user: "File asli tidak akan terhapus dari perangkat" (sesuai pola §27).
 
 ### Intan — Modul C: File Management
 
@@ -114,13 +116,13 @@ Referensi PRD: section 18 (Material Management), 25 (Open Material), 33-34 (Loca
 
 | # | Task | Referensi PRD | Test |
 |---|---|---|---|
-| C1 | File picker integration (system picker, `ActivityResultContracts.OpenDocument`) | §18, Add Material Flow (design.md §5) | - (manual test di device) |
-| C2 | Ambil metadata dari URI: title, fileType, fileSize | §18 | Unit test: fungsi parsing metadata dari URI mock |
-| C3 | Persist URI permission (`takePersistableUriPermission`) supaya file tetap bisa diakses setelah app restart | §33, §34 | `androidTest`: buka lagi setelah simulasi restart |
-| C4 | MaterialRepository: implementasi penuh (insert dari hasil import) | §18 | `androidTest` |
-| C5 | Open Material — intent ke aplikasi eksternal sesuai MIME type | §25 | - (manual, tidak semua bisa diunit-test karena tergantung app eksternal device) |
-| C6 | Error handling: file tidak ditemukan, tidak bisa dibuka, permission issue | §29 Error Handling | Unit test: fungsi cek `fileExists`/error mapping dengan mock URI |
-| C7 | Move Material antar Shelf | §26 | `androidTest` |
+| C1 | ✅ File picker integration (system picker, `ActivityResultContracts.OpenDocument`) | §18, Add Material Flow (design.md §5) | **Verified manual di device fisik**: FAB → Add Material screen → "Choose File" → system file picker terbuka beneran, no crash. `AddMaterialViewModel` logic 3 case run-verified via `AddMaterialViewModelTest` |
+| C2 | ✅ Ambil metadata dari URI: title, fileType, fileSize | §18 | `FileMetadataExtractorTest` — real file via FileProvider, **run-verified di device fisik** |
+| C3 | ✅ Persist URI permission (`takePersistableUriPermission`) supaya file tetap bisa diakses setelah app restart | §33, §34 | `UriPermissionManagerTest` — URI tanpa flag persistable return false tanpa crash, **run-verified di device fisik** |
+| C4 | ✅ MaterialRepository: implementasi penuh (insert dari hasil import) + validasi title/fileUri kosong | §18 | `androidTest`: MaterialRepositoryTest — **run-verified di device fisik** |
+| C5 | ✅ Open Material — PDF in-app viewer via PdfRenderer native (bukan delegasi app eksternal lagi), file non-PDF tetap ACTION_VIEW intent | §25 | `OpenMaterialIntentTest`, `PdfPageRendererTest` (pageCount/renderPage/invalid index), `MaterialDetailViewModelTest` — 44/44 androidTest run-verified di device fisik. Verified manual: PDF CV asli 5 halaman ter-render in-app, swipe antar halaman jalan |
+| C6 | ✅ Error handling: file tidak ditemukan, tidak bisa dibuka, permission issue | §29 Error Handling | Unit test: `MaterialErrorMapperTest` — 4 case (JVM unit test gagal run di environment lokal karena konflik classpath Windows/MSYS — tolong jalankan `./gradlew testDebugUnitTest` di Android Studio buat verifikasi) |
+| C7 | ✅ Move Material antar Shelf | §26 | `MaterialRepositoryTest.moveToShelf_validTargetShelf_updatesShelfId` — run-verified di device fisik |
 
 **Pitfall**: §34 penting dibaca duluan — MVP pakai URI reference (bukan copy file ke app storage). Ini keputusan arsitektur, jangan diubah sepihak.
 
@@ -130,13 +132,13 @@ Referensi PRD: section 19 (Search), 20 (Filter), 21 (Sort), 22 (Favorite), 23 (R
 
 | # | Task | Referensi PRD | Test |
 |---|---|---|---|
-| D1 | Search ViewModel: query by title, case-insensitive | §19 | Unit test: query "database" match "Database Room.pdf" |
-| D2 | UI State sealed class (Loading/Success/Empty/Error) dipakai semua ViewModel | §32 | Unit test: transisi state |
-| D3 | Filter state: by Shelf, File Type, Category | §20 | Unit test: kombinasi filter menghasilkan subset benar |
-| D4 | Sort: Newest, Oldest, Name A-Z/Z-A, Recently Opened | §21 | Unit test: tiap opsi sort menghasilkan urutan benar |
-| D5 | Favorite toggle + query getFavorites | §22 | `androidTest` (sentuh Room) |
-| D6 | Recently Opened — update `lastOpenedAt` saat Open Material dipanggil, query terbaru | §23 | `androidTest` |
-| D7 | Preserve search query/filter saat navigasi balik (§22 Interaction Principles / Preserve Context) | design.md §22 | Unit test: state tidak reset saat navigate back |
+| D1 | ✅ Search ViewModel: query by title, case-insensitive | §19 | `SearchViewModelTest` — 4 case, **run-verified di device fisik** (26/26 androidTest lolos) |
+| D2 | ✅ UI State sealed class (Loading/Success/Empty/Error) dipakai semua ViewModel | §32 | Unit test: `UiStateTest` — 5 case (JVM unit test gagal run di environment lokal, sama catatan C6) |
+| D3 | ✅ Filter state: by Shelf, File Type, Category | §20 | `FilterStateTest` — 7 case (JVM unit test gagal run di environment lokal, sama catatan C6) |
+| D4 | ✅ Sort: Newest, Oldest, Name A-Z/Z-A, Recently Opened | §21 | `SortOptionTest` — 5 case (JVM unit test gagal run di environment lokal, sama catatan C6) |
+| D5 | ✅ Favorite toggle + query getFavorites | §22 | `FavoritesViewModelTest` — 2 case, **run-verified di device fisik** |
+| D6 | ✅ Recently Opened — update `lastOpenedAt` saat Open Material dipanggil, query terbaru | §23 | `RecentViewModelTest` — 2 case, **run-verified di device fisik** |
+| D7 | ✅ Preserve search query/filter saat navigasi balik (§22 Interaction Principles / Preserve Context) | design.md §22 | `SearchFilterStateHolderTest` — 5 case (JVM unit test gagal run di environment lokal, sama catatan C6) |
 
 **Pitfall**: Search/Filter/Sort harus reactive terhadap perubahan data (pakai `Flow`, bukan snapshot sekali query) — kalau Material baru ditambah Intan (C), list di Search (D) harus update otomatis tanpa refresh manual.
 

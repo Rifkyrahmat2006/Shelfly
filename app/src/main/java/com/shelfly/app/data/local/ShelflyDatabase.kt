@@ -13,9 +13,21 @@ import com.shelfly.app.data.local.entity.ShelfEntity
 
 @Database(
     entities = [ShelfEntity::class, CategoryEntity::class, MaterialEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
+// PIC: Person B — Migration strategy (PRD section 35)
+// version = 2 (naik dari 1 karena B6: tambah ForeignKey CASCADE di MaterialEntity.shelfId).
+// Project masih development, belum ada user data produksi -> migrasi 1->2 di-skip,
+// kalau crash "Room cannot verify data integrity" saat testing, uninstall+reinstall app.
+// exportSchema = false karena project kuliah, belum butuh backward-compat prod.
+// Kalau nanti ada perubahan schema lagi (tambah/ubah kolom Entity):
+//   1. Naikkan `version` di atas (misal 1 -> 2)
+//   2. Tulis Migration object: object MIGRATION_1_2 : Migration(1, 2) { override fun migrate(db: SupportSQLiteDatabase) { db.execSQL("ALTER TABLE ...") } }
+//   3. Daftarkan ke builder: .addMigrations(MIGRATION_1_2) di getInstance()
+//   4. Set exportSchema = true + tentukan schemaLocation kalau butuh test migration otomatis
+// ponytail: fallbackToDestructiveMigration() TIDAK dipakai sengaja — itu hapus semua data
+// user kalau schema berubah tanpa migration, gak boleh buat app yang beneran dipakai.
 abstract class ShelflyDatabase : RoomDatabase() {
     abstract fun shelfDao(): ShelfDao
     abstract fun materialDao(): MaterialDao
