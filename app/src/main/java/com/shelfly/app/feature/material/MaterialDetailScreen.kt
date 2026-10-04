@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -63,6 +64,15 @@ fun MaterialDetailScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = {
+                        material?.let {
+                            context.startActivity(
+                                buildShareMaterialIntent(Uri.parse(it.fileUri), it.fileType),
+                            )
+                        }
+                    }) {
+                        Icon(Icons.Filled.Share, contentDescription = "Share Material")
+                    }
                     IconButton(onClick = { showDeleteDialog = true }) {
                         Icon(Icons.Filled.Delete, contentDescription = "Delete Material")
                     }
