@@ -80,6 +80,7 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                     onOpenSearch = { navController.navigate(Routes.SEARCH) },
                     onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) },
                     onAddMaterial = { shelfId -> navController.navigate(Routes.addMaterial(shelfId)) },
+                    onCreateShelf = { navController.navigate(Routes.SHELF_FORM_CREATE) },
                 )
             }
             composable(Routes.SHELVES) {
