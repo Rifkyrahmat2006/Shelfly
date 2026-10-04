@@ -42,7 +42,10 @@ class MaterialRepository(private val materialDao: MaterialDao) {
 
     suspend fun delete(material: MaterialEntity) = materialDao.delete(material)
 
-    // PIC: Person C — Move Material antar Shelf (PRD section 26)
+    suspend fun rename(material: MaterialEntity, newTitle: String) =
+        materialDao.update(material.copy(title = newTitle))
+
+
     suspend fun moveToShelf(materialId: Long, targetShelfId: Long) {
         val material = materialDao.getById(materialId) ?: return
         materialDao.update(material.copy(shelfId = targetShelfId))

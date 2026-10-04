@@ -1,10 +1,12 @@
 package com.shelfly.app.feature.search
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -32,7 +34,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.shelfly.app.R
 import com.shelfly.app.core.component.MaterialCard
 import com.shelfly.app.data.local.ShelflyDatabase
 import com.shelfly.app.data.repository.MaterialRepository
@@ -54,6 +58,7 @@ fun SearchScreen(onOpenMaterial: (Long) -> Unit, onBack: () -> Unit = {}) {
     val viewModel = remember { SearchViewModel(repository) }
     var query by remember { mutableStateOf("") }
     var sort by remember { mutableStateOf(SortOption.NEWEST) }
+    var materialToRename by remember { mutableStateOf<com.shelfly.app.data.local.entity.MaterialEntity?>(null) }
     val state by remember(query) { viewModel.search(query) }.collectAsState(initial = UiState.Empty)
 
     Scaffold(
@@ -96,7 +101,17 @@ fun SearchScreen(onOpenMaterial: (Long) -> Unit, onBack: () -> Unit = {}) {
                 }
                 is UiState.Empty -> {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(if (query.isBlank()) "Ketik untuk mencari Material." else "Tidak ada hasil.")
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.illustration_search_empty),
+                                contentDescription = null,
+                                modifier = Modifier.height(160.dp),
+                            )
+                            Text(if (query.isBlank()) "Ketik untuk mencari Material." else "Tidak ada hasil.")
+                        }
                     }
                 }
                 is UiState.Success -> {
@@ -111,6 +126,7 @@ fun SearchScreen(onOpenMaterial: (Long) -> Unit, onBack: () -> Unit = {}) {
                                 onToggleFavorite = {
                                     scope.launch { repository.toggleFavorite(material) }
                                 },
+                                onEdit = { materialToRename = material },
                                 onShare = {
                                     context.startActivity(
                                         com.shelfly.app.feature.material.buildShareMaterialIntent(
@@ -133,5 +149,16 @@ fun SearchScreen(onOpenMaterial: (Long) -> Unit, onBack: () -> Unit = {}) {
                 }
             }
         }
+    }
+
+    materialToRename?.let { material ->
+        com.shelfly.app.core.component.RenameMaterialDialog(
+            currentTitle = material.title,
+            onConfirm = { newTitle ->
+                scope.launch { repository.rename(material, newTitle) }
+                materialToRename = null
+            },
+            onDismiss = { materialToRename = null },
+        )
     }
 }
