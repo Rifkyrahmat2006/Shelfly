@@ -48,6 +48,17 @@ object Routes {
 
 private val BOTTOM_NAV_ROUTES = setOf(Routes.HOME, Routes.SHELVES, Routes.RECENT, Routes.FAVORITES)
 
+// Navigasi antar tab (bottom nav & "See all") harus pakai pattern ini biar back stack
+// konsisten — tanpa ini, tab Home bisa "macet" (tap Home tidak merespons) karena entry
+// duplikat menumpuk di back stack tiap kali See all dipakai.
+private fun NavHostController.navigateToTab(route: String) {
+    navigate(route) {
+        popUpTo(Routes.HOME) { saveState = true }
+        launchSingleTop = true
+        restoreState = true
+    }
+}
+
 @Composable
 fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -59,11 +70,7 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                 ShelflyBottomNavBar(
                     currentRoute = currentRoute,
                     onNavigate = { destination ->
-                        navController.navigate(destination.route) {
-                            popUpTo(Routes.HOME) { saveState = true }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        navController.navigateToTab(destination.route)
                     },
                 )
             }
@@ -81,8 +88,8 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                     onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) },
                     onAddMaterial = { shelfId -> navController.navigate(Routes.addMaterial(shelfId)) },
                     onCreateShelf = { navController.navigate(Routes.SHELF_FORM_CREATE) },
-                    onSeeAllShelves = { navController.navigate(Routes.SHELVES) },
-                    onSeeAllRecent = { navController.navigate(Routes.RECENT) },
+                    onSeeAllShelves = { navController.navigateToTab(Routes.SHELVES) },
+                    onSeeAllRecent = { navController.navigateToTab(Routes.RECENT) },
                     onEditShelf = { id -> navController.navigate(Routes.shelfFormEdit(id)) },
                 )
             }
