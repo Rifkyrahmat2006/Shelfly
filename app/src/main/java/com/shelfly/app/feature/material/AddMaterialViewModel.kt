@@ -17,7 +17,8 @@ class AddMaterialViewModel(
 
     val title = mutableStateOf("")
     private var selectedUri: Uri? = null
-    private var fileType: String = ""
+    var fileType: String = ""
+        private set
     private var fileSize: Long = 0
     private var shelfId: Long? = null
     private var categoryId: Long? = null

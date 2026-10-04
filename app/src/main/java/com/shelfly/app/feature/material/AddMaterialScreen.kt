@@ -1,11 +1,13 @@
 package com.shelfly.app.feature.material
 
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
@@ -18,13 +20,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.shelfly.app.core.theme.Spacing
 import kotlinx.coroutines.launch
 
 // PIC: Person C — Add Material Flow (design.md §5): step 1 system file picker,
-// step 2 metadata form, Save. Shelf dropdown jadi tanggung jawab Nadine (A) saat
-// integrasi UI penuh — screen ini pakai shelfId yang sudah diketahui (dipanggil
-// dari Shelf Detail "Add Material" FAB).
+// step 2 preview + metadata form, Save. Shelf dropdown jadi tanggung jawab
+// Nadine (A) saat integrasi UI penuh — screen ini pakai shelfId yang sudah
+// diketahui (dipanggil dari Shelf Detail "Add Material" FAB).
 @Composable
 fun AddMaterialScreen(
     viewModel: AddMaterialViewModel,
@@ -34,12 +37,16 @@ fun AddMaterialScreen(
     val scope = rememberCoroutineScope()
     val title by viewModel.title
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    var selectedUri by remember { mutableStateOf<Uri?>(null) }
+    var selectedFileType by remember { mutableStateOf("") }
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
         if (uri != null) {
             viewModel.onFileSelected(uri)
             viewModel.onShelfSelected(shelfId)
+            selectedUri = uri
+            selectedFileType = viewModel.fileType
         }
     }
 
@@ -54,6 +61,14 @@ fun AddMaterialScreen(
             Text("Add Material")
             Button(onClick = { launcher.launch(arrayOf("*/*")) }) {
                 Text(if (title.isBlank()) "Choose File" else "Change File")
+            }
+            val previewUri = selectedUri
+            if (previewUri != null) {
+                MaterialPreview(
+                    uri = previewUri,
+                    fileType = selectedFileType,
+                    modifier = Modifier.fillMaxWidth().height(320.dp),
+                )
             }
             if (title.isNotBlank()) {
                 OutlinedTextField(
