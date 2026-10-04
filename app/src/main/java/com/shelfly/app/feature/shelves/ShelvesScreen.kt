@@ -18,23 +18,31 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.shelfly.app.core.component.ConfirmationDialog
 import com.shelfly.app.core.component.ShelfCard
 import com.shelfly.app.data.local.ShelflyDatabase
+import com.shelfly.app.data.local.entity.ShelfEntity
 import com.shelfly.app.data.repository.ShelfRepository
 import com.shelfly.app.feature.state.UiState
 import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
 
 // PIC: Person A - All Shelves list (PRD section 41 pt 2)
 @Composable
 fun ShelvesScreen(onOpenShelf: (Long) -> Unit, onCreateShelf: () -> Unit = {}) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val viewModel = remember {
         ShelvesViewModel(ShelfRepository(ShelflyDatabase.getInstance(context).shelfDao()))
     }
+    var shelfToDelete by remember { mutableStateOf<ShelfEntity?>(null) }
     val state by viewModel.observeShelves().collectAsState(initial = UiState.Loading)
 
     Scaffold(
@@ -64,6 +72,7 @@ fun ShelvesScreen(onOpenShelf: (Long) -> Unit, onCreateShelf: () -> Unit = {}) {
                                 name = shelfWithCount.shelf.name,
                                 materialCount = shelfWithCount.materialCount,
                                 onClick = { onOpenShelf(shelfWithCount.shelf.id) },
+                                onDelete = { shelfToDelete = shelfWithCount.shelf },
                             )
                         }
                     }
@@ -75,5 +84,17 @@ fun ShelvesScreen(onOpenShelf: (Long) -> Unit, onCreateShelf: () -> Unit = {}) {
                 }
             }
         }
+    }
+
+    shelfToDelete?.let { shelf ->
+        ConfirmationDialog(
+            title = "Hapus Shelf",
+            message = "Shelf \"${shelf.name}\" dan semua Material di dalamnya akan dihapus permanen. Lanjutkan?",
+            onConfirm = {
+                scope.launch { viewModel.deleteShelf(shelf) }
+                shelfToDelete = null
+            },
+            onDismiss = { shelfToDelete = null },
+        )
     }
 }

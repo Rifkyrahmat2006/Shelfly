@@ -16,16 +16,21 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -44,6 +49,7 @@ fun HomeScreen(
     onOpenSearch: () -> Unit,
     onOpenMaterial: (Long) -> Unit = {},
     onAddMaterial: (Long) -> Unit = {},
+    onCreateShelf: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val viewModel = remember {
@@ -51,10 +57,19 @@ fun HomeScreen(
         HomeViewModel(ShelfRepository(db.shelfDao()), MaterialRepository(db.materialDao()))
     }
     val state by viewModel.observeHome().collectAsState(initial = HomeUiState())
+    var showShelfPicker by remember { mutableStateOf(false) }
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { onAddMaterial(state.shelves.firstOrNull()?.shelf?.id ?: 0L) }) {
+            FloatingActionButton(
+                onClick = {
+                    when {
+                        state.shelves.isEmpty() -> onCreateShelf()
+                        state.shelves.size == 1 -> onAddMaterial(state.shelves.first().shelf.id)
+                        else -> showShelfPicker = true
+                    }
+                },
+            ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add Material")
             }
         },
@@ -133,5 +148,29 @@ fun HomeScreen(
                 }
             }
         }
+    }
+
+    if (showShelfPicker) {
+        AlertDialog(
+            onDismissRequest = { showShelfPicker = false },
+            title = { Text("Pilih Shelf") },
+            text = {
+                Column {
+                    state.shelves.forEach { shelfWithCount ->
+                        ListItem(
+                            headlineContent = { Text(shelfWithCount.shelf.name) },
+                            supportingContent = { Text("${shelfWithCount.materialCount} materials") },
+                            modifier = Modifier.clickable {
+                                showShelfPicker = false
+                                onAddMaterial(shelfWithCount.shelf.id)
+                            },
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showShelfPicker = false }) { Text("Batal") }
+            },
+        )
     }
 }

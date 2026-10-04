@@ -80,6 +80,7 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                     onOpenSearch = { navController.navigate(Routes.SEARCH) },
                     onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) },
                     onAddMaterial = { shelfId -> navController.navigate(Routes.addMaterial(shelfId)) },
+                    onCreateShelf = { navController.navigate(Routes.SHELF_FORM_CREATE) },
                 )
             }
             composable(Routes.SHELVES) {
@@ -100,14 +101,23 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                     shelfId = shelfId,
                     onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) },
                     onAddMaterial = { sid -> navController.navigate(Routes.addMaterial(sid)) },
+                    onBack = { navController.popBackStack() },
+                    onDeleted = { navController.popBackStack() },
                 )
             }
             composable(Routes.MATERIAL_DETAIL) { backStackEntry ->
                 val materialId = backStackEntry.arguments?.getString("materialId")?.toLongOrNull() ?: 0L
-                MaterialDetailScreen(materialId = materialId)
+                MaterialDetailScreen(
+                    materialId = materialId,
+                    onBack = { navController.popBackStack() },
+                    onDeleted = { navController.popBackStack() },
+                )
             }
             composable(Routes.SEARCH) {
-                SearchScreen(onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) })
+                SearchScreen(
+                    onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) },
+                    onBack = { navController.popBackStack() },
+                )
             }
             composable(Routes.ADD_MATERIAL) { backStackEntry ->
                 val shelfId = backStackEntry.arguments?.getString("shelfId")?.toLongOrNull() ?: 0L
@@ -118,6 +128,7 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                     viewModel = viewModel,
                     shelfId = shelfId,
                     onSaved = { navController.popBackStack() },
+                    onBack = { navController.popBackStack() },
                 )
             }
             composable(Routes.SHELF_FORM_CREATE) {
@@ -128,6 +139,7 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                     viewModel = viewModel,
                     isEditMode = false,
                     onSaved = { navController.popBackStack() },
+                    onBack = { navController.popBackStack() },
                 )
             }
             composable(Routes.SHELF_FORM_EDIT) { backStackEntry ->
@@ -139,6 +151,7 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                     viewModel = viewModel,
                     isEditMode = true,
                     onSaved = { navController.popBackStack() },
+                    onBack = { navController.popBackStack() },
                 )
             }
         }
