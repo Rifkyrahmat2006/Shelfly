@@ -20,12 +20,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.shelfly.app.core.theme.Radius
 import com.shelfly.app.core.theme.Spacing
 
 // PIC: Person A - Shelf Card, dipakai di Home & Shelves list (PRD section 41 Material Card, adaptasi Shelf)
+// Edit + Delete dikelompokkan di satu Row kanan (nempel bersebelahan), bukan SpaceBetween 3 elemen.
 @Composable
 fun ShelfCard(
     name: String,
@@ -53,22 +53,24 @@ fun ShelfCard(
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(24.dp),
             )
-            if (onEdit != null) {
-                IconButton(onClick = onEdit) {
-                    Icon(
-                        imageVector = Icons.Filled.Edit,
-                        contentDescription = "Edit",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (onEdit != null) {
+                    IconButton(onClick = onEdit) {
+                        Icon(
+                            imageVector = Icons.Filled.Edit,
+                            contentDescription = "Edit",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
-            }
-            if (onDelete != null) {
-                IconButton(onClick = onDelete) {
-                    Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = "Delete",
-                        tint = MaterialTheme.colorScheme.error,
-                    )
+                if (onDelete != null) {
+                    IconButton(onClick = onDelete) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "Delete",
+                            tint = MaterialTheme.colorScheme.error,
+                        )
+                    }
                 }
             }
         }
