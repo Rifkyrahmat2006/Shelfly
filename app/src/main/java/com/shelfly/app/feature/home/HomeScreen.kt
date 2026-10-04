@@ -144,6 +144,14 @@ fun HomeScreen(
                         subtitle = material.fileType,
                         isFavorite = material.isFavorite,
                         onClick = { onOpenMaterial(material.id) },
+                        onShare = {
+                            context.startActivity(
+                                com.shelfly.app.feature.material.buildShareMaterialIntent(
+                                    android.net.Uri.parse(material.fileUri),
+                                    material.fileType,
+                                ),
+                            )
+                        },
                     )
                 }
             }
