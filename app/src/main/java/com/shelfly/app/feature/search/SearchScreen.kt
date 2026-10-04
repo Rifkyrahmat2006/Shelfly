@@ -58,6 +58,7 @@ fun SearchScreen(onOpenMaterial: (Long) -> Unit, onBack: () -> Unit = {}) {
     val viewModel = remember { SearchViewModel(repository) }
     var query by remember { mutableStateOf("") }
     var sort by remember { mutableStateOf(SortOption.NEWEST) }
+    var materialToRename by remember { mutableStateOf<com.shelfly.app.data.local.entity.MaterialEntity?>(null) }
     val state by remember(query) { viewModel.search(query) }.collectAsState(initial = UiState.Empty)
 
     Scaffold(
@@ -125,6 +126,7 @@ fun SearchScreen(onOpenMaterial: (Long) -> Unit, onBack: () -> Unit = {}) {
                                 onToggleFavorite = {
                                     scope.launch { repository.toggleFavorite(material) }
                                 },
+                                onEdit = { materialToRename = material },
                                 onShare = {
                                     context.startActivity(
                                         com.shelfly.app.feature.material.buildShareMaterialIntent(
@@ -147,5 +149,16 @@ fun SearchScreen(onOpenMaterial: (Long) -> Unit, onBack: () -> Unit = {}) {
                 }
             }
         }
+    }
+
+    materialToRename?.let { material ->
+        com.shelfly.app.core.component.RenameMaterialDialog(
+            currentTitle = material.title,
+            onConfirm = { newTitle ->
+                scope.launch { repository.rename(material, newTitle) }
+                materialToRename = null
+            },
+            onDismiss = { materialToRename = null },
+        )
     }
 }

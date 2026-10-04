@@ -54,6 +54,7 @@ fun HomeScreen(
     onCreateShelf: () -> Unit = {},
     onSeeAllShelves: () -> Unit = {},
     onSeeAllRecent: () -> Unit = {},
+    onEditShelf: (Long) -> Unit = {},
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -65,6 +66,7 @@ fun HomeScreen(
     }
     val state by viewModel.observeHome().collectAsState(initial = HomeUiState())
     var showShelfPicker by remember { mutableStateOf(false) }
+    var materialToRename by remember { mutableStateOf<com.shelfly.app.data.local.entity.MaterialEntity?>(null) }
 
     Scaffold(
         floatingActionButton = {
@@ -131,6 +133,7 @@ fun HomeScreen(
                                     name = shelfWithCount.shelf.name,
                                     materialCount = shelfWithCount.materialCount,
                                     onClick = { onOpenShelf(shelfWithCount.shelf.id) },
+                                    onEdit = { onEditShelf(shelfWithCount.shelf.id) },
                                 )
                             }
                         }
@@ -164,6 +167,7 @@ fun HomeScreen(
                         onToggleFavorite = {
                             scope.launch { materialRepository.toggleFavorite(material) }
                         },
+                        onEdit = { materialToRename = material },
                         onShare = {
                             context.startActivity(
                                 com.shelfly.app.feature.material.buildShareMaterialIntent(
@@ -199,6 +203,17 @@ fun HomeScreen(
             confirmButton = {
                 TextButton(onClick = { showShelfPicker = false }) { Text("Batal") }
             },
+        )
+    }
+
+    materialToRename?.let { material ->
+        com.shelfly.app.core.component.RenameMaterialDialog(
+            currentTitle = material.title,
+            onConfirm = { newTitle ->
+                scope.launch { materialRepository.rename(material, newTitle) }
+                materialToRename = null
+            },
+            onDismiss = { materialToRename = null },
         )
     }
 }

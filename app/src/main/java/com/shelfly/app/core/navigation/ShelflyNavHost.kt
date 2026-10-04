@@ -83,12 +83,14 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                     onCreateShelf = { navController.navigate(Routes.SHELF_FORM_CREATE) },
                     onSeeAllShelves = { navController.navigate(Routes.SHELVES) },
                     onSeeAllRecent = { navController.navigate(Routes.RECENT) },
+                    onEditShelf = { id -> navController.navigate(Routes.shelfFormEdit(id)) },
                 )
             }
             composable(Routes.SHELVES) {
                 ShelvesScreen(
                     onOpenShelf = { id -> navController.navigate(Routes.shelfDetail(id)) },
                     onCreateShelf = { navController.navigate(Routes.SHELF_FORM_CREATE) },
+                    onEditShelf = { id -> navController.navigate(Routes.shelfFormEdit(id)) },
                 )
             }
             composable(Routes.RECENT) {

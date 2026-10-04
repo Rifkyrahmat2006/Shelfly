@@ -78,6 +78,7 @@ fun ShelfDetailScreen(
     var shelfEntity by remember { mutableStateOf<ShelfEntity?>(null) }
     var showDeleteShelfDialog by remember { mutableStateOf(false) }
     var materialToDelete by remember { mutableStateOf<MaterialEntity?>(null) }
+    var materialToRename by remember { mutableStateOf<MaterialEntity?>(null) }
     val state by viewModel.observeMaterials(shelfId).collectAsState(initial = UiState.Loading)
     val allShelves by viewModel.observeAllShelves().collectAsState(initial = emptyList())
 
@@ -187,6 +188,7 @@ fun ShelfDetailScreen(
                                     )
                                     scope.launch { repository.toggleFavorite(material) }
                                 },
+                                onEdit = { materialToRename = material },
                                 onShare = {
                                     context.startActivity(
                                         com.shelfly.app.feature.material.buildShareMaterialIntent(
@@ -235,6 +237,17 @@ fun ShelfDetailScreen(
                 materialToDelete = null
             },
             onDismiss = { materialToDelete = null },
+        )
+    }
+
+    materialToRename?.let { material ->
+        com.shelfly.app.core.component.RenameMaterialDialog(
+            currentTitle = material.title,
+            onConfirm = { newTitle ->
+                scope.launch { viewModel.renameMaterial(material, newTitle) }
+                materialToRename = null
+            },
+            onDismiss = { materialToRename = null },
         )
     }
 
