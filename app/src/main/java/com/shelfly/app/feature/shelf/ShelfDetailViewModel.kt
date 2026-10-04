@@ -16,6 +16,10 @@ class ShelfDetailViewModel(
 ) : ViewModel() {
     suspend fun loadShelf(shelfId: Long): ShelfEntity? = shelfRepository.getShelfById(shelfId)
 
+    suspend fun deleteShelf(shelf: ShelfEntity) = shelfRepository.deleteShelf(shelf)
+
+    suspend fun deleteMaterial(material: MaterialEntity) = materialRepository.delete(material)
+
     fun observeMaterials(shelfId: Long): Flow<UiState<List<MaterialEntity>>> =
         materialRepository.getByShelf(shelfId).map { list ->
             if (list.isEmpty()) UiState.Empty else UiState.Success(list)

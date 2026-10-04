@@ -17,7 +17,8 @@ class AddMaterialViewModel(
 
     val title = mutableStateOf("")
     private var selectedUri: Uri? = null
-    private var fileType: String = ""
+    var fileType: String = ""
+        private set
     private var fileSize: Long = 0
     private var shelfId: Long? = null
     private var categoryId: Long? = null
@@ -42,6 +43,7 @@ class AddMaterialViewModel(
     suspend fun save() {
         val uri = selectedUri ?: return
         val shelf = shelfId ?: return
+        check(shelf > 0) { "Tidak ada Shelf dipilih. Buat Shelf terlebih dahulu sebelum menambah Material." }
         repository.importMaterial(
             title = title.value,
             fileUri = uri.toString(),

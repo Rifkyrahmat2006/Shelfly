@@ -11,12 +11,16 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,7 +44,8 @@ import kotlinx.coroutines.launch
 // ponytail: filter chips (fileType/category/shelf, PRD section 20) belum di-wire ke UI;
 // FilterState sudah siap dipakai (lihat FilterState.kt), tambahkan saat ada waktu.
 @Composable
-fun SearchScreen(onOpenMaterial: (Long) -> Unit) {
+@OptIn(ExperimentalMaterial3Api::class)
+fun SearchScreen(onOpenMaterial: (Long) -> Unit, onBack: () -> Unit = {}) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val repository = remember {
@@ -51,9 +56,19 @@ fun SearchScreen(onOpenMaterial: (Long) -> Unit) {
     var sort by remember { mutableStateOf(SortOption.NEWEST) }
     val state by remember(query) { viewModel.search(query) }.collectAsState(initial = UiState.Empty)
 
-    Scaffold { padding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Search") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+            )
+        },
+    ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
-            Text("Search", style = MaterialTheme.typography.headlineLarge)
             OutlinedTextField(
                 value = query,
                 onValueChange = { query = it },
@@ -95,6 +110,9 @@ fun SearchScreen(onOpenMaterial: (Long) -> Unit) {
                                 onClick = { onOpenMaterial(material.id) },
                                 onToggleFavorite = {
                                     scope.launch { repository.toggleFavorite(material) }
+                                },
+                                onDelete = {
+                                    scope.launch { repository.delete(material) }
                                 },
                             )
                         }
