@@ -1,45 +1,33 @@
 package com.shelfly.app.feature.material
 
 import android.content.ActivityNotFoundException
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import android.net.Uri
-import android.graphics.Bitmap
 import com.shelfly.app.data.local.ShelflyDatabase
-import com.shelfly.app.data.local.entity.MaterialEntity
 import com.shelfly.app.data.repository.MaterialRepository
 import kotlinx.coroutines.launch
 
 // PIC: Person C — File Management: detail + open material (PRD section 24, 25)
-// PDF di-render in-app via PdfPageRenderer (native, tanpa app eksternal). File
-// lain (bukan PDF) tetap pakai buildOpenMaterialIntent -> delegasi ke app luar.
+// PDF & gambar di-render in-app via MaterialPreview (native, tanpa app
+// eksternal, bisa di-zoom). Tipe lain tetap pakai buildOpenMaterialIntent.
 @Composable
 fun MaterialDetailScreen(materialId: Long) {
     val context = LocalContext.current
@@ -60,8 +48,13 @@ fun MaterialDetailScreen(materialId: Long) {
                 }
             } else {
                 Text(current.title, modifier = Modifier.padding(16.dp))
-                if (current.fileType == "application/pdf") {
-                    PdfInlineViewer(uri = Uri.parse(current.fileUri))
+                val isPreviewable = current.fileType == "application/pdf" || current.fileType.startsWith("image/")
+                if (isPreviewable) {
+                    MaterialPreview(
+                        uri = Uri.parse(current.fileUri),
+                        fileType = current.fileType,
+                        modifier = Modifier.fillMaxSize(),
+                    )
                 } else {
                     Button(
                         onClick = {
@@ -87,52 +80,3 @@ fun MaterialDetailScreen(materialId: Long) {
     }
 }
 
-@Composable
-@OptIn(ExperimentalFoundationApi::class)
-private fun PdfInlineViewer(uri: Uri) {
-    val context = LocalContext.current
-    var renderer by remember { mutableStateOf<PdfPageRenderer?>(null) }
-    var error by remember { mutableStateOf<String?>(null) }
-
-    LaunchedEffect(uri) {
-        try {
-            renderer = PdfPageRenderer.fromUri(context, uri)
-        } catch (e: Exception) {
-            error = "Tidak bisa membuka PDF: ${e.message}"
-        }
-    }
-
-    DisposableEffectCloseRenderer(renderer)
-
-    val current = renderer
-    when {
-        error != null -> Text(error!!, modifier = Modifier.padding(16.dp))
-        current == null -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-        else -> {
-            val pagerState = rememberPagerState(pageCount = { current.pageCount })
-            Column(modifier = Modifier.fillMaxSize()) {
-                Text(
-                    "Halaman ${pagerState.currentPage + 1} / ${current.pageCount}",
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                )
-                HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
-                    val bitmap = remember(page) { current.renderPage(page) }
-                    Image(
-                        bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "Halaman ${page + 1}",
-                        modifier = Modifier.fillMaxSize(),
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun DisposableEffectCloseRenderer(renderer: PdfPageRenderer?) {
-    androidx.compose.runtime.DisposableEffect(renderer) {
-        onDispose { renderer?.close() }
-    }
-}
