@@ -30,6 +30,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +42,7 @@ import com.shelfly.app.core.theme.Spacing
 import com.shelfly.app.data.local.ShelflyDatabase
 import com.shelfly.app.data.repository.MaterialRepository
 import com.shelfly.app.data.repository.ShelfRepository
+import kotlinx.coroutines.launch
 
 // PIC: Person A - Home (My Shelves, Search entry, Recent) - PRD section 41
 @Composable
@@ -52,9 +54,12 @@ fun HomeScreen(
     onCreateShelf: () -> Unit = {},
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val materialRepository = remember {
+        MaterialRepository(ShelflyDatabase.getInstance(context).materialDao())
+    }
     val viewModel = remember {
-        val db = ShelflyDatabase.getInstance(context)
-        HomeViewModel(ShelfRepository(db.shelfDao()), MaterialRepository(db.materialDao()))
+        HomeViewModel(ShelfRepository(ShelflyDatabase.getInstance(context).shelfDao()), materialRepository)
     }
     val state by viewModel.observeHome().collectAsState(initial = HomeUiState())
     var showShelfPicker by remember { mutableStateOf(false) }
@@ -144,6 +149,9 @@ fun HomeScreen(
                         subtitle = material.fileType,
                         isFavorite = material.isFavorite,
                         onClick = { onOpenMaterial(material.id) },
+                        onToggleFavorite = {
+                            scope.launch { materialRepository.toggleFavorite(material) }
+                        },
                         onShare = {
                             context.startActivity(
                                 com.shelfly.app.feature.material.buildShareMaterialIntent(
