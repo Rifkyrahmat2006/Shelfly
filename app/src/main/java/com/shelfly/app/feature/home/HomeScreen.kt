@@ -30,6 +30,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +42,7 @@ import com.shelfly.app.core.theme.Spacing
 import com.shelfly.app.data.local.ShelflyDatabase
 import com.shelfly.app.data.repository.MaterialRepository
 import com.shelfly.app.data.repository.ShelfRepository
+import kotlinx.coroutines.launch
 
 // PIC: Person A - Home (My Shelves, Search entry, Recent) - PRD section 41
 @Composable
@@ -50,14 +52,21 @@ fun HomeScreen(
     onOpenMaterial: (Long) -> Unit = {},
     onAddMaterial: (Long) -> Unit = {},
     onCreateShelf: () -> Unit = {},
+    onSeeAllShelves: () -> Unit = {},
+    onSeeAllRecent: () -> Unit = {},
+    onEditShelf: (Long) -> Unit = {},
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val materialRepository = remember {
+        MaterialRepository(ShelflyDatabase.getInstance(context).materialDao())
+    }
     val viewModel = remember {
-        val db = ShelflyDatabase.getInstance(context)
-        HomeViewModel(ShelfRepository(db.shelfDao()), MaterialRepository(db.materialDao()))
+        HomeViewModel(ShelfRepository(ShelflyDatabase.getInstance(context).shelfDao()), materialRepository)
     }
     val state by viewModel.observeHome().collectAsState(initial = HomeUiState())
     var showShelfPicker by remember { mutableStateOf(false) }
+    var materialToRename by remember { mutableStateOf<com.shelfly.app.data.local.entity.MaterialEntity?>(null) }
 
     Scaffold(
         floatingActionButton = {
@@ -105,7 +114,12 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text("My Shelves", style = MaterialTheme.typography.titleMedium)
-                    Text("See all", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                    Text(
+                        "See all",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.clickable(onClick = onSeeAllShelves),
+                    )
                 }
             }
             item {
@@ -119,6 +133,7 @@ fun HomeScreen(
                                     name = shelfWithCount.shelf.name,
                                     materialCount = shelfWithCount.materialCount,
                                     onClick = { onOpenShelf(shelfWithCount.shelf.id) },
+                                    onEdit = { onEditShelf(shelfWithCount.shelf.id) },
                                 )
                             }
                         }
@@ -132,7 +147,12 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text("Recently Opened", style = MaterialTheme.typography.titleMedium)
-                    Text("See all", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                    Text(
+                        "See all",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.clickable(onClick = onSeeAllRecent),
+                    )
                 }
             }
             if (state.recent.isEmpty()) {
@@ -144,6 +164,10 @@ fun HomeScreen(
                         subtitle = material.fileType,
                         isFavorite = material.isFavorite,
                         onClick = { onOpenMaterial(material.id) },
+                        onToggleFavorite = {
+                            scope.launch { materialRepository.toggleFavorite(material) }
+                        },
+                        onEdit = { materialToRename = material },
                         onShare = {
                             context.startActivity(
                                 com.shelfly.app.feature.material.buildShareMaterialIntent(
@@ -179,6 +203,17 @@ fun HomeScreen(
             confirmButton = {
                 TextButton(onClick = { showShelfPicker = false }) { Text("Batal") }
             },
+        )
+    }
+
+    materialToRename?.let { material ->
+        com.shelfly.app.core.component.RenameMaterialDialog(
+            currentTitle = material.title,
+            onConfirm = { newTitle ->
+                scope.launch { materialRepository.rename(material, newTitle) }
+                materialToRename = null
+            },
+            onDismiss = { materialToRename = null },
         )
     }
 }

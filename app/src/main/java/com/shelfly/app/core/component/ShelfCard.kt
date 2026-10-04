@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.LibraryBooks
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,6 +32,7 @@ fun ShelfCard(
     materialCount: Int,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
+    onEdit: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
 ) {
     Column(
@@ -51,6 +53,15 @@ fun ShelfCard(
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(24.dp),
             )
+            if (onEdit != null) {
+                IconButton(onClick = onEdit) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        contentDescription = "Edit",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
             if (onDelete != null) {
                 IconButton(onClick = onDelete) {
                     Icon(
