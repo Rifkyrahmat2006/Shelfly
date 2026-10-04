@@ -1,12 +1,15 @@
 package com.shelfly.app.feature.shelves
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -24,7 +27,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.shelfly.app.R
 import com.shelfly.app.core.component.ConfirmationDialog
 import com.shelfly.app.core.component.ShelfCard
 import com.shelfly.app.data.local.ShelflyDatabase
@@ -47,8 +52,10 @@ fun ShelvesScreen(onOpenShelf: (Long) -> Unit, onCreateShelf: () -> Unit = {}) {
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = onCreateShelf) {
-                Icon(Icons.Filled.Add, contentDescription = "Create Shelf")
+            if (state !is UiState.Empty) {
+                FloatingActionButton(onClick = onCreateShelf) {
+                    Icon(Icons.Filled.Add, contentDescription = "Create Shelf")
+                }
             }
         }
     ) { padding ->
@@ -62,7 +69,20 @@ fun ShelvesScreen(onOpenShelf: (Long) -> Unit, onCreateShelf: () -> Unit = {}) {
                 }
                 is UiState.Empty -> {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Belum ada Shelf. Ketuk + untuk membuat.")
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.illustration_shelves_empty),
+                                contentDescription = null,
+                                modifier = Modifier.height(160.dp),
+                            )
+                            Text("Belum ada Shelf.")
+                            Button(onClick = onCreateShelf) {
+                                Text("Create Shelf")
+                            }
+                        }
                     }
                 }
                 is UiState.Success -> {
