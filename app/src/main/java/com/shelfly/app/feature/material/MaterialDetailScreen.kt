@@ -1,14 +1,22 @@
 package com.shelfly.app.feature.material
 
 import android.content.ActivityNotFoundException
+import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,7 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import android.net.Uri
+import com.shelfly.app.core.component.ConfirmationDialog
 import com.shelfly.app.data.local.ShelflyDatabase
 import com.shelfly.app.data.repository.MaterialRepository
 import kotlinx.coroutines.launch
@@ -29,7 +37,12 @@ import kotlinx.coroutines.launch
 // PDF & gambar di-render in-app via MaterialPreview (native, tanpa app
 // eksternal, bisa di-zoom). Tipe lain tetap pakai buildOpenMaterialIntent.
 @Composable
-fun MaterialDetailScreen(materialId: Long) {
+@OptIn(ExperimentalMaterial3Api::class)
+fun MaterialDetailScreen(
+    materialId: Long,
+    onBack: () -> Unit = {},
+    onDeleted: () -> Unit = {},
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val repository = remember {
@@ -38,8 +51,25 @@ fun MaterialDetailScreen(materialId: Long) {
     val viewModel = remember { MaterialDetailViewModel(repository) }
     val material by viewModel.material(materialId).collectAsState(initial = null)
     var openError by remember { mutableStateOf<String?>(null) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
-    Scaffold { padding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(material?.title ?: "") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { showDeleteDialog = true }) {
+                        Icon(Icons.Filled.Delete, contentDescription = "Delete Material")
+                    }
+                },
+            )
+        },
+    ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
             val current = material
             if (current == null) {
@@ -47,7 +77,6 @@ fun MaterialDetailScreen(materialId: Long) {
                     CircularProgressIndicator()
                 }
             } else {
-                Text(current.title, modifier = Modifier.padding(16.dp))
                 val isPreviewable = current.fileType == "application/pdf" || current.fileType.startsWith("image/")
                 if (isPreviewable) {
                     MaterialPreview(
@@ -78,5 +107,21 @@ fun MaterialDetailScreen(materialId: Long) {
             }
         }
     }
-}
 
+    if (showDeleteDialog) {
+        material?.let { current ->
+            ConfirmationDialog(
+                title = "Hapus Material",
+                message = "\"${current.title}\" akan dihapus permanen. Lanjutkan?",
+                onConfirm = {
+                    showDeleteDialog = false
+                    scope.launch {
+                        repository.delete(current)
+                        onDeleted()
+                    }
+                },
+                onDismiss = { showDeleteDialog = false },
+            )
+        }
+    }
+}
