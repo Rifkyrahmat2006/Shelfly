@@ -20,6 +20,17 @@ class ShelfDetailViewModel(
 
     suspend fun deleteMaterial(material: MaterialEntity) = materialRepository.delete(material)
 
+    // Multi-select (user request): hapus/pindah banyak Material sekaligus.
+    suspend fun deleteMaterials(materials: Set<MaterialEntity>) {
+        materials.forEach { materialRepository.delete(it) }
+    }
+
+    suspend fun moveMaterials(materialIds: Set<Long>, targetShelfId: Long) {
+        materialIds.forEach { materialRepository.moveToShelf(it, targetShelfId) }
+    }
+
+    fun observeAllShelves() = shelfRepository.getAllShelves()
+
     fun observeMaterials(shelfId: Long): Flow<UiState<List<MaterialEntity>>> =
         materialRepository.getByShelf(shelfId).map { list ->
             if (list.isEmpty()) UiState.Empty else UiState.Success(list)
