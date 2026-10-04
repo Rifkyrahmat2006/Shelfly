@@ -48,6 +48,25 @@ object Routes {
 
 private val BOTTOM_NAV_ROUTES = setOf(Routes.HOME, Routes.SHELVES, Routes.RECENT, Routes.FAVORITES)
 
+// Navigasi antar tab (bottom nav & "See all") harus pakai pattern ini biar back stack
+// konsisten — tanpa ini, tab Home bisa "macet" (tap Home tidak merespons) karena entry
+// duplikat menumpuk di back stack tiap kali See all dipakai.
+private fun NavHostController.navigateToTab(route: String) {
+    navigate(route) {
+        popUpTo(Routes.HOME) { saveState = true }
+        launchSingleTop = true
+        restoreState = true
+    }
+}
+
+// Tap ganda/cepat pada card (lag render, dsb) bisa memicu navigate() terpanggil 2x
+// sebelum destinasi baru ter-render, menumpuk 2 entry identik di back stack. User lalu
+// merasa tombol back/tab Home "tidak berfungsi" karena tekan back sekali baru menghapus
+// satu duplikat. launchSingleTop = true mencegah penumpukan itu.
+private fun NavHostController.navigateSingle(route: String) {
+    navigate(route) { launchSingleTop = true }
+}
+
 @Composable
 fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -59,11 +78,7 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
                 ShelflyBottomNavBar(
                     currentRoute = currentRoute,
                     onNavigate = { destination ->
-                        navController.navigate(destination.route) {
-                            popUpTo(Routes.HOME) { saveState = true }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        navController.navigateToTab(destination.route)
                     },
                 )
             }
@@ -76,35 +91,35 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
         ) {
             composable(Routes.HOME) {
                 HomeScreen(
-                    onOpenShelf = { id -> navController.navigate(Routes.shelfDetail(id)) },
-                    onOpenSearch = { navController.navigate(Routes.SEARCH) },
-                    onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) },
-                    onAddMaterial = { shelfId -> navController.navigate(Routes.addMaterial(shelfId)) },
+                    onOpenShelf = { id -> navController.navigateSingle(Routes.shelfDetail(id)) },
+                    onOpenSearch = { navController.navigateSingle(Routes.SEARCH) },
+                    onOpenMaterial = { id -> navController.navigateSingle(Routes.materialDetail(id)) },
+                    onAddMaterial = { shelfId -> navController.navigateSingle(Routes.addMaterial(shelfId)) },
                     onCreateShelf = { navController.navigate(Routes.SHELF_FORM_CREATE) },
-                    onSeeAllShelves = { navController.navigate(Routes.SHELVES) },
-                    onSeeAllRecent = { navController.navigate(Routes.RECENT) },
+                    onSeeAllShelves = { navController.navigateToTab(Routes.SHELVES) },
+                    onSeeAllRecent = { navController.navigateToTab(Routes.RECENT) },
                     onEditShelf = { id -> navController.navigate(Routes.shelfFormEdit(id)) },
                 )
             }
             composable(Routes.SHELVES) {
                 ShelvesScreen(
-                    onOpenShelf = { id -> navController.navigate(Routes.shelfDetail(id)) },
+                    onOpenShelf = { id -> navController.navigateSingle(Routes.shelfDetail(id)) },
                     onCreateShelf = { navController.navigate(Routes.SHELF_FORM_CREATE) },
                     onEditShelf = { id -> navController.navigate(Routes.shelfFormEdit(id)) },
                 )
             }
             composable(Routes.RECENT) {
-                RecentScreen(onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) })
+                RecentScreen(onOpenMaterial = { id -> navController.navigateSingle(Routes.materialDetail(id)) })
             }
             composable(Routes.FAVORITES) {
-                FavoritesScreen(onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) })
+                FavoritesScreen(onOpenMaterial = { id -> navController.navigateSingle(Routes.materialDetail(id)) })
             }
             composable(Routes.SHELF_DETAIL) { backStackEntry ->
                 val shelfId = backStackEntry.arguments?.getString("shelfId")?.toLongOrNull() ?: 0L
                 ShelfDetailScreen(
                     shelfId = shelfId,
-                    onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) },
-                    onAddMaterial = { sid -> navController.navigate(Routes.addMaterial(sid)) },
+                    onOpenMaterial = { id -> navController.navigateSingle(Routes.materialDetail(id)) },
+                    onAddMaterial = { sid -> navController.navigateSingle(Routes.addMaterial(sid)) },
                     onBack = { navController.popBackStack() },
                     onDeleted = { navController.popBackStack() },
                 )
@@ -119,7 +134,7 @@ fun ShelflyNavHost(navController: NavHostController = rememberNavController()) {
             }
             composable(Routes.SEARCH) {
                 SearchScreen(
-                    onOpenMaterial = { id -> navController.navigate(Routes.materialDetail(id)) },
+                    onOpenMaterial = { id -> navController.navigateSingle(Routes.materialDetail(id)) },
                     onBack = { navController.popBackStack() },
                 )
             }
