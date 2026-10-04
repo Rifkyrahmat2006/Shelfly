@@ -62,6 +62,9 @@ fun FavoritesScreen(onOpenMaterial: (Long) -> Unit) {
                                 onToggleFavorite = {
                                     scope.launch { repository.toggleFavorite(material) }
                                 },
+                                onDelete = {
+                                    scope.launch { repository.delete(material) }
+                                },
                             )
                         }
                     }
