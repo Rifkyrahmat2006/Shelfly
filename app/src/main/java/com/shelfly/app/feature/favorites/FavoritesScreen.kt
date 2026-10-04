@@ -1,9 +1,11 @@
 package com.shelfly.app.feature.favorites
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,7 +21,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.shelfly.app.R
 import com.shelfly.app.core.component.MaterialCard
 import com.shelfly.app.data.local.ShelflyDatabase
 import com.shelfly.app.data.repository.MaterialRepository
@@ -48,7 +52,17 @@ fun FavoritesScreen(onOpenMaterial: (Long) -> Unit) {
                 }
                 is UiState.Empty -> {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Belum ada Favorite.")
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.illustration_favorites_empty),
+                                contentDescription = null,
+                                modifier = Modifier.height(160.dp),
+                            )
+                            Text("Belum ada Favorite.")
+                        }
                     }
                 }
                 is UiState.Success -> {

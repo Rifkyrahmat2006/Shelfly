@@ -1,11 +1,13 @@
 package com.shelfly.app.feature.shelf
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,7 +34,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.shelfly.app.R
 import com.shelfly.app.core.component.ConfirmationDialog
 import com.shelfly.app.core.component.MaterialCard
 import com.shelfly.app.data.local.ShelflyDatabase
@@ -89,8 +93,10 @@ fun ShelfDetailScreen(
         },
     ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
-            Button(onClick = { onAddMaterial(shelfId) }) {
-                Text("Import Material")
+            if (state !is UiState.Empty) {
+                Button(onClick = { onAddMaterial(shelfId) }) {
+                    Text("Import Material")
+                }
             }
             when (val s = state) {
                 is UiState.Loading -> {
@@ -100,7 +106,20 @@ fun ShelfDetailScreen(
                 }
                 is UiState.Empty -> {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Belum ada Material di Shelf ini.")
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.illustration_shelf_empty),
+                                contentDescription = null,
+                                modifier = Modifier.height(160.dp),
+                            )
+                            Text("Belum ada Material di Shelf ini.")
+                            Button(onClick = { onAddMaterial(shelfId) }) {
+                                Text("Import Material")
+                            }
+                        }
                     }
                 }
                 is UiState.Success -> {
